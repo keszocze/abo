@@ -20,5 +20,8 @@ endif()
 
 
 add_subdirectory(lib)
+add_subdirectory(tests)
+add_subdirectory(src)
 
-add_library(abo library.cpp library.h)
+
+#target_link_libraries(tests abo cudd lorina)

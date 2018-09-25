@@ -394,7 +394,7 @@ unsigned PrintfFormatter<Char, AF>::parse_header(
         spec.fill_ = '0';
       if (value != 0) {
         // Nonzero value means that we parsed width and don't need to
-        // parse it or flags again, so return now.
+        // parsing it or flags again, so return now.
         spec.width_ = value;
         return arg_index;
       }

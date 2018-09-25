@@ -296,6 +296,7 @@ inline return_code read_pla( std::istream& in, const pla_reader& reader, diagnos
         ++errors;
         return true; /* understood error case, go on parsing */
       }
+      
     }
 
     /* [01-]+ [01-]+ */
@@ -308,7 +309,7 @@ inline return_code read_pla( std::istream& in, const pla_reader& reader, diagnos
 
     if ( diag )
       diag->report( diagnostic_level::error,
-                    fmt::format( "Unable to parse line\n"
+                    fmt::format( "Unable to parsing line\n"
                                  "line {0}: `{1}`",
                                  loc, line ) );
     ++errors;

@@ -486,7 +486,7 @@ inline return_code read_ascii_aiger( std::istream& in, const aiger_reader& reade
     if ( diag )
     {
       diag->report( diagnostic_level::fatal,
-                    fmt::format( "could not parse AIGER header `{0}`", header_line ) );
+                    fmt::format( "could not parsing AIGER header `{0}`", header_line ) );
     }
     return return_code::parse_error;
   }
@@ -512,7 +512,7 @@ inline return_code read_ascii_aiger( std::istream& in, const aiger_reader& reade
       if ( diag )
       {
         diag->report( diagnostic_level::fatal,
-                      fmt::format( "could not parse declaration of LATCH `{0}`", line ) );
+                      fmt::format( "could not parsing declaration of LATCH `{0}`", line ) );
       }
       return return_code::parse_error;
     }
@@ -601,7 +601,7 @@ inline return_code read_ascii_aiger( std::istream& in, const aiger_reader& reade
       if ( diag )
       {
         diag->report( diagnostic_level::fatal,
-                      fmt::format( "could not parse declaration of AND gate `{0}`", line ) );
+                      fmt::format( "could not parsing declaration of AND gate `{0}`", line ) );
       }
       return return_code::parse_error;
     }
@@ -612,7 +612,7 @@ inline return_code read_ascii_aiger( std::istream& in, const aiger_reader& reade
     reader.on_and( index, left_lit, right_lit );
   }
 
-  /* parse names and comments */
+  /* parsing names and comments */
   while ( std::getline( in, line ) )
   {
     if ( std::regex_search( line, m, aig_regex::input ) )
@@ -694,7 +694,7 @@ inline return_code read_aiger( std::istream& in, const aiger_reader& reader, dia
 
   std::size_t _m, _i, _l, _o, _a, _b, _c, _j, _f;
 
-  /* parse header */
+  /* parsing header */
   if ( std::regex_search( header_line, m, aig_regex::header ) )
   {
     std::vector<std::size_t> header;
@@ -724,7 +724,7 @@ inline return_code read_aiger( std::istream& in, const aiger_reader& reader, dia
     if ( diag )
     {
       diag->report( diagnostic_level::fatal,
-                    fmt::format( "could not parse AIGER header `{0}`", header_line ) );
+                    fmt::format( "could not parsing AIGER header `{0}`", header_line ) );
     }
     return return_code::parse_error;
   }
@@ -833,7 +833,7 @@ inline return_code read_aiger( std::istream& in, const aiger_reader& reader, dia
     reader.on_and( i, ( g - d1 ), ( g - d1 - d2 ) );
   }
 
-  /* parse names and comments */
+  /* parsing names and comments */
   while ( std::getline( in, line ) )
   {
     if ( std::regex_search( line, m, aig_regex::input ) )

@@ -278,7 +278,7 @@ inline return_code read_blif( std::istream& in, const blif_reader& reader, diagn
       if ( diag )
       {
         diag->report( diagnostic_level::error,
-                      fmt::format( "cannot parse line `{0}`", line ) );
+                      fmt::format( "cannot parsing line `{0}`", line ) );
       }
 
       result = return_code::parse_error;

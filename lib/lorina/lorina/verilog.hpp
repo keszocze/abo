@@ -334,7 +334,7 @@ public:
     {
       if ( diag )
       {
-        diag->report( diagnostic_level::error, "cannot parse module header" );
+        diag->report( diagnostic_level::error, "cannot parsing module header" );
       }
       return false;
     }
@@ -351,7 +351,7 @@ public:
         {
           if ( diag )
           {
-            diag->report( diagnostic_level::error, "cannot parse input declaration" );
+            diag->report( diagnostic_level::error, "cannot parsing input declaration" );
           }
           return false;
         }
@@ -363,7 +363,7 @@ public:
         {
           if ( diag )
           {
-            diag->report( diagnostic_level::error, "cannot parse output declaration" );
+            diag->report( diagnostic_level::error, "cannot parsing output declaration" );
           }
           return false;
         }
@@ -375,7 +375,7 @@ public:
         {
           if ( diag )
           {
-            diag->report( diagnostic_level::error, "cannot parse wire declaration" );
+            diag->report( diagnostic_level::error, "cannot parsing wire declaration" );
           }
           return false;
         }
@@ -394,7 +394,7 @@ public:
       {
         if ( diag )
         {
-          diag->report( diagnostic_level::error, "cannot parse assign statement" );
+          diag->report( diagnostic_level::error, "cannot parsing assign statement" );
         }
         return false;
       }
@@ -530,7 +530,7 @@ public:
       if ( diag )
       {
         diag->report( diagnostic_level::error,
-                      fmt::format( "cannot parse expression on right-hand side of assign `{0}`", lhs ) );
+                      fmt::format( "cannot parsing expression on right-hand side of assign `{0}`", lhs ) );
       }
       return false;
     }

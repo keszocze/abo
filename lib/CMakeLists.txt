@@ -15,3 +15,5 @@ if (NOT TARGET lorina)
     target_include_directories(lorina INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/lorina)
     target_link_libraries(lorina INTERFACE rang fmt)
 endif()
+
+add_subdirectory(cudd)
