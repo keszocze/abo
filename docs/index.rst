@@ -14,6 +14,15 @@ Welcome to ABO's documentation!
 Installation
 ============
 
+On Linux and Mac run the following instructions in the main ABO folder::
+
+	mkdir build
+	cd build
+	cmake ..
+	make
+
+The binaries will be created in the ``build`` folder.
+
 
 Indices and tables
 ==================

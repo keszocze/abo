@@ -31,17 +31,20 @@ namespace abo::parser {
      * As the parsing can not really make use of this information, it is completely ignored.
      */
     void pla_parser::on_number_of_terms(std::size_t number_of_terms) const {
-        std::cout << number_of_terms << "\n";
         (void) number_of_terms; // this cast prevents a compile time warning [-Wunused-variable] and supposedly generates no code
     }
 
     bool pla_parser::on_keyword(const std::string &keyword, const std::string &value) const {
         if (keyword == "ilb") {
             abo::util::split(value, innames);
+            for (std::string n: innames) {
+                mgr.pushVariableName(n);
+            }
             return true;
         }
         if (keyword == "ob") {
             abo::util::split(value, outnames);
+
             return true;
         }
 
@@ -52,9 +55,6 @@ namespace abo::parser {
 
 
     void pla_parser::on_end() const {
-
-//        mgr.DumpDot(output_bdds, innames, outnames);
-
     }
 
     void pla_parser::on_term(const std::string &term, const std::string &out) const {
