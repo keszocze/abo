@@ -4,58 +4,57 @@
 
 #include "pla_parser.hpp"
 
+#include "../util/string_helpers.hpp"
+
+
+
 namespace abo::parser {
 
     void pla_parser::on_number_of_inputs(std::size_t number_of_inputs) const {
-        inputs.reserve(number_of_inputs);
-        std::cout << "found " << number_of_inputs << " inputs\n";
-
-        n_in = number_of_inputs;
 
         for (std::size_t i = 0; i < number_of_inputs; i++) {
-            bdd_vars.push_back(mgr.bddVar());
+            bdd_vars.push_back(mgr.bddVar(i));
         }
     }
 
     void pla_parser::on_number_of_outputs(std::size_t number_of_outputs) const {
-        outputs.reserve(number_of_outputs);
-        std::cout << "found " << number_of_outputs << " outputs\n";
-
-        // alle Ausgaben können erstmal sicher auf "false" gesetzt werden. So lange kein Cube sie "trifft" ist ja alles gut
-        // TODO benötige ich diese Variablen? (vermutlich nicht)
-        n_out = number_of_outputs;
 
         for (std::size_t i = 0; i < number_of_outputs; i++) {
             output_bdds.push_back(mgr.bddZero());
         }
     }
 
+    /**
+     * @brief Empty function doing nothing
+     * @param number_of_terms  The number of terms specified in the .pla file
+     *
+     * As the parsing can not really make use of this information, it is completely ignored.
+     */
     void pla_parser::on_number_of_terms(std::size_t number_of_terms) const {
-        pla_reader::on_number_of_terms(number_of_terms);
+        std::cout << number_of_terms << "\n";
+        (void) number_of_terms; // this cast prevents a compile time warning [-Wunused-variable] and supposedly generates no code
     }
 
     bool pla_parser::on_keyword(const std::string &keyword, const std::string &value) const {
-
-        // TODO namen auch tatsächlich auslesen
         if (keyword == "ilb") {
-//            std::cout << "found inputs: " << value << "\n";
+            abo::util::split(value, innames);
             return true;
         }
-
         if (keyword == "ob") {
-//            std::cout << "found outputs: " << value << "\n";
+            abo::util::split(value, outnames);
             return true;
         }
-        std::cout << "unrecognized keyword \"" << keyword << "\" (" << value << ")\n";
 
+        std::cout << "unrecognized keyword \"" << keyword << "\" (" << value << ")\n";
         return false;
+
     }
+
 
     void pla_parser::on_end() const {
 
-        const char* out_names[] = {"or", "and"};
-        const char* in_names[] = {"a", "b"};
-        mgr.DumpDot(output_bdds, nullptr, out_names);
+//        mgr.DumpDot(output_bdds, innames, outnames);
+
     }
 
     void pla_parser::on_term(const std::string &term, const std::string &out) const {

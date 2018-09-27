@@ -3,3 +3,5 @@ cmake-build-debug
 CMackeCache.txt
 CMakeFiles
 
+build/
+docs/_build

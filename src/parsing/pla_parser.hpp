@@ -14,18 +14,19 @@ namespace abo::parser {
     private:
 
         // TODO im Endeffekt natürlich den Krams per call parameter rausreichen
-        Cudd& mgr;
+        const Cudd &mgr;
         mutable std::vector<BDD> bdd_vars;
-        mutable std::vector<BDD> output_bdds;
+        std::vector<BDD> &output_bdds;
 
-        mutable std::size_t n_in, n_out;
-
-        mutable std::vector<std::string> inputs;
-        mutable std::vector<std::string> outputs;
+        std::vector<std::string> &innames;
+        std::vector<std::string> &outnames;
 
     public:
 
-        pla_parser(Cudd& mgr): mgr(mgr) {}
+        pla_parser( Cudd &mgr, std::vector<BDD> &out,
+                    std::vector<std::string> &innames,
+                    std::vector<std::string> &outnames) :
+                        mgr(mgr), output_bdds(out), innames(innames), outnames(outnames) {}
 
         void on_number_of_inputs(std::size_t number_of_inputs) const override;
 

@@ -1,8 +1,7 @@
+.ilb x y
+.ob or and
 .i 2
 .o 2
-.p 3
-.ilb a b
-.ob or and
 01 10
 10 10
 11 11
