@@ -9,7 +9,7 @@
 #include <string>
 
 
-#include "../../lib/cudd/cplusplus/cuddObj.hh"
+#include <cudd/cplusplus/cuddObj.hh>
 
 namespace abo::util {
     void dump_dot(

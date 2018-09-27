@@ -6,7 +6,7 @@
 #define ABO_PLA_PARSER_HPP
 
 #include <lorina/pla.hpp>
-#include "../../lib/cudd/cplusplus/cuddObj.hh"
+#include <cudd/cplusplus/cuddObj.hh>
 
 namespace abo::parser {
 

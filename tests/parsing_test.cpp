@@ -2,10 +2,10 @@
 // Created by keszocze on 21.09.18.
 //
 
-#include "../src/parsing/pla_parser.hpp"
-#include "../src/util/string_helpers.hpp"
-#include "../src/util/cudd_helpers.hpp"
-#include "../lib/catch2/catch.hpp"
+#include <parsing/pla_parser.hpp>
+#include <util/string_helpers.hpp>
+#include <util/cudd_helpers.hpp>
+#include <catch2/catch.hpp>
 
 using namespace abo;
 using namespace abo::util;

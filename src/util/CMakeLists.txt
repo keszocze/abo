@@ -1,1 +1,7 @@
-add_library(abo_util string_helpers.cpp string_helpers.hpp cudd_helpers.cpp cudd_helpers.hpp cudd_helpers.hpp)
+add_library(abo_util
+        string_helpers.cpp
+        string_helpers.hpp
+        cudd_helpers.cpp
+        cudd_helpers.hpp
+        cudd_helpers.hpp)
+target_link_libraries(abo_util cudd)

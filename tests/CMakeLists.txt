@@ -1,7 +1,8 @@
 add_executable(parsing_test parsing_test.cpp)
 add_library(catch-main catch-main.cpp)
 
-target_link_libraries(parsing_test pla_parser cudd abo_util catch-main)
+target_link_libraries(parsing_test PRIVATE pla_parser cudd abo_util catch catch-main)
+target_link_libraries(catch-main catch)
 
 
 add_custom_command(
