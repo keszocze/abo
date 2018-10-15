@@ -4,7 +4,7 @@ project(abo)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-option(ABO_TEST "Build tests" OFF)
+option(BUILD_TESTS "Build tests" ON)
 
 if(UNIX)
     # show quite some warnings (but remove some intentionally)
@@ -20,8 +20,9 @@ endif()
 
 
 add_subdirectory(lib)
-add_subdirectory(tests)
 add_subdirectory(src)
 
 
-#target_link_libraries(tests abo cudd lorina)
+#IF (BUILD_TESTS)
+    add_subdirectory(tests)
+#endif(BUILD_TESTS)

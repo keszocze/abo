@@ -2,9 +2,8 @@
 // Created by keszocze on 21.09.18.
 //
 
-#include <parsing/pla_parser.hpp>
-#include <util/string_helpers.hpp>
-#include <util/cudd_helpers.hpp>
+#include <pla_parser.hpp>
+#include <cudd_helpers.hpp>
 #include <catch2/catch.hpp>
 
 using namespace abo;

@@ -5,3 +5,6 @@ CMakeFiles
 
 build/
 docs/_build
+tests/cudd.pdf
+tests/foo.dot
+tests/foo.png
