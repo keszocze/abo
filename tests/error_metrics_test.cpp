@@ -8,6 +8,7 @@
 #include <catch2/catch.hpp>
 #include <cudd/cplusplus/cuddObj.hh>
 #include <cudd_helpers.hpp>
+#include <simple.hpp>
 
 #include <iostream>
 
@@ -59,7 +60,7 @@ TEST_CASE("Generic OR constraint error rate test"){
 
     Cudd mgr(n);
 
-    BDD or_bdd = mgr.bddZero();
+    BDD or_bdd = abo::example_bdds::or_bdd(mgr,n);
 
     // TODO Methoden für die generische Erzeugung von AND, OR, XOR etc. BDDs erzeugen
 
@@ -100,13 +101,7 @@ TEST_CASE("Generic AND constraint error rate test"){
 
     Cudd mgr(n);
 
-    BDD and_bdd = mgr.bddOne();
-
-    // TODO Methoden für die generische Erzeugung von AND, OR, XOR etc. BDDs erzeugen
-
-    for (size_t i = 0; i < n; i++) {
-        and_bdd = and_bdd * mgr.bddVar(i);
-    }
+    BDD and_bdd = abo::example_bdds::and_bdd(mgr,n);
 
     BDD and_pos_approx_bdd = and_bdd;
     BDD and_neg_approx_bdd = and_bdd;

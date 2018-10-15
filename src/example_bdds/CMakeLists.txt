@@ -1,4 +1,4 @@
-add_library(bdd_examples simple.cpp simple.hpp)
+add_library(bdd_examples simple.cpp simple.hpp from_papers.cpp from_papers.hpp)
 
 target_link_libraries(bdd_examples PUBLIC cudd)
 

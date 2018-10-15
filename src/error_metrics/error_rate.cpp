@@ -50,7 +50,7 @@ namespace abo::error_metrics {
 
         return n_solutions;
     }
-f
+
 
     boost::multiprecision::uint256_t error_rate(const Cudd & mgr,const size_t n_vars, const BDD& f, const BDD& f_hat) {
         std::vector<BDD> fv{f};

@@ -24,6 +24,12 @@ On Linux and Mac run the following instructions in the main ABO folder::
 The binaries will be created in the ``build`` folder.
 
 
+Library
+=======
+
+* [1] Mathias Soeken, Daniel Große, Arun Chandreasekharan, Rolf Drechsler: *BDD Minimization for Apprxoimate Computing*, ASP-DAC
+
+
 Indices and tables
 ==================
 
