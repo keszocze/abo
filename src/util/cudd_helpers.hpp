@@ -13,15 +13,18 @@
 
 namespace abo::util {
     void dump_dot(
-            Cudd &mgr,
+            const Cudd &mgr,
             const std::vector<BDD>& bdd,
             const std::vector <std::string> &innames={},
             const std::vector <std::string> &outnames={});
 
     void dump_dot(
-            Cudd &mgr,
+            const Cudd &mgr,
             const BDD& bdd,
             const std::vector<std::string>& inames={},
             const std::string& funname=std::string());
+
+    BDD high(const Cudd& mgr, const BDD& v);
+    BDD low(const Cudd& mgr, const BDD& v);
 }
 #endif //ABO_CUDD_HELPERS_HPP

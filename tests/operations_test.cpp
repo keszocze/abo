@@ -5,8 +5,36 @@
 #include <catch2/catch.hpp>
 #include <cudd/cplusplus/cuddObj.hh>
 #include <cudd_helpers.hpp>
+#include <from_papers.hpp>
 #include <iostream>
 
+
+TEST_CASE("Test child operators") {
+
+    // hand-crafted test cases for understanding whether the low/how operators actually work as expected
+
+    Cudd mgr(2);
+
+    std::vector<BDD> f = abo::example_bdds::example3(mgr);
+
+    BDD lf0 = abo::util::low(mgr,f.at(0));
+    BDD hf0 = abo::util::high(mgr,f.at(0));
+
+    CHECK(mgr.bddZero() == hf0);
+
+    BDD tmp = !mgr.bddVar(1);
+
+    CHECK(tmp == lf0);
+
+    // Note that these tests are rather brittle as someone might change the actual exception text
+    CHECK_THROWS_WITH(abo::util::low(mgr,f.at(4)), "low(mgr,n): Cannot retrieve child of a terminal node");
+    CHECK_THROWS_WITH(abo::util::high(mgr,f.at(4)), "high(mgr,n): Cannot retrieve child of a terminal node");
+
+//    abo::util::dump_dot(mgr,f);
+//    abo::util::dump_dot(mgr,lf0);
+//    abo::util::dump_dot(mgr,hf0);
+
+}
 
 TEST_CASE("Dinge") {
     Cudd mgr(2);
@@ -89,28 +117,28 @@ TEST_CASE("Cofactor works as expected") {
 
 
     BDD m = or_bdd.Cofactor(x);
-    REQUIRE(m.IsOne() == true);
-    REQUIRE(m.IsZero() == false);
-    REQUIRE(m.IsCube() == true);
+    CHECK(m.IsOne() == true);
+    CHECK(m.IsZero() == false);
+    CHECK(m.IsCube() == true);
 //    abo::util::dump_dot(mgr,{m},varnames);
 
     m = and_bdd.Cofactor(x);
-    REQUIRE(m.IsOne() == false);
+    CHECK(m.IsOne() == false);
 
 
     // warum ist das nicht false?!?!
-//    REQUIRE(m.IsCube() == false);
-    REQUIRE(m.IsZero() == false);
+//    CHECK(m.IsCube() == false);
+    CHECK(m.IsZero() == false);
 
 
     m = or_bdd.Cofactor(!x);
-    REQUIRE(m.IsOne() == false);
-    REQUIRE(m.IsZero() == false);
+    CHECK(m.IsOne() == false);
+    CHECK(m.IsZero() == false);
 
     m = and_bdd.Cofactor(!x);
-    REQUIRE(m.IsOne() == false);
-    REQUIRE(m.IsZero() == true);
-    REQUIRE(m.IsCube() == false); // const zero is no cube according to docs
+    CHECK(m.IsOne() == false);
+    CHECK(m.IsZero() == true);
+    CHECK(m.IsCube() == false); // const zero is no cube according to docs
 
 
     m = xor_bdd.Constrain(x * z);
@@ -151,24 +179,24 @@ TEST_CASE("Differnce in Cofactor and Constrain(?)") {
             BDD neg_or_cons = or_bdd.Constrain(neg_cube);
             BDD neg_or_cof = or_bdd.Cofactor(neg_cube);
 
-            REQUIRE(pos_or_cons == pos_or_cof);
-            REQUIRE(neg_or_cons == neg_or_cof);
+            CHECK(pos_or_cons == pos_or_cof);
+            CHECK(neg_or_cons == neg_or_cof);
 
             BDD pos_and_cons = and_bdd.Constrain(pos_cube);
             BDD pos_and_cof = and_bdd.Cofactor(pos_cube);
             BDD neg_and_cons = and_bdd.Constrain(neg_cube);
             BDD neg_and_cof = and_bdd.Cofactor(neg_cube);
 
-            REQUIRE(pos_and_cons == pos_and_cof);
-            REQUIRE(neg_and_cons == neg_and_cof);
+            CHECK(pos_and_cons == pos_and_cof);
+            CHECK(neg_and_cons == neg_and_cof);
 
             BDD pos_xor_cons = xor_bdd.Constrain(pos_cube);
             BDD pos_xor_cof = xor_bdd.Cofactor(pos_cube);
             BDD neg_xor_cons = xor_bdd.Constrain(neg_cube);
             BDD neg_xor_cof = xor_bdd.Cofactor(neg_cube);
 
-            REQUIRE(pos_xor_cons == pos_xor_cof);
-            REQUIRE(neg_xor_cons == neg_xor_cof);
+            CHECK(pos_xor_cons == pos_xor_cof);
+            CHECK(neg_xor_cons == neg_xor_cof);
         }
     }
 

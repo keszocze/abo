@@ -26,7 +26,7 @@ namespace abo::example_bdds {
  * @warning The method uses the first four bdd variables within the manager to create the function. The caller has to
  * make sure that this makes sense in hist context.
  */
-    std::vector <BDD> example3(const Cudd &mgr);
+    std::vector <BDD> example3(Cudd &mgr);
 
 /**
  * @brief BDD for Example 3 of Soeken et al. BDD Minimization for Approximate Computing
@@ -45,6 +45,6 @@ namespace abo::example_bdds {
  * @warning The method uses the first two bdd variables within the manager to create the function. The caller has to
  * make sure that this makes sense in hist context.
  */
-    std::vector <BDD> example3(const Cudd &mgr);
+    std::vector <BDD> example3(Cudd &mgr);
 }
 #endif //ABO_FROM_PAPERS_HPP

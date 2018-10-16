@@ -5,11 +5,16 @@
 #include "cudd_helpers.hpp"
 #include "string_helpers.hpp"
 
+#include <iostream>
+#include <cudd/cudd/cudd.h>
+
+#include <assert.h>
+
 namespace abo::util {
 
 
     void dump_dot(
-            Cudd &mgr,
+            const Cudd &mgr,
             const std::vector<BDD> &bdd,
             const std::vector<std::string> &innames,
             const std::vector<std::string> &outnames) {
@@ -29,7 +34,7 @@ namespace abo::util {
     }
 
     void dump_dot(
-            Cudd &mgr,
+            const Cudd &mgr,
             const BDD &bdd,
             const std::vector<std::string> &inames,
             const std::string &funname) {
@@ -37,5 +42,36 @@ namespace abo::util {
         std::vector<std::string> funnames{funname};
         dump_dot(mgr, bddv, inames, funnames);
     }
+
+    BDD high(const Cudd &mgr, const BDD &v) {
+        DdNode *n = v.getNode();
+
+        if (Cudd_IsConstant(n)) {
+            throw "high(mgr,n): Cannot retrieve child of a terminal node";
+        }
+
+
+        if (Cudd_IsComplement(n)) {
+            return !BDD(mgr, Cudd_Regular(Cudd_T(n)));
+        } else {
+            return BDD(mgr, Cudd_T(n));
+        }
+    }
+
+    BDD low(const Cudd &mgr, const BDD &v) {
+        DdNode *n = v.getNode();
+
+        if (Cudd_IsConstant(n)) {
+            throw "low(mgr,n): Cannot retrieve child of a terminal node";
+        }
+
+        if (Cudd_IsComplement(n)) {
+            return !BDD(mgr, Cudd_Regular(Cudd_E(n)));
+        } else {
+            return BDD(mgr, Cudd_E(n));
+        }
+    }
+
+    // func  https://stackoverflow.com/questions/47704600/cudd-access-bdd-childs
 
 }
