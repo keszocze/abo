@@ -7,7 +7,7 @@
 
 #include <iostream>
 #include <cudd/cudd/cudd.h>
-
+#include <tuple>
 #include <assert.h>
 
 namespace abo::util {
@@ -43,6 +43,12 @@ namespace abo::util {
         dump_dot(mgr, bddv, inames, funnames);
     }
 
+
+    /*
+     * How to get the children of nodes has been taken from StackOverflow:
+     * https://stackoverflow.com/questions/47704600/cudd-access-bdd-childs
+     */
+
     BDD high(const Cudd &mgr, const BDD &v) {
         DdNode *n = v.getNode();
 
@@ -58,6 +64,7 @@ namespace abo::util {
         }
     }
 
+
     BDD low(const Cudd &mgr, const BDD &v) {
         DdNode *n = v.getNode();
 
@@ -72,6 +79,53 @@ namespace abo::util {
         }
     }
 
-    // func  https://stackoverflow.com/questions/47704600/cudd-access-bdd-childs
+    std::pair<BDD, BDD> full_adder(const BDD &f, const BDD &g, const BDD &carry_in) {
+        BDD carry_out = (f * g) | (f * carry_in) | (g * carry_in);
+        BDD sum = g ^g ^carry_in;
+        return {sum, carry_out};
+    }
+
+    std::vector<BDD>
+    bdd_subtract(const Cudd &mgr, const std::vector<BDD> &minuend, const std::vector<BDD> &subtrahend) {
+        std::vector<BDD> diff;
+        diff.reserve(minuend.size());
+
+
+        // using one as carry in serves as an implicit method to add one to the subtrahend, which is necessary to
+        // change its sign
+        BDD carry = mgr.bddOne();
+
+        for (size_t i = 0; i < minuend.size(); ++i) {
+            // the subtrahend's bits are negated to change the sign of the subtrahend
+            auto tmp  = full_adder(minuend[i], !subtrahend[i], carry);
+            diff.push_back(tmp.first);
+            carry = tmp.second;
+
+        }
+
+        std::cout << "diff.size() " << diff.size() << "\n";
+
+        return diff;
+    }
+
+
+    std::vector<BDD> abs(const Cudd &mgr, const std::vector<BDD> &f) {
+
+        // mask consisting of the sign bit only
+        BDD sign_bit = f.back();
+        std::vector<BDD> mask(f.size(), sign_bit);
+
+        std::vector<BDD> tmp;
+
+        for (size_t i=0; i < f.size(); ++i) {
+            tmp.push_back(f[i] ^ sign_bit);
+        }
+
+        std::vector<BDD> abs = abo::util::bdd_subtract(mgr,tmp,mask);
+
+        return abs;
+    }
+
+
 
 }

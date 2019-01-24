@@ -72,6 +72,17 @@ TEST_CASE("Example 3 from ASP-DAC 2016 paper") {
 
 }
 
+TEST_CASE("Trivial worst_case_error") {
+    Cudd mgr(2);
+
+    std::vector<BDD> zero_fun{mgr.bddZero(), mgr.bddZero()};
+    std::vector<BDD> one_fun{mgr.bddOne(), mgr.bddOne()};
+
+
+//    std::cout << abo::error_metrics::worst_case_error(mgr, zero_fun, one_fun);
+
+}
+
 
 TEST_CASE("Generic OR constraint error rate test"){
 

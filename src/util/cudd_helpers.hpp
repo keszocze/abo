@@ -26,5 +26,26 @@ namespace abo::util {
 
     BDD high(const Cudd& mgr, const BDD& v);
     BDD low(const Cudd& mgr, const BDD& v);
+
+
+    std::pair<BDD,BDD> full_adder(const BDD& f, const BDD& g, const BDD &carry_in);
+
+
+    /**
+     * @brief Creates a (vector of) BDDs that represent the difference between to given (vectors of) BDDs
+     *
+     * The supplied BDDs are supposed to compute values represented in Two's Copmlement. The BDD returned by this function
+     * computes the difference between the outputs of these BDDs, again represented in Two's Complement.
+     *
+     * @param minuend Minuend in Two's Complement
+     * @param subtrahend  Subtrahend in Two's Complement
+     * @return BDD computing the difference of the outputs of the two suupplied BDDs
+     */
+    std::vector<BDD> bdd_subtract(const Cudd &mgr, const std::vector<BDD> &minuend, const std::vector<BDD> &subtrahend);
+
+
+    std::vector<BDD> abs(const Cudd& mgr, const std::vector<BDD>& f);
+
 }
 #endif //ABO_CUDD_HELPERS_HPP
+
