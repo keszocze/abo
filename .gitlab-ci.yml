@@ -3,5 +3,7 @@ before_script:
 
 check-environment:
     script:
-        - which cmake
-        - which g++
+        - echo $(which cmake)
+        - echo $(which g++)
+        - echo $(which make)
+        - echo $(which cppcheck) 
