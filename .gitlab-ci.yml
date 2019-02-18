@@ -2,5 +2,6 @@ before_script:
     - echo "Running CI job before script"
 
 check-environment:
-    - which cmake
-    - which g++
+    script:
+        - which cmake
+        - which g++
