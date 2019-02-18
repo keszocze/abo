@@ -81,7 +81,7 @@ namespace abo::util {
 
     std::pair<BDD, BDD> full_adder(const BDD &f, const BDD &g, const BDD &carry_in) {
         BDD carry_out = (f * g) | (f * carry_in) | (g * carry_in);
-        BDD sum = g ^g ^carry_in;
+        BDD sum = f ^ g ^carry_in;
         return {sum, carry_out};
     }
 
