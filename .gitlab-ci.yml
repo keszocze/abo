@@ -2,11 +2,13 @@ stages:
     - compile
     - test
 
+variables:
+    GIT_SUBMODULE_STRATEGY: recursive
+    GIT_STRATEGY: clone
+
 try_compiling:
     stage: compile
     script:
-        - git submodule init
-        - git submodule update --recursive
         - ls -la  lib/cudd
         - mkdir -p build
         - cd build
