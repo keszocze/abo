@@ -1,9 +1,6 @@
 before_script:
     - echo "Running CI job before script"
 
-check-environment:
+run_cppcheck:
     script:
-        - echo $(which cmake)
-        - echo $(which g++)
-        - echo $(which make)
-        - echo $(which cppcheck) 
+        - ./stylecheck.sh
