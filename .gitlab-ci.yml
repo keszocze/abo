@@ -30,7 +30,9 @@ run_cppcheck:
 run_tests:
     stage: test
     script:
+        - pwd
         - cd build/tests
-        - error_metrics_test
-        - operations_test
-        - parsing_test
+        - ls -l
+        - ./error_metrics_test
+        - ./operations_test
+        - ./parsing_test
