@@ -1,6 +1,25 @@
-before_script:
-    - echo "Running CI job before script"
+stages:
+    - compile
+    - test
 
+try_compiling:
+    stage: compile
+    script:
+        - mkdir -p build
+        - cd build
+        - cmake ..
+        - make all
+
+# cpp check is put in a separate script file as we want to perform stuff that
+# fits this yaml style rather badly
 run_cppcheck:
+    stage: test
     script:
         - ./stylecheck.sh
+
+run_tests:
+    stage: test
+    script:
+        - ./build/tests/error_metrics_test
+        - ./build/tests/operations_test
+        - ./build/tests/parsing_test
