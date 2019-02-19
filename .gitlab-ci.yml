@@ -4,7 +4,7 @@ stages:
 
 variables:
     GIT_SUBMODULE_STRATEGY: recursive
-    GIT_STRATEGY: clone
+    GIT_STRATEGY: fetch
 
 try_compiling:
     stage: compile
