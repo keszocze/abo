@@ -2,6 +2,8 @@
 
 errcho() { >&2 echo $@; }
 
+echo "Checking C++ code quality using cppcheck"
+
 ALLOWED_ERRS=28
 
 cpp_check() {
