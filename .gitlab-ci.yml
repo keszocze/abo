@@ -8,6 +8,11 @@ variables:
 
 try_compiling:
     stage: compile
+    artifacts:
+        paths:
+            - build
+        expire_in: 30 minutes
+
     script:
         - ls -la  lib/cudd
         - mkdir -p build
@@ -19,7 +24,7 @@ try_compiling:
 # cpp check is put in a separate script file as we want to perform stuff that
 # fits this yaml style rather badly
 run_cppcheck:
-    stage: test
+    stage: compile # no need to wait for the actual compilation
     script:
         - ./stylecheck.sh
 
