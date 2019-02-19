@@ -5,9 +5,10 @@ stages:
 try_compiling:
     stage: compile
     script:
-        - git submodule init
-        - git submodule update --recursive --remote
-        - mkdir -p build
+        - git submodule update --recursive --remote --init
+        - cd lib/cudd
+        - git branch
+        -  mkdir -p build
         - cd build
         - cmake ..
         - make cudd # needs to be build separately (dunno why)
