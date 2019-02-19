@@ -27,6 +27,9 @@ run_tests:
     stage: test
     script:
         - pwd
+        - ls -la
+        - ls -la build
+        - ls -la build/tests
         - ./build/tests/error_metrics_test
         - ./build/tests/operations_test
         - ./build/tests/parsing_test
