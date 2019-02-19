@@ -26,6 +26,7 @@ run_cppcheck:
 run_tests:
     stage: test
     script:
+        - pwd
         - ./build/tests/error_metrics_test
         - ./build/tests/operations_test
         - ./build/tests/parsing_test
