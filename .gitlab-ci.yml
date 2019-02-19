@@ -5,6 +5,7 @@ stages:
 try_compiling:
     stage: compile
     script:
+        - git submodule init
         - git submodule update --recursive --remote
         - mkdir -p build
         - cd build
