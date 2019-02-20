@@ -17,7 +17,7 @@ try_compiling:
         - mkdir -p build
         - cd build
         - cmake ..
-        - make cudd # needs to be build separately (dunno why)
+          #        - make cudd # needs to be build separately (dunno why)
         - make all
 
 # cpp check is put in a separate script file as we want to perform stuff that
@@ -30,9 +30,8 @@ run_cppcheck:
 run_tests:
     stage: test
     script:
-        - pwd
         - cd build/tests
-        - ls -l
+          # the leading dot seems to be necessary
         - ./error_metrics_test
         - ./operations_test
         - ./parsing_test
