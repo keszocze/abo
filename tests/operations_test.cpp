@@ -26,9 +26,17 @@ TEST_CASE("Test child operators") {
 
     CHECK(tmp == lf0);
 
+    auto pred = Catch::Predicate<std::invalid_argument>(
+            [] (std::invalid_argument const & e) -> bool {
+                std::string msg{e.what()};
+                return msg.find("Cannot retrieve child of a terminal node");;
+            },
+            "Cannot retrieve child of a terminal node");
+
     // Note that these tests are rather brittle as someone might change the actual exception text
-    CHECK_THROWS_WITH(abo::util::low(mgr,f.at(4)), "low(mgr,n): Cannot retrieve child of a terminal node");
-    CHECK_THROWS_WITH(abo::util::high(mgr,f.at(4)), "high(mgr,n): Cannot retrieve child of a terminal node");
+    CHECK_THROWS_MATCHES(abo::util::low(mgr,f.at(4)), std::invalid_argument, pred);
+    CHECK_THROWS_MATCHES(abo::util::high(mgr,f.at(4)), std::invalid_argument, pred);
+
 
 //    abo::util::dump_dot(mgr,f);
 //    abo::util::dump_dot(mgr,lf0);
