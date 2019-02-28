@@ -4,6 +4,7 @@
 
 #include <pla_parser.hpp>
 #include <cudd_helpers.hpp>
+#include <cudd/cplusplus/cuddObj.hh>
 #include <catch2/catch.hpp>
 
 using namespace abo;
@@ -19,7 +20,7 @@ TEST_CASE("parse or.pla file") {
     std::vector<std::string> outnames;
     std::vector<BDD> out;
 
-    abo::parser::pla_parser parser(mgr,out, innames,outnames);
+    abo::parser::pla_parser parser(mgr, out, innames, outnames);
 
     lorina::read_pla("or.pla", parser);
 
@@ -38,8 +39,6 @@ TEST_CASE("parse or.pla file") {
     REQUIRE(outnames[0] == "f");
 
 
-
-
     REQUIRE(out[0].nodeCount() == 3); // it seems that you do count the terminal node
     REQUIRE(mgr.nodeCount(out) == 3);
 
@@ -48,8 +47,6 @@ TEST_CASE("parse or.pla file") {
 
     // number of variables on that particular output
     REQUIRE(out[0].SupportSize() == 2);
-
-
 
 
 }
@@ -62,7 +59,7 @@ TEST_CASE("parse funs.pla and perform basic operations") {
     std::vector<std::string> outnames;
     std::vector<BDD> out;
 
-    abo::parser::pla_parser parser(mgr,out, innames,outnames);
+    abo::parser::pla_parser parser(mgr, out, innames, outnames);
 
     lorina::read_pla("funs.pla", parser);
 
@@ -93,5 +90,32 @@ TEST_CASE("parse funs.pla and perform basic operations") {
     REQUIRE(out[0].SupportSize() == 2);
     REQUIRE(out[1].SupportSize() == 2);
     REQUIRE(out[2].SupportSize() == 1);
+
+}
+
+TEST_CASE("check handling of overlapping cubes in pla specification") {
+    Cudd mgr(2);
+    std::vector<std::string> innames;
+    std::vector<std::string> outnames;
+    std::vector<BDD> out;
+
+    abo::parser::pla_parser parser(mgr, out, innames, outnames);
+
+    lorina::read_pla("dc.pla", parser);
+
+    int assignments[4][2] = {
+            {0, 0},
+            {0, 1},
+            {1, 0},
+            {1, 1}
+    };
+    bool expected_values[4] = {true, false, true, true};
+
+    for (unsigned int i = 0; i < 4; i++) {
+
+        REQUIRE(out.at(0).Eval(assignments[i]).IsOne() == expected_values[i]);
+
+    }
+
 
 }
