@@ -53,10 +53,6 @@ namespace abo::parser {
 
     }
 
-
-    void pla_parser::on_end() const {
-    }
-
     void pla_parser::on_term(const std::string &term, const std::string &out) const {
         // term ist der cube, den man einlesen muss
 

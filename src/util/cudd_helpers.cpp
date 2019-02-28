@@ -53,7 +53,7 @@ namespace abo::util {
         DdNode *n = v.getNode();
 
         if (Cudd_IsConstant(n)) {
-            throw "high(mgr,n): Cannot retrieve child of a terminal node";
+            throw std::invalid_argument("high(mgr,v): Cannot retrieve child of a terminal node");
         }
 
 
@@ -69,7 +69,7 @@ namespace abo::util {
         DdNode *n = v.getNode();
 
         if (Cudd_IsConstant(n)) {
-            throw "low(mgr,n): Cannot retrieve child of a terminal node";
+            throw std::invalid_argument("low(mgr,v): Cannot retrieve child of a terminal node");
         }
 
         if (Cudd_IsComplement(n)) {

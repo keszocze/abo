@@ -19,8 +19,8 @@ namespace abo::error_metrics {
 
         BDD sigma = mgr.bddOne();
 
-        boost::multiprecision::uint256_t error = 0u;
-        boost::multiprecision::uint256_t one = 1;
+        boost::multiprecision::uint256_t error = 0U;
+        boost::multiprecision::uint256_t one = 1U;
 
         /*
          * We use iterators instead of explicit indexing using ints as that would (well, let's be honest: it is not

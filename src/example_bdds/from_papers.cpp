@@ -29,14 +29,6 @@ namespace abo::example_bdds {
         BDD d3 = cube1 | cube3 | cube4;
         BDD d4 = mgr.bddZero();
 
-//        std::cout << "d0: " << d0 << "\n";
-//        std::cout << "d1: " << d1 << "\n";
-//        std::cout << "d2: " << d2 << "\n";
-//        std::cout << "d3: " << d3 << "\n";
-//        std::cout << "d4: " << d4 << "\n";
-
-
-
         return {d0, d1, d2, d3, d4};
     }
 

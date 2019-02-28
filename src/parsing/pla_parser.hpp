@@ -28,6 +28,9 @@ namespace abo::parser {
                     std::vector<std::string> &outnames) :
                         mgr(mgr), output_bdds(out), innames(innames), outnames(outnames) {}
 
+
+        virtual ~pla_parser() = default;
+
         void on_number_of_inputs(std::size_t number_of_inputs) const override;
 
         void on_number_of_outputs(std::size_t number_of_outputs) const override;
@@ -35,8 +38,6 @@ namespace abo::parser {
         void on_number_of_terms(std::size_t number_of_terms) const override;
 
         bool on_keyword(const std::string &keyword, const std::string &value) const override;
-
-        void on_end() const override;
 
         void on_term(const std::string &term, const std::string &out) const override;
     };
