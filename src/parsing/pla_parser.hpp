@@ -38,6 +38,19 @@ namespace abo::parser {
 
         bool on_keyword(const std::string &keyword, const std::string &value) const override;
 
+        /**
+         * @brief Method called on cube lines of a pla file.
+         *
+         * @param term The currently evaluated cube
+         * @param out The functions, the cube belongs to
+         *
+         * Characters in the cube other than '1' and '0' are treated as don't care values.
+         *
+         * Characters in the list of functions other than '1' are ignored.
+         *
+         * @note This method performs no range checks whatsoever. This means that syntactically incorrect pla files will
+         * result in undefined behavior or crashes.
+         */
         void on_term(const std::string &term, const std::string &out) const override;
     };
 
