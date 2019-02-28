@@ -13,7 +13,7 @@ target_link_libraries(catch-main catch)
 add_custom_command(
         TARGET parsing_test POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
-        ${CMAKE_SOURCE_DIR}/tests/or.pla ${CMAKE_SOURCE_DIR}/tests/funs.pla
+        ${CMAKE_SOURCE_DIR}/tests/or.pla ${CMAKE_SOURCE_DIR}/tests/funs.pla ${CMAKE_SOURCE_DIR}/tests/dc.pla
         ${CMAKE_CURRENT_BINARY_DIR}
         COMMENT "Copying .pla files for testing"
         VERBATIM)

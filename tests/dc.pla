@@ -1,0 +1,9 @@
+# used for testing don't care values in the input pla file
+.ilb x y
+.ob f 
+.i 2
+.o 1
+00 1
+01 0
+1- 1
+.e
