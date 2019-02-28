@@ -13,7 +13,6 @@ namespace abo::parser {
     class pla_parser : public lorina::pla_reader {
     private:
 
-        // TODO im Endeffekt natürlich den Krams per call parameter rausreichen
         const Cudd &mgr;
         mutable std::vector<BDD> bdd_vars;
         std::vector<BDD> &output_bdds;
