@@ -54,7 +54,8 @@ namespace abo::parser {
     }
 
     void pla_parser::on_term(const std::string &term, const std::string &out) const {
-        // term ist der cube, den man einlesen muss
+        // 'term' is the cube that is currently read
+        // 'out' contains the functions this cube belongs to
 
         BDD cube = mgr.bddOne();
 
@@ -67,7 +68,7 @@ namespace abo::parser {
                 case '1':
                     cube = cube * bdd_vars[i];
                     break;
-                default: // TODO find files with don't cares and extend accordingly
+                default:
                     break;
             }
 
