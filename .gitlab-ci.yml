@@ -14,11 +14,11 @@ try_compiling:
         expire_in: 30 minutes
 
     script:
-        - mkdir -p build
+        - mkdir -p build/bw_output
         - cd build
         - cmake ..
           #        - make cudd # needs to be build separately (dunno why)
-        - make all
+        - /opt/sonar-build-wrapper/build-wrapper-linux-x86-64 --out-dir bw_output make all
 
 # cpp check is put in a separate script file as we want to perform stuff that
 # fits this yaml style rather badly
@@ -26,6 +26,11 @@ run_cppcheck:
     stage: compile # no need to wait for the actual compilation
     script:
         - ./stylecheck.sh
+
+run_sonarqube:
+    stage: test # we have to wait for new data to be present in bw_output
+    script: 
+        - /opt/sonar-scanner/bin/sonar-scanner
 
 run_tests:
     stage: test
