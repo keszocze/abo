@@ -11,6 +11,7 @@
 #include <simple.hpp>
 #include <from_papers.hpp>
 #include <worst_case_error.hpp>
+#include <average_case_error.hpp>
 
 #include <iostream>
 
@@ -155,4 +156,16 @@ TEST_CASE("Generic AND constraint error rate test"){
     }
 
 
+}
+
+
+TEST_CASE("Trivial average case error") {
+
+    const size_t n = 3;
+    Cudd mgr(n);
+
+    std::vector<BDD> zero({mgr.bddZero(), mgr.bddZero()});
+    std::vector<BDD> one({mgr.bddOne(), mgr.bddOne()});
+
+    REQUIRE(abo::error_metrics::average_case_error(mgr, one, zero) == 3);
 }
