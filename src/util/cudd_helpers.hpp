@@ -12,6 +12,11 @@
 #include <cudd/cplusplus/cuddObj.hh>
 
 namespace abo::util {
+
+    BDD round_down(const Cudd &mgr, const BDD &bdd, unsigned int level_start, unsigned int level_end);
+    BDD round_up(const Cudd &mgr, const BDD &bdd, unsigned int level_start, unsigned int level_end);
+    BDD round(const Cudd &mgr, const BDD &bdd, unsigned int level);
+
     void dump_dot(
             const Cudd &mgr,
             const std::vector<BDD>& bdd,
