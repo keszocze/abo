@@ -141,6 +141,15 @@ namespace abo::util {
     }
 
 
+    unsigned int const_add_value(const ADD &add) {
+        DdNode *node = add.getNode();
+        if (Cudd_IsConstant(node)) {
+            return static_cast<unsigned int>(Cudd_V(node));
+        }
+        return 0;
+    }
+
+
     void dump_dot(
             const Cudd &mgr,
             const std::vector<BDD> &bdd,

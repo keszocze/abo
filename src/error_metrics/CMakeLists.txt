@@ -3,6 +3,8 @@ add_library(error_metrics
     error_rate.hpp
     worst_case_error.cpp
     worst_case_error.hpp
+    worst_case_bit_flip_error.cpp
+    worst_case_bit_flip_error.hpp
     average_case_error.cpp
     average_case_error.hpp
 )

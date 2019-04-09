@@ -17,6 +17,9 @@ namespace abo::util {
     BDD round_up(const Cudd &mgr, const BDD &bdd, unsigned int level_start, unsigned int level_end);
     BDD round(const Cudd &mgr, const BDD &bdd, unsigned int level);
 
+    // return the value of the given add node, it must be a constant
+    unsigned int const_add_value(const ADD &add);
+
     void dump_dot(
             const Cudd &mgr,
             const std::vector<BDD>& bdd,
