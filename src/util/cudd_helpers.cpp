@@ -150,6 +150,17 @@ namespace abo::util {
     }
 
 
+    ADD bdd_forest_to_add(const Cudd &mgr, const std::vector<BDD> &bdds) {
+        ADD result = mgr.addZero();
+        ADD two = mgr.addOne() + mgr.addOne();
+        for (auto it = bdds.rbegin();it != bdds.rend();it++) {
+            result *= two;
+            result += it->Add();
+        }
+        return result;
+    }
+
+
     void dump_dot(
             const Cudd &mgr,
             const std::vector<BDD> &bdd,
