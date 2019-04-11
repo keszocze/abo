@@ -10,6 +10,7 @@
 #include <tuple>
 #include <map>
 #include <set>
+#include <stack>
 #include <assert.h>
 
 namespace abo::util {
@@ -149,6 +150,34 @@ namespace abo::util {
         return 0;
     }
 
+    std::vector<int> add_terminal_values(const ADD &add) {
+        std::set<DdNode*> visited;
+        std::stack<DdNode*> toVisit;
+        toVisit.push(add.getNode());
+        visited.insert(add.getNode());
+
+        std::vector<int> result;
+        while (toVisit.size() > 0) {
+            DdNode *node = toVisit.top();
+            toVisit.pop();
+
+            if (Cudd_IsConstant(node)) {
+                result.push_back(static_cast<int>(Cudd_V(node)));
+            } else {
+                DdNode *thenNode = Cudd_T(node);
+                if (visited.find(thenNode) == visited.end()) {
+                    visited.insert(thenNode);
+                    toVisit.push(thenNode);
+                }
+                DdNode *elseNode = Cudd_E(node);
+                if (visited.find(elseNode) == visited.end()) {
+                    visited.insert(elseNode);
+                    toVisit.push(elseNode);
+                }
+            }
+        }
+        return result;
+    }
 
     ADD bdd_forest_to_add(const Cudd &mgr, const std::vector<BDD> &bdds) {
         ADD result = mgr.addZero();

@@ -19,6 +19,7 @@ namespace abo::util {
 
     // return the value of the given add node, it must be a constant
     unsigned int const_add_value(const ADD &add);
+    std::vector<int> add_terminal_values(const ADD &add);
 
     // assumes that the function represents an unsigned integer
     ADD bdd_forest_to_add(const Cudd &mgr, const std::vector<BDD> &bdds);
