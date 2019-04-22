@@ -247,6 +247,38 @@ namespace abo::util {
         return result;
     }
 
+    ADD xor_difference_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat) {
+        std::vector<BDD> diff;
+        for (unsigned int i = 0;i<f.size();i++) {
+            diff.push_back(f[i] ^ f_hat[i]);
+        }
+
+        return bdd_forest_to_add(mgr, diff);
+    }
+
+    static DdNode * add_absolute_difference_apply(DdManager * dd, DdNode ** f, DdNode ** g) {
+        // basically copied from cuddAddApply.c (the operator is modified of course)
+        DdNode *F = *f;
+        DdNode *G = *g;
+        if (Cudd_IsConstant(F) && Cudd_IsConstant(G)) {
+            CUDD_VALUE_TYPE value = std::abs(Cudd_V(F) - Cudd_V(G));
+            DdNode * res = Cudd_addConst(dd, value);
+            return res;
+        }
+        if (F > G) { /* swap f and g */
+            *f = G;
+            *g = F;
+        }
+        return nullptr;
+    }
+
+    ADD absolute_difference_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat) {
+        ADD a = bdd_forest_to_add(mgr, f);
+        ADD b = bdd_forest_to_add(mgr, f_hat);
+        DdNode *result_node = Cudd_addApply(mgr.getManager(), add_absolute_difference_apply, a.getNode(), b.getNode());
+        return ADD(mgr, result_node);
+    }
+
 
     void dump_dot(
             const Cudd &mgr,

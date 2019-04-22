@@ -25,6 +25,9 @@ namespace abo::util {
     // assumes that the function represents an unsigned integer
     ADD bdd_forest_to_add(const Cudd &mgr, const std::vector<BDD> &bdds);
 
+    ADD xor_difference_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat);
+    ADD absolute_difference_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat);
+
     void dump_dot(
             const Cudd &mgr,
             const std::vector<BDD>& bdd,
