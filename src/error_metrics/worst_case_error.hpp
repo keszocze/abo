@@ -26,6 +26,9 @@ namespace abo::error_metrics {
     worst_case_error(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat,
                          const NumberRepresentation num_rep= NumberRepresentation::BaseTwo);
 
+    boost::multiprecision::uint256_t
+        worst_case_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat);
+
 }
 
 #endif //ABO_WORST_CASE_ERROR_HPP

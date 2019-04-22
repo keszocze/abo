@@ -66,4 +66,16 @@ namespace abo::error_metrics {
 
         return get_max_value(mgr,absolute_difference);
     }
+
+    boost::multiprecision::uint256_t
+    worst_case_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat) {
+        ADD diff = abo::util::absolute_difference_add(mgr, f, f_hat);
+        std::vector<std::pair<unsigned long, unsigned long>> terminal_values = abo::util::add_terminal_values(diff);
+
+        boost::multiprecision::uint256_t max_value = 0;
+        for (auto p : terminal_values) {
+            max_value = std::max(boost::multiprecision::uint256_t(p.first), max_value);
+        }
+        return max_value;
+    }
 }
