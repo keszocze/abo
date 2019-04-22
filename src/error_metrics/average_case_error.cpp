@@ -78,4 +78,34 @@ namespace abo::error_metrics {
         return mean_squared_value(absolute_difference);
     }
 
+
+    boost::multiprecision::cpp_dec_float_100 average_case_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat) {
+        ADD diff = abo::util::absolute_difference_add(mgr, f, f_hat);
+        std::vector<std::pair<unsigned long, unsigned long>> terminal_values = abo::util::add_terminal_values(diff);
+
+        boost::multiprecision::uint256_t sum = 0;
+        boost::multiprecision::uint256_t path_sum = 0;
+        for (auto p : terminal_values) {
+            sum += boost::multiprecision::uint256_t(p.first) * p.second;
+            path_sum += p.second;
+        }
+        return boost::multiprecision::cpp_dec_float_100(sum) /
+                boost::multiprecision::cpp_dec_float_100(path_sum);
+    }
+
+    boost::multiprecision::cpp_dec_float_100 mean_squared_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat) {
+        ADD diff = abo::util::absolute_difference_add(mgr, f, f_hat);
+        std::vector<std::pair<unsigned long, unsigned long>> terminal_values = abo::util::add_terminal_values(diff);
+
+        boost::multiprecision::uint256_t sum = 0;
+        boost::multiprecision::uint256_t path_sum = 0;
+        for (auto p : terminal_values) {
+            boost::multiprecision::uint256_t value(p.first);
+            sum += value * value * p.second;
+            path_sum += p.second;
+        }
+        return boost::multiprecision::cpp_dec_float_100(sum) /
+                boost::multiprecision::cpp_dec_float_100(path_sum);
+    }
+
 }
