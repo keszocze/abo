@@ -11,6 +11,7 @@
 #include <map>
 #include <set>
 #include <stack>
+#include <algorithm>
 #include <assert.h>
 
 namespace abo::util {
@@ -150,19 +151,76 @@ namespace abo::util {
         return 0;
     }
 
-    std::vector<int> add_terminal_values(const ADD &add) {
+    static std::map<DdNode*, unsigned long> count_paths(DdNode* node, unsigned int terminal_level) {
+        if (Cudd_IsConstant(node)) {
+            return {{node, 1}};
+        }
+
+        // do a sort of breadth first search, visiting all variable levels from top to bottom
+        std::vector<std::stack<DdNode*>> levels;
+        levels.push_back(std::stack<DdNode*>({Cudd_Regular(node)}));
+
+        std::map<DdNode*, unsigned long> node_to_count;
+        std::set<DdNode*> visited;
+        node_to_count[node] = 1;
+        visited.insert(node);
+        for (unsigned int level = 0;level<levels.size();level++) {
+            // a reference can not be used here since the vector may resize and move the data elsewhere
+            std::stack<DdNode*> nodes = levels[level];
+            while (nodes.size() > 0) {
+                DdNode *current = nodes.top();
+                nodes.pop();
+
+
+                if (!Cudd_IsConstant(current)) {
+                    DdNode *then_node = Cudd_Regular(Cudd_T(current));
+                    DdNode *else_node = Cudd_Regular(Cudd_E(current));
+
+                    unsigned long current_count = node_to_count[current];
+
+                    unsigned long then_level = Cudd_IsConstant(then_node) ? terminal_level : Cudd_NodeReadIndex(then_node);
+                    // the map will automatically use 0 if the node is not yet present
+                    node_to_count[then_node] += current_count << (then_level - level - 1);
+                    if (visited.find(then_node) == visited.end()) {
+                        levels.resize(std::max(levels.size(), then_level+1));
+                        levels[then_level].push(then_node);
+                        visited.insert(then_node);
+                    }
+
+                    unsigned long else_level = Cudd_IsConstant(else_node) ? terminal_level : Cudd_NodeReadIndex(else_node);
+                    node_to_count[else_node] += current_count << (else_level - level - 1);
+                    if (visited.find(else_node) == visited.end()) {
+                        levels.resize(std::max(levels.size(), else_level+1));
+                        levels[else_level].push(else_node);
+                        visited.insert(else_node);
+                    }
+                }
+            }
+        }
+
+        return node_to_count;
+    }
+
+    std::vector<std::pair<unsigned long, unsigned long>> add_terminal_values(const ADD &add) {
         std::set<DdNode*> visited;
         std::stack<DdNode*> toVisit;
         toVisit.push(add.getNode());
         visited.insert(add.getNode());
 
-        std::vector<int> result;
+        // determine the level that terminal nodes should be interpreted as
+        std::vector<unsigned int> support = add.SupportIndices();
+        auto max_support_index = std::max_element(support.begin(), support.end());
+        unsigned int terminal_level = (max_support_index == support.end() ? 0 : *max_support_index) + 1;
+
+        auto path_count = count_paths(add.getNode(), terminal_level);
+
+        std::vector<std::pair<unsigned long, unsigned long>> result;
         while (toVisit.size() > 0) {
             DdNode *node = toVisit.top();
             toVisit.pop();
 
             if (Cudd_IsConstant(node)) {
-                result.push_back(static_cast<int>(Cudd_V(node)));
+                result.push_back({static_cast<unsigned long>(Cudd_V(node)), path_count[node]});
             } else {
                 DdNode *thenNode = Cudd_T(node);
                 if (visited.find(thenNode) == visited.end()) {
