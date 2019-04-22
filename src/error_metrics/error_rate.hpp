@@ -13,8 +13,10 @@
 namespace abo::error_metrics {
     double error_rate(const Cudd & mgr, const  std::vector<BDD>& f, const std::vector<BDD>& f_hat);
 
+    double error_rate_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat);
 
     double error_rate(const Cudd & mgr, const BDD& f, const BDD& f_hat);
+
 }
 
 #endif //ABO_ERROR_RATE_HPP

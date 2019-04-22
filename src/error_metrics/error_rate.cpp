@@ -3,6 +3,7 @@
 //
 
 #include "error_rate.hpp"
+#include "cudd_helpers.hpp"
 
 
 namespace abo::error_metrics {
@@ -26,11 +27,18 @@ namespace abo::error_metrics {
         return Cudd_CountMinterm(dd, miter_bdd.getNode(), Cudd_ReadSize(dd));
     }
 
-
-    double error_rate(const Cudd &mgr, const BDD &f, const BDD &f_hat) {
-        std::vector<BDD> fv{f};
-        std::vector<BDD> fv_hat{f_hat};
-        return error_rate(mgr, fv, fv_hat);
+    double error_rate_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat) {
+        ADD diff = abo::util::xor_difference_add(mgr, f, f_hat);
+        std::vector<std::pair<unsigned long, unsigned long>> terminal_values = abo::util::add_terminal_values(diff);
+        unsigned long non_zero_path_count = 0;
+        unsigned long total_path_count = 0;
+        for (auto [value, path_count] : terminal_values) {
+            if (value != 0) {
+                non_zero_path_count += path_count;
+            }
+            total_path_count += path_count;
+        }
+        return non_zero_path_count / double(total_path_count);
     }
 
 }
