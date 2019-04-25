@@ -15,8 +15,8 @@ namespace abo::example_bdds {
         input1.reserve(num_bits);
         input2.reserve(num_bits);
         for (unsigned int i = 0;i<num_bits;i++) {
-            input1.push_back(mgr.bddVar(i));
-            input2.push_back(mgr.bddVar(i + num_bits));
+            input1.push_back(mgr.bddVar(i * 2));
+            input2.push_back(mgr.bddVar(i * 2 + 1));
         }
 
         std::vector<BDD> carry_outs;
@@ -66,8 +66,8 @@ namespace abo::example_bdds {
         input1.reserve(num_bits);
         input2.reserve(num_bits);
         for (unsigned int i = 0;i<num_bits;i++) {
-            input1.push_back(mgr.bddVar(i));
-            input2.push_back(mgr.bddVar(i + num_bits));
+            input1.push_back(mgr.bddVar(i * 2));
+            input2.push_back(mgr.bddVar(i * 2 + 1));
         }
 
         unsigned int num_partitions = (num_bits / partition_size) + 1;
@@ -116,8 +116,8 @@ namespace abo::example_bdds {
         input1.reserve(num_bits);
         input2.reserve(num_bits);
         for (unsigned int i = 0;i<num_bits;i++) {
-            input1.push_back(mgr.bddVar(i));
-            input2.push_back(mgr.bddVar(i + num_bits));
+            input1.push_back(mgr.bddVar(i * 2));
+            input2.push_back(mgr.bddVar(i * 2 + 1));
         }
 
         std::vector<BDD> carry_outs;
@@ -166,8 +166,8 @@ namespace abo::example_bdds {
         input1.reserve(num_bits);
         input2.reserve(num_bits);
         for (unsigned int i = 0;i<num_bits;i++) {
-            input1.push_back(mgr.bddVar(i));
-            input2.push_back(mgr.bddVar(i + num_bits));
+            input1.push_back(mgr.bddVar(i * 2));
+            input2.push_back(mgr.bddVar(i * 2 + 1));
         }
 
         unsigned int sub_adder_length = resultant_bits + previous_bits;
@@ -222,8 +222,8 @@ namespace abo::example_bdds {
         input1.reserve(num_bits);
         input2.reserve(num_bits);
         for (unsigned int i = 0;i<num_bits;i++) {
-            input1.push_back(mgr.bddVar(i));
-            input2.push_back(mgr.bddVar(i + num_bits));
+            input1.push_back(mgr.bddVar(i * 2));
+            input2.push_back(mgr.bddVar(i * 2 + 1));
         }
 
         std::vector<BDD> sum;

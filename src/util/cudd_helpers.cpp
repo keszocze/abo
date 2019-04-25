@@ -20,8 +20,6 @@ namespace abo::util {
         std::vector<int> bdd_inputs;
         for (int i = 0;i<bits;i++) {
             bdd_inputs.push_back((input1 & (1 << i)) > 0 ? 1 : 0);
-        }
-        for (int i = 0;i<bits;i++) {
             bdd_inputs.push_back((input2 & (1 << i)) > 0 ? 1 : 0);
         }
 
@@ -365,6 +363,40 @@ namespace abo::util {
         }
     }
 
+    int variable_index(const Cudd& mgr, const BDD& v) {
+        //return Cudd_ReadPerm(v.getNode());
+    }
+
+    std::vector<BDD> copy_to_mgr(const Cudd &original_mgr, const std::vector<BDD> &f, const Cudd &mgr_to) {
+
+    }
+
+    std::pair<BDD, Cudd> characteristic_function(const Cudd &mgr, const std::vector<BDD> &f, int max_level) {
+        /*auto function_support = mgr.SupportIndices(f);
+
+        std::map<unsigned int, unsigned int> index_map;
+        std::sort(function_support.begin(), function_support.end());
+        for (unsigned int i = 0;i<function_support.size();i++) {
+            index_map[function_support[i]] = i;
+        }
+
+        Cudd characteristic_manager(function_support.size() + f.size());*/
+
+        std::vector<BDD> output_variables;
+        for (unsigned int i = 0;i<f.size();i++) {
+            output_variables.push_back(mgr.bddNewVarAtLevel(max_level + i + 1));
+        }
+
+        // TODO: copy bdd to new manager
+        BDD result = mgr.bddOne();
+
+        for (unsigned int i = 0; i < f.size(); i++) {
+            result &= (!output_variables[i] ^ f[i]);
+        }
+
+        return std::make_pair(result, mgr);
+    }
+
     std::pair<BDD, BDD> full_adder(const BDD &f, const BDD &g, const BDD &carry_in) {
         BDD carry_out = (f * g) | (f * carry_in) | (g * carry_in);
         BDD sum = f ^ g ^carry_in;
@@ -375,7 +407,6 @@ namespace abo::util {
     bdd_subtract(const Cudd &mgr, const std::vector<BDD> &minuend, const std::vector<BDD> &subtrahend) {
         std::vector<BDD> diff;
         diff.reserve(minuend.size());
-
 
         // using one as carry in serves as an implicit method to add one to the subtrahend, which is necessary to
         // change its sign
@@ -389,7 +420,7 @@ namespace abo::util {
 
         }
 
-        std::cout << "diff.size() " << diff.size() << "\n";
+        //std::cout << "diff.size() " << diff.size() << "\n";
 
         return diff;
     }
@@ -412,6 +443,78 @@ namespace abo::util {
         return abs;
     }
 
+    std::vector<BDD> generate_random_function_layered(const Cudd &mgr, int num_variables, int layers, int layer_size, int number_of_bdds) {
+        std::vector<BDD> result;
+        for (int i = 0;i<number_of_bdds;i++) {
+            std::vector<BDD> layer;
+            for (int b = 0;b<num_variables;b++) {
+                layer.push_back(mgr.bddVar(b));
+            }
+            for (int b = 0;b<layers;b++) {
+                std::vector<BDD> next_layer;
+                while (next_layer.size() < layer_size) {
+                    BDD a = layer[rand() % layer.size()];
+                    if (rand() % 2 == 0) a = !a;
+                    BDD b = layer[rand() % layer.size()];
+                    if (rand() % 2 == 0) b = !b;
+                    if (rand() % 5 == 0) {
+                        next_layer.push_back(a & b);
+                    } else {
+                        next_layer.push_back(a ^ b);
+                    }
+                    if (next_layer.back().nodeCount() < std::min(a.nodeCount(), b.nodeCount())) {
+                        next_layer.pop_back();
+                    }
+                }
+                layer = next_layer;
+            }
+            BDD biggest = layer[0];
+            for (const BDD & b : layer) {
+                if (b.nodeCount() > biggest.nodeCount()) {
+                    biggest = b;
+                }
+            }
+            result.push_back(biggest);
+            std::cout <<"Size: "<<biggest.nodeCount()<<std::endl;
+        }
+
+        return result;
+    }
+
+
+    std::vector<BDD> generate_random_function(const Cudd &mgr, int num_variables, int complexity, int number_of_bdds) {
+        std::vector<BDD> result;
+        for (int i = 0;i<number_of_bdds;i++) {
+            std::vector<BDD> parts;
+            BDD biggest = mgr.bddVar(0);
+            for (int b = 0;b<num_variables;b++) {
+                parts.push_back(mgr.bddVar(b));
+            }
+            for (int b = 0;b<complexity;b++) {
+                int modification = rand() % 5;
+                if (modification == 0) { // not
+                    parts.push_back(!parts[rand() % parts.size()]);
+                } else {
+                    int a_pos = parts.size() - 1 - (rand() % std::min(100UL, parts.size()));
+                    int b_pos = parts.size() - 1 - (rand() % std::min(100UL, parts.size()));
+                    if (modification <= 2) {
+                        parts.push_back(parts[a_pos] & parts[b_pos]);
+                    } else {
+                        parts.push_back(parts[a_pos] | parts[b_pos]);
+                    }
+                }
+                if (parts.back().nodeCount() >= biggest.nodeCount()) {
+                    biggest = parts.back();
+                } else {
+                    parts.pop_back();
+                }
+            }
+            result.push_back(biggest);
+            std::cout <<"Size: "<<biggest.nodeCount()<<std::endl;
+        }
+
+        return result;
+    }
 
 
 }
