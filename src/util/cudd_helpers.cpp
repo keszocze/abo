@@ -16,6 +16,25 @@
 
 namespace abo::util {
 
+    long eval_adder(const std::vector<BDD> &adder, long input1, long input2, int bits) {
+        std::vector<int> bdd_inputs;
+        for (int i = 0;i<bits;i++) {
+            bdd_inputs.push_back((input1 & (1 << i)) > 0 ? 1 : 0);
+        }
+        for (int i = 0;i<bits;i++) {
+            bdd_inputs.push_back((input2 & (1 << i)) > 0 ? 1 : 0);
+        }
+
+        long result = 0;
+        for (unsigned int i = 0;i<adder.size();i++) {
+            if (adder[i].Eval(bdd_inputs.data()).IsOne()) {
+                result |= 1 << i;
+            }
+        }
+
+        return result;
+    }
+
     static double count_minterms_rec(DdNode* node, std::map<DdNode*, double> &minterms_map) {
         auto it = minterms_map.find(node);
         if (it != minterms_map.end()) {

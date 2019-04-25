@@ -13,6 +13,8 @@
 
 namespace abo::util {
 
+    long eval_adder(const std::vector<BDD> &adder, long input1, long input2, int bits);
+
     BDD round_down(const Cudd &mgr, const BDD &bdd, unsigned int level_start, unsigned int level_end);
     BDD round_up(const Cudd &mgr, const BDD &bdd, unsigned int level_start, unsigned int level_end);
     BDD round(const Cudd &mgr, const BDD &bdd, unsigned int level);
