@@ -29,7 +29,7 @@ namespace abo::example_bdds {
             }
         }
 
-        for (unsigned int i = partition_size-1;i<num_bits;i++) {
+        for (int i = partition_size-1;i<num_bits;i++) {
             BDD temp_carry = mgr.bddZero();
             for (int j = partition_size-2;j >= 0;j--) {
                 if (i-j >= 0) {
@@ -74,7 +74,7 @@ namespace abo::example_bdds {
 
         std::vector<BDD> carry_outs;
         carry_outs.reserve(num_bits);
-        for (unsigned int i = 0;i<num_bits;i++) {
+        for (int i = 0;i<num_bits;i++) {
             const BDD &a = input1[i];
             const BDD &b = input2[i];
 
@@ -122,7 +122,7 @@ namespace abo::example_bdds {
 
         std::vector<BDD> carry_outs;
         carry_outs.reserve(num_bits);
-        for (unsigned int i = 0;i<num_bits;i++) {
+        for (int i = 0;i<num_bits;i++) {
             const BDD &a = input1[i];
             const BDD &b = input2[i];
 
