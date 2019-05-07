@@ -99,8 +99,8 @@ static void generate_adders(benchmark::State& state) {
 // this re-creates the time table found in "One Method - All Error-Metrics [...]"
 BENCHMARK(generate_adders)->Unit(benchmark::kMillisecond)->Apply([](auto *b) {
     std::vector<ErrorMetric> metrics = {WORST_CASE, AVERAGE_CASE, MEAN_SQUARED, ERROR_RATE, AVERAGE_BIT_FLIP, WORST_CASE_BIT_FLIP};
+    // 8 bit adders
     for (auto metric : metrics) {
-        // 8 bit adders
         b = b->Args({metric, ACA1, 8, 5, 0})
                 ->Args({metric, ACA2, 8, 4, 0})
                 ->Args({metric, GDA, 8, 4, 2})
@@ -118,6 +118,25 @@ BENCHMARK(generate_adders)->Unit(benchmark::kMillisecond)->Apply([](auto *b) {
                 ->Args({metric, GEAR, 8, 2, 2})
                 ->Args({metric, GEAR, 8, 2, 4});
     }
+    // 16 bit adders
+    for (auto metric : metrics) {
+        // TODO: ETA2 is missing
+        b = b->Args({metric, ACA1, 16, 4, 0})
+                ->Args({metric, ACA2, 16, 4, 0})
+                ->Args({metric, ACA2, 16, 8, 0})
+                ->Args({metric, GDA, 16, 4, 4})
+                ->Args({metric, GDA, 16, 4, 8})
+                ->Args({metric, GEAR, 16, 2, 4})
+                ->Args({metric, GEAR, 16, 4, 4})
+                ->Args({metric, GEAR, 16, 4, 8})
+                ->Args({metric, GEAR, 16, 6, 4});
+    }
+    // 32 bit adders
+    for (auto metric : metrics) {
+        b = b->Args({metric, ACA1, 32, 8, 0})
+                -> Args({metric, ACA1, 32, 16, 0});
+    }
+    // TODO: add 64 bit adders as well (not present in the paper)
 });
 
 BENCHMARK_MAIN();
