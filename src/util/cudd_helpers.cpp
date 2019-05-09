@@ -16,6 +16,18 @@
 
 namespace abo::util {
 
+    unsigned int terminal_level(const std::vector<std::vector<BDD>>& bdds) {
+        unsigned int max_index = 0;
+        for (const auto &f : bdds) {
+            for (const BDD &b : f) {
+                std::vector<unsigned int> support = b.SupportIndices();
+                auto max_support_index = std::max_element(support.begin(), support.end());
+                max_index = std::max(max_index, (max_support_index == support.end() ? 0 : *max_support_index) + 1);
+            }
+        }
+        return max_index;
+    }
+
     long eval_adder(const std::vector<BDD> &adder, long input1, long input2, int bits) {
         std::vector<int> bdd_inputs;
         for (int i = 0;i<bits;i++) {

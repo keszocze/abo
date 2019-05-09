@@ -24,7 +24,8 @@ namespace abo::error_metrics {
 
         DdManager *dd = mgr.getManager();
 
-        return Cudd_CountMinterm(dd, miter_bdd.getNode(), Cudd_ReadSize(dd));
+        unsigned int num_variables = abo::util::terminal_level({f, f_hat}) - 1;
+        return Cudd_CountMinterm(dd, miter_bdd.getNode(), num_variables) / std::pow(2.0, num_variables);
     }
 
     double error_rate_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat) {
