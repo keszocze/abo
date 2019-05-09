@@ -28,6 +28,31 @@ namespace abo::error_metrics {
         return Cudd_CountMinterm(dd, miter_bdd.getNode(), num_variables) / std::pow(2.0, num_variables);
     }
 
+    double error_rate_sampling(const std::vector<BDD>& f, const std::vector<BDD>& f_hat, long samples) {
+        assert(f.size() == f_hat.size());
+        std::vector<BDD> difference;
+
+        difference.reserve(f.size());
+        for (int i = 0;i<f.size();i++) {
+            difference.push_back(f[i] ^ f_hat[i]);
+        }
+
+        unsigned int terminal_level = abo::util::terminal_level({f, f_hat});
+
+        long error_samples = 0;
+        std::vector<int> inputs(terminal_level, 0);
+        for (int i = 0;i<samples;i++) {
+            std::generate(inputs.begin(), inputs.end(), []() { return rand() % 2; });
+            for (const BDD &b : difference) {
+                if (b.Eval(inputs.data()).IsOne()) {
+                    error_samples++;
+                    break;
+                }
+            }
+        }
+        return double(error_samples) / samples;
+    }
+
     double error_rate_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat) {
         ADD diff = abo::util::xor_difference_add(mgr, f, f_hat);
         std::vector<std::pair<unsigned long, unsigned long>> terminal_values = abo::util::add_terminal_values(diff);
