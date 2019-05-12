@@ -29,6 +29,22 @@ namespace abo::error_metrics {
     boost::multiprecision::uint256_t
         worst_case_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat);
 
+    /**
+     * @brief approximate_worst_case_error
+     *  Calculates the worst case error approximately, to a given relative error.
+     *  The time and memory this function uses scales exponentially with the desired precision (n) (in the worst case).
+     *  With m being the input size (f, f_hat), in the worst case, it lies in O(m ^ n).
+     * @param mgr
+     * @param f
+     * @param f_hat
+     * @param n The precision to calculate in number of bits, for more details see the return value. It must be greater than zero.
+     * @return The approximated worst case error. It is an upper bound and therefore guaranteed to be larger
+     *  than the actual error. Let wc be the correct worst case error and x be the result of this function.
+     *  Then it holds that wc <= x <= wc * (1 + 1 / (2 ^ (n + 1) - 1)))
+     */
+    boost::multiprecision::uint256_t approximate_worst_case_error(const Cudd &mgr, const std::vector<BDD> &f,
+                                                                  const std::vector<BDD> &f_hat, int n);
+
 }
 
 #endif //ABO_WORST_CASE_ERROR_HPP

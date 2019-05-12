@@ -78,4 +78,42 @@ namespace abo::error_metrics {
         }
         return max_value;
     }
+
+    boost::multiprecision::uint256_t approximate_worst_case_error(const Cudd &mgr, const std::vector<BDD> &f,
+                                                                  const std::vector<BDD> &f_hat, int n) {
+        assert(f.size() == f_hat.size() && n >= 1);
+
+        std::vector<BDD> f_;
+        std::vector<BDD> f_hat_;
+
+        f_.push_back(mgr.bddZero());
+        f_hat_.push_back(mgr.bddZero());
+
+        int bit_start = -1;
+        int bit_end = -1;
+        for (int i = f.size()-1;i >= 0;i--) {
+            if (bit_start == -1 && f[i] != f_hat[i]) {
+                bit_start = i;
+            }
+            if (bit_start >= 0 && bit_start - i >= n) {
+                bit_end = i;
+                break;
+            }
+            f_.push_back(f[i]);
+            f_hat_.push_back(f_hat[i]);
+        }
+        if (bit_start == -1) {
+            return 0;
+        }
+        std::reverse(f_.begin(), f_.end());
+        std::reverse(f_hat_.begin(), f_hat_.end());
+
+        std::vector<BDD> difference = abo::util::bdd_subtract(mgr, f_, f_hat_);
+        std::vector<BDD> absolute_difference = abo::util::abs(mgr, difference);
+
+        unsigned long shift = bit_end + 1;
+        boost::multiprecision::uint256_t one = 1;
+        // add one to give an upper bound on the error
+        return (get_max_value(mgr, absolute_difference) + 1) * (one << shift) - 1;
+    }
 }
