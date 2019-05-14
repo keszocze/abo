@@ -84,8 +84,9 @@ namespace abo::util {
     }
 
     static DdNode *round_rec(DdManager * dd, DdNode *node, unsigned int level_start, unsigned int level_end,
-                             const std::map<DdNode*, double> minterm_count, std::map<DdNode*, DdNode*> round_map,
+                             const std::map<DdNode*, double> &minterm_count, std::map<DdNode*, DdNode*> &round_map,
                              bool remove_heavy, bool remove_light) {
+
         if (Cudd_IsConstant(node)) {
             return node;
         }
@@ -148,13 +149,14 @@ namespace abo::util {
         Cudd_RecursiveDeref(dd, then_branch);
         Cudd_RecursiveDeref(dd, else_branch);
 
+        round_map[node] = neW;
+
         return neW;
     }
 
     BDD round_down(const Cudd &mgr, const BDD &bdd, unsigned int level_start, unsigned int level_end) {
         std::map<DdNode*, DdNode*> round_map;
         DdNode *node = round_rec(mgr.getManager(), bdd.getNode(), level_start, level_end, count_minterms(bdd), round_map, false, true);
-        count_minterms(BDD(mgr, node));
         return BDD(mgr, node);
     }
 
