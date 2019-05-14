@@ -17,3 +17,12 @@ target_link_libraries(benchmark_iscas_85
         PRIVATE benchmark
         PRIVATE abo_util
 )
+
+# copies the iscas dataset used for benchmarking into the build folder so that they are actually found
+add_custom_command(
+        TARGET benchmark_iscas_85 POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_CURRENT_SOURCE_DIR}/iscas85
+        ${CMAKE_CURRENT_BINARY_DIR}/iscas85
+        COMMENT "Copying iscas dataset for benchmarking"
+        VERBATIM)
