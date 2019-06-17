@@ -32,6 +32,7 @@ try_compiling:
 # cpp check is put in a separate script file as we want to perform stuff that
 # fits this yaml style rather badly
 run_cppcheck:
+    extends: ciconf
     stage: compile # no need to wait for the actual compilation
     script:
         - date
