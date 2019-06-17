@@ -46,6 +46,7 @@ run_sonarqube:
         - /opt/sonar-scanner/bin/sonar-scanner
 
 run_tests:
+    extends: .ciconf
     stage: test
     script:
         - cd build/tests
