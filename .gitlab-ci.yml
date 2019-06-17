@@ -39,7 +39,7 @@ run_cppcheck:
         - date
 
 run_sonarqube:
-    extends: .cifonf
+    extends: .ciconf
     stage: test # we have to wait for new data to be present in bw_output
     script: 
         - /opt/sonar-scanner/bin/sonar-scanner
