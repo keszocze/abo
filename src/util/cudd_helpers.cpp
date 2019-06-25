@@ -76,7 +76,7 @@ namespace abo::util {
         return minTerms;
     }
 
-    static std::map<DdNode*, double> count_minterms(const BDD &bdd) {
+    std::map<DdNode*, double> count_minterms(const BDD &bdd) {
         std::map<DdNode*, double> result;
 
         count_minterms_rec(bdd.getNode(), result);
