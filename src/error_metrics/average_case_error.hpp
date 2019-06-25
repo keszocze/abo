@@ -26,6 +26,8 @@ namespace abo::error_metrics {
 
     boost::multiprecision::cpp_dec_float_100 average_relative_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat);
 
+    boost::multiprecision::cpp_dec_float_100 average_relative_error_sampling(const std::vector<BDD>& f, const std::vector<BDD>& f_hat, long samples);
+
 }
 
 #endif // AVERAGE_CASE_ERROR_H

@@ -163,4 +163,37 @@ namespace abo::error_metrics {
                 boost::multiprecision::cpp_dec_float_100(path_sum);
     }
 
+    boost::multiprecision::cpp_dec_float_100 average_relative_error_sampling(const std::vector<BDD>& f, const std::vector<BDD>& f_hat, long samples) {
+        assert(f.size() == f_hat.size());
+        std::vector<BDD> difference;
+
+        difference.reserve(f.size());
+        for (int i = 0;i<f.size();i++) {
+            difference.push_back(f[i] ^ f_hat[i]);
+        }
+
+        unsigned int terminal_level = abo::util::terminal_level({f, f_hat});
+
+        boost::multiprecision::cpp_dec_float_100 error = 0;
+        std::vector<int> inputs(terminal_level, 0);
+        for (int i = 0;i<samples;i++) {
+            std::generate(inputs.begin(), inputs.end(), []() { return rand() % 2; });
+            boost::multiprecision::cpp_dec_float_100 original_value = 0, diff_value = 0;
+            for (auto it = difference.rbegin();it != difference.rend();++it) {
+                diff_value *= 2;
+                if (it->Eval(inputs.data()).IsOne()) {
+                    diff_value += 1;
+                }
+            }
+            for (auto it = f.rbegin();it != f.rend();++it) {
+                original_value *= 2;
+                if (it->Eval(inputs.data()).IsOne()) {
+                    original_value += 1;
+                }
+            }
+            error += diff_value / max(boost::multiprecision::cpp_dec_float_100(1.0), original_value);
+        }
+        return error / samples;
+    }
+
 }
