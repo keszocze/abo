@@ -54,7 +54,7 @@ static void benchmark_iscas85(benchmark::State& state) {
     case ROUND_DOWN: rounding_text = "round down"; break;
     case ROUND_FULL: rounding_text = "round"; break;
     }
-    state.SetLabel(files[state.range(1)] + "(" + rounding_text + "->" + std::to_string(state.range(3)) + ") - " + error_metric_name);
+    state.SetLabel(files[state.range(1)] + "(" + rounding_text + "->" + std::to_string(state.range(3)+1) + ") - " + error_metric_name);
     for (auto _ : state) {
         state.PauseTiming();
         Cudd mgr(64); // the exact number does not matter, it will be expanded if necessary
