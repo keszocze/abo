@@ -70,7 +70,7 @@ namespace abo::error_metrics {
     boost::multiprecision::uint256_t
     worst_case_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat) {
         ADD diff = abo::util::absolute_difference_add(mgr, f, f_hat);
-        std::vector<std::pair<unsigned long, unsigned long>> terminal_values = abo::util::add_terminal_values(diff);
+        std::vector<std::pair<double, unsigned long>> terminal_values = abo::util::add_terminal_values(diff);
 
         boost::multiprecision::uint256_t max_value = 0;
         for (auto p : terminal_values) {

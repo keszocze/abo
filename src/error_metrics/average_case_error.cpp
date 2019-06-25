@@ -81,7 +81,7 @@ namespace abo::error_metrics {
 
     boost::multiprecision::cpp_dec_float_100 average_case_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat) {
         ADD diff = abo::util::absolute_difference_add(mgr, f, f_hat);
-        std::vector<std::pair<unsigned long, unsigned long>> terminal_values = abo::util::add_terminal_values(diff);
+        std::vector<std::pair<double, unsigned long>> terminal_values = abo::util::add_terminal_values(diff);
 
         boost::multiprecision::uint256_t sum = 0;
         boost::multiprecision::uint256_t path_sum = 0;
@@ -95,7 +95,7 @@ namespace abo::error_metrics {
 
     boost::multiprecision::cpp_dec_float_100 mean_squared_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat) {
         ADD diff = abo::util::absolute_difference_add(mgr, f, f_hat);
-        std::vector<std::pair<unsigned long, unsigned long>> terminal_values = abo::util::add_terminal_values(diff);
+        std::vector<std::pair<double, unsigned long>> terminal_values = abo::util::add_terminal_values(diff);
 
         boost::multiprecision::uint256_t sum = 0;
         boost::multiprecision::uint256_t path_sum = 0;

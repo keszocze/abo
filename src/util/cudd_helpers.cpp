@@ -232,7 +232,7 @@ namespace abo::util {
         return node_to_count;
     }
 
-    std::vector<std::pair<unsigned long, unsigned long>> add_terminal_values(const ADD &add) {
+    std::vector<std::pair<double, unsigned long>> add_terminal_values(const ADD &add) {
         std::set<DdNode*> visited;
         std::stack<DdNode*> toVisit;
         toVisit.push(add.getNode());
@@ -245,13 +245,13 @@ namespace abo::util {
 
         auto path_count = count_paths(add.getNode(), terminal_level);
 
-        std::vector<std::pair<unsigned long, unsigned long>> result;
+        std::vector<std::pair<double, unsigned long>> result;
         while (toVisit.size() > 0) {
             DdNode *node = toVisit.top();
             toVisit.pop();
 
             if (Cudd_IsConstant(node)) {
-                result.push_back({static_cast<unsigned long>(Cudd_V(node)), path_count[node]});
+                result.push_back({Cudd_V(node), path_count[node]});
             } else {
                 DdNode *thenNode = Cudd_T(node);
                 if (visited.find(thenNode) == visited.end()) {
