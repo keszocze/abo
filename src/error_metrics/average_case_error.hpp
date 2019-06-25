@@ -20,6 +20,10 @@ namespace abo::error_metrics {
 
     boost::multiprecision::cpp_dec_float_100 mean_squared_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat);
 
+    // return bounds on the average respective error: {minimum error, maximum error}
+    std::pair<boost::multiprecision::cpp_dec_float_100, boost::multiprecision::cpp_dec_float_100>
+        avererage_relative_error(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat);
+
 }
 
 #endif // AVERAGE_CASE_ERROR_H
