@@ -109,6 +109,37 @@ namespace abo::error_metrics {
     }
 
     std::pair<boost::multiprecision::cpp_dec_float_100, boost::multiprecision::cpp_dec_float_100>
+            average_relative_value(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &g) {
+
+        BDD zero_so_far = mgr.bddOne();
+        boost::multiprecision::cpp_dec_float_100 min_average_result = 0, max_average_result = 0;
+        for (int i = g.size()-1;i>=0;i--) {
+            std::vector<BDD> partial_result;
+            partial_result.reserve(f.size());
+            BDD modifier = zero_so_far & g[i];
+            for (const BDD &b : f) {
+                partial_result.push_back(b & modifier);
+            }
+            auto average = average_value(partial_result);
+            min_average_result += average  / (std::pow(2.0, i + 1) - 1);
+            max_average_result += average  / std::pow(2.0, i);
+
+            zero_so_far &= !g[i];
+        }
+
+        // handle f(x) = 0
+        std::vector<BDD> partial_result;
+        for (const BDD &b : f) {
+            partial_result.push_back(b & zero_so_far);
+        }
+        auto average = average_value(partial_result);
+        min_average_result += average;
+        max_average_result += average;
+
+        return {min_average_result, max_average_result};
+    }
+
+    std::pair<boost::multiprecision::cpp_dec_float_100, boost::multiprecision::cpp_dec_float_100>
             avererage_relative_error(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat) {
         std::vector<BDD> f_= f;
         std::vector<BDD> f_hat_ = f_hat;
@@ -119,32 +150,7 @@ namespace abo::error_metrics {
         std::vector<BDD> difference = abo::util::bdd_subtract(mgr, f_, f_hat_);
         std::vector<BDD> absolute_difference = abo::util::abs(mgr,difference);
 
-        BDD zero_so_far = mgr.bddOne();
-        boost::multiprecision::cpp_dec_float_100 min_average_result = 0, max_average_result = 0;
-        for (int i = f_.size()-1;i>=0;i--) {
-            std::vector<BDD> partial_result;
-            partial_result.reserve(absolute_difference.size());
-            BDD modifier = zero_so_far & f_[i];
-            for (const BDD &b : absolute_difference) {
-                partial_result.push_back(b & modifier);
-            }
-            auto average = average_value(partial_result);
-            min_average_result += average  / (std::pow(2.0, i + 1) - 1);
-            max_average_result += average  / std::pow(2.0, i);
-
-            zero_so_far &= !f_[i];
-        }
-
-        // handle f(x) = 0
-        std::vector<BDD> partial_result;
-        for (const BDD &b : absolute_difference) {
-            partial_result.push_back(b & zero_so_far);
-        }
-        auto average = average_value(partial_result);
-        min_average_result += average;
-        max_average_result += average;
-
-        return {min_average_result, max_average_result};
+        return average_relative_value(mgr, absolute_difference, f_);
     }
 
     boost::multiprecision::cpp_dec_float_100 average_relative_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat) {
