@@ -45,6 +45,9 @@ namespace abo::error_metrics {
     boost::multiprecision::uint256_t approximate_worst_case_error(const Cudd &mgr, const std::vector<BDD> &f,
                                                                   const std::vector<BDD> &f_hat, int n);
 
+
+    double worst_case_relative_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat);
+
 }
 
 #endif //ABO_WORST_CASE_ERROR_HPP
