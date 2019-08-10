@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <string>
+#include <map>
 
 
 #include <cudd/cplusplus/cuddObj.hh>
