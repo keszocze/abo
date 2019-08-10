@@ -57,11 +57,11 @@ namespace abo::error_metrics {
 
         std::vector<BDD> difference = abo::util::bdd_subtract(mgr, f_, f_hat_);
 
-        abo::util::dump_dot(mgr, f);
-        abo::util::dump_dot(mgr,f_hat);
-        abo::util::dump_dot(mgr,difference);
+        // abo::util::dump_dot(mgr, f);
+        // abo::util::dump_dot(mgr,f_hat);
+        // abo::util::dump_dot(mgr,difference);
         std::vector<BDD> absolute_difference = abo::util::abs(mgr,difference);
-        abo::util::dump_dot(mgr,absolute_difference);
+        // abo::util::dump_dot(mgr,absolute_difference);
 
 
         return get_max_value(mgr,absolute_difference);
