@@ -67,4 +67,10 @@ namespace abo::error_metrics {
         return non_zero_path_count / double(total_path_count);
     }
 
+    double error_rate(const Cudd &mgr, const BDD &f, const BDD &f_hat) {
+        std::vector<BDD> fv{f};
+        std::vector<BDD> fv_hat{f_hat};
+        return error_rate(mgr, fv, fv_hat);
+    }
+
 }
