@@ -41,15 +41,15 @@ TEST_CASE("Trivial Error Rate Test") {
 //
 //    abo::util::dump_dot(mgr,funs, varnames, funnames);
 
-    REQUIRE(1 == abo::error_metrics::error_rate(mgr,and_bdd,and_approx_bdd));
+    REQUIRE(1.0 / 8.0 == abo::error_metrics::error_rate(mgr,and_bdd,and_approx_bdd));
 
     and_approx_bdd = and_approx_bdd.Constrain(x);
 
-    REQUIRE(3 == abo::error_metrics::error_rate(mgr,and_bdd,and_approx_bdd));
+    REQUIRE(3.0 / 8.0 == abo::error_metrics::error_rate(mgr,and_bdd,and_approx_bdd));
 
     and_approx_bdd = and_approx_bdd.Constrain(z);
 
-    REQUIRE(7 == abo::error_metrics::error_rate(mgr,and_bdd,and_approx_bdd));
+    REQUIRE(7.0 / 8.0 == abo::error_metrics::error_rate(mgr,and_bdd,and_approx_bdd));
 
 
 }
@@ -111,14 +111,14 @@ TEST_CASE("Generic OR constraint error rate test"){
         or_pos_approx_bdd = or_pos_approx_bdd.Constrain(mgr.bddVar(i));
         or_neg_approx_bdd = or_neg_approx_bdd.Constrain(!mgr.bddVar(i));
 
-        unsigned int expected_error = ((1 << (i+1)) - 1);
+        double expected_error = double((1L << (i+1)) - 1) / double(1L << n);
 
 
         auto computed_error = abo::error_metrics::error_rate(mgr, or_bdd,or_neg_approx_bdd);
 
 //        std::cout << "i=" << i << "\texpected error=" << expected_error <<"\tcomputed error=" << computed_error << "\n";
         REQUIRE(expected_error == computed_error);
-        REQUIRE(1 ==  abo::error_metrics::error_rate(mgr, or_bdd,or_pos_approx_bdd));
+        REQUIRE(1.0 / double(1L << n) ==  abo::error_metrics::error_rate(mgr, or_bdd,or_pos_approx_bdd));
     }
 
 
@@ -144,7 +144,7 @@ TEST_CASE("Generic AND constraint error rate test"){
     for (size_t i = 0; i < n; i++) {
         and_pos_approx_bdd = and_pos_approx_bdd.Constrain(mgr.bddVar(i));
         and_neg_approx_bdd = and_pos_approx_bdd.Constrain(!mgr.bddVar(i));
-        unsigned int expected_error = ((1 << (i+1)) - 1);
+        double expected_error = double((1L << (i+1)) - 1) / double(1L << n);
 
         // TODO sinnvolles overloads, so dsas man keine dämlichen ein-bdd vektoren mehr bauen muss
 
