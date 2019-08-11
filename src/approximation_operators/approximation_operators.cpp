@@ -86,6 +86,18 @@ namespace abo::operators {
         return BDD(mgr, node);
     }
 
+    BDD superset_light_child(const Cudd &mgr, const BDD &bdd, unsigned int level_start, unsigned int level_end) {
+        std::map<DdNode*, DdNode*> round_map;
+        DdNode *node = remove_children_rec(mgr.getManager(), bdd.getNode(), level_start, level_end, abo::util::count_minterms(bdd), round_map, false, false);
+        return BDD(mgr, node);
+    }
+
+    BDD subset_heavy_child(const Cudd &mgr, const BDD &bdd, unsigned int level_start, unsigned int level_end) {
+        std::map<DdNode*, DdNode*> round_map;
+        DdNode *node = remove_children_rec(mgr.getManager(), bdd.getNode(), level_start, level_end, abo::util::count_minterms(bdd), round_map, true, true);
+        return BDD(mgr, node);
+    }
+
 
     static DdNode *round_rec(DdManager * dd, DdNode *node, unsigned int level_start, const std::map<DdNode*, double> &minterm_count,
                              std::map<DdNode*, DdNode*> &round_map) {

@@ -9,6 +9,10 @@ namespace abo::operators {
 
     BDD superset_heavy_child(const Cudd &mgr, const BDD &bdd, unsigned int level_start, unsigned int level_end);
 
+    BDD superset_light_child(const Cudd &mgr, const BDD &bdd, unsigned int level_start, unsigned int level_end);
+
+    BDD subset_heavy_child(const Cudd &mgr, const BDD &bdd, unsigned int level_start, unsigned int level_end);
+
     BDD round(const Cudd &mgr, const BDD &bdd, unsigned int level);
 
 }
