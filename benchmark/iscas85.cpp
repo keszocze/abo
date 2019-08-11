@@ -69,10 +69,10 @@ static void benchmark_iscas85(benchmark::State& state) {
         for (const BDD &orig : original) {
             switch (state.range(2)) {
             case ROUND_UP:
-                rounded.push_back(abo::operators::round_up(mgr, orig, state.range(3), 10000));
+                rounded.push_back(abo::operators::superset_heavy_child(mgr, orig, state.range(3), 10000));
                 break;
             case ROUND_DOWN:
-                rounded.push_back(abo::operators::round_down(mgr, orig, state.range(3), 10000));
+                rounded.push_back(abo::operators::subset_light_child(mgr, orig, state.range(3), 10000));
                 break;
             case ROUND_FULL:
                 rounded.push_back(abo::operators::round(mgr, orig, state.range(3)));
