@@ -20,10 +20,6 @@ namespace abo::util {
 
     std::map<DdNode*, double> count_minterms(const BDD &bdd);
 
-    BDD round_down(const Cudd &mgr, const BDD &bdd, unsigned int level_start, unsigned int level_end);
-    BDD round_up(const Cudd &mgr, const BDD &bdd, unsigned int level_start, unsigned int level_end);
-    BDD round(const Cudd &mgr, const BDD &bdd, unsigned int level);
-
     // return the value of the given add node, it must be a constant
     unsigned int const_add_value(const ADD &add);
     // returns a list of values (first) and how often they are reached (second)

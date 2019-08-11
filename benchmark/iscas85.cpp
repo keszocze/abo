@@ -2,7 +2,7 @@
 #include <cudd/cplusplus/cuddObj.hh>
 
 #include "aig_parser.hpp"
-#include "cudd_helpers.hpp"
+#include "approximation_operators.hpp"
 #include "error_rate.hpp"
 #include "average_case_error.hpp"
 #include "worst_case_error.hpp"
@@ -69,13 +69,13 @@ static void benchmark_iscas85(benchmark::State& state) {
         for (const BDD &orig : original) {
             switch (state.range(2)) {
             case ROUND_UP:
-                rounded.push_back(abo::util::round_up(mgr, orig, state.range(3), 10000));
+                rounded.push_back(abo::operators::round_up(mgr, orig, state.range(3), 10000));
                 break;
             case ROUND_DOWN:
-                rounded.push_back(abo::util::round_down(mgr, orig, state.range(3), 10000));
+                rounded.push_back(abo::operators::round_down(mgr, orig, state.range(3), 10000));
                 break;
             case ROUND_FULL:
-                rounded.push_back(abo::util::round(mgr, orig, state.range(3)));
+                rounded.push_back(abo::operators::round(mgr, orig, state.range(3)));
                 break;
             }
         }

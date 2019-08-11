@@ -1,3 +1,4 @@
+add_subdirectory(approximation_operators)
 add_subdirectory(parsing)
 add_subdirectory(error_metrics)
 add_subdirectory(example_bdds)

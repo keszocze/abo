@@ -16,6 +16,7 @@ target_link_libraries(benchmark_iscas_85
         PRIVATE bdd_examples
         PRIVATE benchmark
         PRIVATE abo_util
+        PRIVATE approximation_operators
 )
 
 # copies the iscas dataset used for benchmarking into the build folder so that they are actually found
