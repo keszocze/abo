@@ -10,7 +10,7 @@ namespace abo::operators {
 
     static DdNode *remove_children_rec(DdManager * dd, DdNode *node, unsigned int level_start, unsigned int level_end,
                              const std::map<DdNode*, double> &minterm_count, std::map<DdNode*, DdNode*> &round_map,
-                             bool remove_heavy, bool remove_light) {
+                             bool remove_heavy, bool subset) {
 
         if (Cudd_IsConstant(node)) {
             return node;
@@ -33,8 +33,8 @@ namespace abo::operators {
 
         DdNode *then_branch, *else_branch;
         if (varId < level_start) {
-            then_branch = remove_children_rec(dd, Nv, level_start, level_end, minterm_count, round_map, remove_heavy, remove_light);
-            else_branch = remove_children_rec(dd, Nnv, level_start, level_end, minterm_count, round_map, remove_heavy, remove_light);
+            then_branch = remove_children_rec(dd, Nv, level_start, level_end, minterm_count, round_map, remove_heavy, subset);
+            else_branch = remove_children_rec(dd, Nnv, level_start, level_end, minterm_count, round_map, remove_heavy, subset);
         } else if (varId >= level_start && varId <= level_end) {
             auto then_minterm_count = minterm_count.find(Nv);
             auto else_minterm_count = minterm_count.find(Nnv);
@@ -42,21 +42,16 @@ namespace abo::operators {
                 throw std::logic_error("round_rec: node should be in map");
             }
 
-            if (then_minterm_count->second > else_minterm_count->second && remove_heavy) {
-                then_branch = Cudd_ReadOne(dd);
-            } else if (then_minterm_count->second <= else_minterm_count->second && remove_light) {
-                then_branch = Cudd_Not(Cudd_ReadOne(dd));
+            bool then_is_heavy = then_minterm_count->second > else_minterm_count->second;
+
+            if (remove_heavy == then_is_heavy) {
+                then_branch = subset ? Cudd_Not(Cudd_ReadOne(dd)) : Cudd_ReadOne(dd);
+                else_branch = remove_children_rec(dd, Nnv, level_start, level_end, minterm_count, round_map, remove_heavy, subset);
             } else {
-                then_branch = remove_children_rec(dd, Nv, level_start, level_end, minterm_count, round_map, remove_heavy, remove_light);
+                then_branch = remove_children_rec(dd, Nv, level_start, level_end, minterm_count, round_map, remove_heavy, subset);
+                else_branch = subset ? Cudd_Not(Cudd_ReadOne(dd)) : Cudd_ReadOne(dd);
             }
 
-            if (else_minterm_count->second > then_minterm_count->second && remove_heavy) {
-                else_branch = Cudd_ReadOne(dd);
-            } else if (else_minterm_count->second <= then_minterm_count->second && remove_light) {
-                else_branch = Cudd_Not(Cudd_ReadOne(dd));
-            } else {
-                else_branch = remove_children_rec(dd, Nnv, level_start, level_end, minterm_count, round_map, remove_heavy, remove_light);
-            }
         } else {
             return node;
         }
