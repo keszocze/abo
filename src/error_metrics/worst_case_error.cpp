@@ -128,4 +128,52 @@ namespace abo::error_metrics {
         }
         return largest;
     }
+
+    std::pair<boost::multiprecision::cpp_dec_float_100, boost::multiprecision::cpp_dec_float_100>
+            maximum_relative_value(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &g) {
+
+        BDD zero_so_far = mgr.bddOne();
+        boost::multiprecision::cpp_dec_float_100 min_error = std::numeric_limits<double>::infinity(), max_error = 0;
+        for (int i = g.size()-1;i>=0;i--) {
+            std::vector<BDD> partial_result;
+            partial_result.reserve(f.size());
+            BDD modifier = zero_so_far & g[i];
+            for (const BDD &b : f) {
+                partial_result.push_back(b & modifier);
+            }
+            std::vector<int> inputValue;
+            boost::multiprecision::cpp_dec_float_100 max_val = boost::multiprecision::cpp_dec_float_100(get_max_value(mgr, partial_result));
+
+            min_error = min(min_error, max_val / (std::pow(2.0, i + 1) - 1));
+            max_error = max(max_error, max_val  / std::pow(2.0, i));
+
+            zero_so_far &= !g[i];
+        }
+
+        // handle f(x) = 0
+        std::vector<BDD> partial_result;
+        for (const BDD &b : f) {
+            partial_result.push_back(b & zero_so_far);
+        }
+        std::vector<int> inputValue;
+        boost::multiprecision::cpp_dec_float_100 max_val = boost::multiprecision::cpp_dec_float_100(get_max_value(mgr, partial_result));
+        min_error = min(min_error, max_val); // divided by one
+        max_error = max(max_error, max_val);
+
+        return {min_error, max_error};
+    }
+
+    std::pair<boost::multiprecision::cpp_dec_float_100, boost::multiprecision::cpp_dec_float_100>
+            worst_case_relative_error(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat) {
+        std::vector<BDD> f_= f;
+        std::vector<BDD> f_hat_ = f_hat;
+
+        f_.push_back(mgr.bddZero());
+        f_hat_.push_back(mgr.bddZero());
+
+        std::vector<BDD> difference = abo::util::bdd_subtract(mgr, f_, f_hat_);
+        std::vector<BDD> absolute_difference = abo::util::abs(mgr,difference);
+
+        return maximum_relative_value(mgr, absolute_difference, f_);
+    }
 }

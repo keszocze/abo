@@ -8,6 +8,7 @@
 #include <vector>
 #include <cudd/cplusplus/cuddObj.hh>
 #include <boost/multiprecision/cpp_int.hpp>
+#include <boost/multiprecision/cpp_dec_float.hpp>
 
 namespace abo::error_metrics {
     enum class NumberRepresentation: bool { BaseTwo, TwosComplement};
@@ -47,6 +48,12 @@ namespace abo::error_metrics {
 
 
     double worst_case_relative_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat);
+
+    std::pair<boost::multiprecision::cpp_dec_float_100, boost::multiprecision::cpp_dec_float_100>
+            maximum_relative_value(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &g);
+
+    std::pair<boost::multiprecision::cpp_dec_float_100, boost::multiprecision::cpp_dec_float_100>
+            worst_case_relative_error(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat);
 
 }
 
