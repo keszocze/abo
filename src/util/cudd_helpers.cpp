@@ -83,6 +83,42 @@ namespace abo::util {
         return result;
     }
 
+    std::vector<int> random_satisfying_input(const BDD &bdd, const std::map<DdNode*, double> &minterm_count, int max_level) {
+            std::vector<int> result;
+
+            DdNode *node = bdd.getNode();
+
+            for(int level = 0;level < max_level;level++) {
+                long node_level = Cudd_IsConstant(node) ? max_level : Cudd_NodeReadIndex(node);
+                if (level < node_level) {
+                    result.push_back(rand() % 2);
+                } else {
+                    assert(!Cudd_IsConstant(node));
+
+                    DdNode *N = Cudd_Regular(node);
+                    DdNode *then_node = Cudd_T(N);
+                    DdNode *else_node = Cudd_E(N);
+
+                    then_node = Cudd_NotCond(then_node, Cudd_IsComplement(node));
+                    else_node = Cudd_NotCond(else_node, Cudd_IsComplement(node));
+
+                    double then_weight = minterm_count.at(then_node);
+                    double else_weight = minterm_count.at(else_node);
+
+                    double r = rand() / double(RAND_MAX);
+                    if (r <= then_weight / (then_weight + else_weight)) {
+                        result.push_back(1);
+                        node = then_node;
+                    } else {
+                        result.push_back(0);
+                        node = else_node;
+                    }
+                }
+            }
+
+            return result;
+        }
+
     unsigned int const_add_value(const ADD &add) {
         DdNode *node = add.getNode();
         if (Cudd_IsConstant(node)) {
