@@ -19,6 +19,8 @@ namespace abo::error_metrics {
 
     double error_rate_sampling(const std::vector<BDD>& f, const std::vector<BDD>& f_hat, long samples = 10000);
 
+    double error_rate_efficient_sampling(const Cudd &mgr, const std::vector<BDD>& f, const std::vector<BDD>& f_hat, long samples = 10000);
+
 }
 
 #endif //ABO_ERROR_RATE_HPP
