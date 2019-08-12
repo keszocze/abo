@@ -286,40 +286,6 @@ namespace abo::util {
         }
     }
 
-    int variable_index(const Cudd& mgr, const BDD& v) {
-        //return Cudd_ReadPerm(v.getNode());
-    }
-
-    std::vector<BDD> copy_to_mgr(const Cudd &original_mgr, const std::vector<BDD> &f, const Cudd &mgr_to) {
-
-    }
-
-    std::pair<BDD, Cudd> characteristic_function(const Cudd &mgr, const std::vector<BDD> &f, int max_level) {
-        /*auto function_support = mgr.SupportIndices(f);
-
-        std::map<unsigned int, unsigned int> index_map;
-        std::sort(function_support.begin(), function_support.end());
-        for (unsigned int i = 0;i<function_support.size();i++) {
-            index_map[function_support[i]] = i;
-        }
-
-        Cudd characteristic_manager(function_support.size() + f.size());*/
-
-        std::vector<BDD> output_variables;
-        for (unsigned int i = 0;i<f.size();i++) {
-            output_variables.push_back(mgr.bddNewVarAtLevel(max_level + i + 1));
-        }
-
-        // TODO: copy bdd to new manager
-        BDD result = mgr.bddOne();
-
-        for (unsigned int i = 0; i < f.size(); i++) {
-            result &= (!output_variables[i] ^ f[i]);
-        }
-
-        return std::make_pair(result, mgr);
-    }
-
     std::pair<BDD, BDD> full_adder(const BDD &f, const BDD &g, const BDD &carry_in) {
         BDD carry_out = (f * g) | (f * carry_in) | (g * carry_in);
         BDD sum = f ^ g ^carry_in;
