@@ -10,11 +10,13 @@
 
 enum ErrorMetric {
     WORST_CASE,
+    WORST_CASE_RELATIVE,
     AVERAGE_CASE,
+    AVERAGE_CASE_RELATIVE,
     MEAN_SQUARED,
     ERROR_RATE,
     AVERAGE_BIT_FLIP,
-    WORST_CASE_BIT_FLIP
+    WORST_CASE_BIT_FLIP,
 };
 
 enum AdderGenerators {
@@ -30,7 +32,9 @@ static void generate_adders(benchmark::State& state) {
     std::string error_metric_name;
     switch (state.range(0)) {
     case WORST_CASE: error_metric_name = "worst case"; break;
+    case WORST_CASE_RELATIVE: error_metric_name = "worst case relative"; break;
     case AVERAGE_CASE: error_metric_name = "average case"; break;
+    case AVERAGE_CASE_RELATIVE: error_metric_name = "average case relative"; break;
     case MEAN_SQUARED: error_metric_name = "mean squared"; break;
     case ERROR_RATE: error_metric_name = "error rate"; break;
     case AVERAGE_BIT_FLIP: error_metric_name = "average bit flip"; break;
@@ -77,8 +81,14 @@ static void generate_adders(benchmark::State& state) {
         case WORST_CASE:
             abo::error_metrics::worst_case_error(mgr, correct, approximate_adder);
             break;
+        case WORST_CASE_RELATIVE:
+            abo::error_metrics::worst_case_relative_error(mgr, correct, approximate_adder);
+            break;
         case AVERAGE_CASE:
             abo::error_metrics::average_case_error(mgr, correct, approximate_adder);
+            break;
+        case AVERAGE_CASE_RELATIVE:
+            abo::error_metrics::avererage_relative_error(mgr, correct, approximate_adder);
             break;
         case MEAN_SQUARED:
             abo::error_metrics::mean_squared_error(mgr, correct, approximate_adder);
@@ -98,7 +108,7 @@ static void generate_adders(benchmark::State& state) {
 
 // this re-creates the time table found in "One Method - All Error-Metrics [...]"
 BENCHMARK(generate_adders)->Unit(benchmark::kMillisecond)->Apply([](auto *b) {
-    std::vector<ErrorMetric> metrics = {WORST_CASE, AVERAGE_CASE, MEAN_SQUARED, ERROR_RATE, AVERAGE_BIT_FLIP, WORST_CASE_BIT_FLIP};
+    std::vector<ErrorMetric> metrics = {WORST_CASE, WORST_CASE_RELATIVE, AVERAGE_CASE, AVERAGE_CASE_RELATIVE, MEAN_SQUARED, ERROR_RATE, AVERAGE_BIT_FLIP, WORST_CASE_BIT_FLIP};
     // 8 bit adders
     for (auto metric : metrics) {
         b = b->Args({metric, ACA1, 8, 5, 0})
