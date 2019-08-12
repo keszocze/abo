@@ -33,7 +33,7 @@ namespace abo::error_metrics {
         std::vector<BDD> difference;
 
         difference.reserve(f.size());
-        for (int i = 0;i<f.size();i++) {
+        for (unsigned int i = 0;i<f.size();i++) {
             difference.push_back(f[i] ^ f_hat[i]);
         }
 

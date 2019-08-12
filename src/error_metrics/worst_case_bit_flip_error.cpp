@@ -19,8 +19,8 @@ namespace abo::error_metrics {
         ADD diff = abo::util::xor_difference_add(mgr, f, f_hat);
         std::vector<std::pair<double, unsigned long>> terminal_values = abo::util::add_terminal_values(diff);
         unsigned int max_flip_error = 0;
-        for (auto [value, _] : terminal_values) {
-            unsigned int bit_flips = static_cast<unsigned int>(__builtin_popcountll(value));
+        for (auto v : terminal_values) {
+            unsigned int bit_flips = static_cast<unsigned int>(__builtin_popcountll(v.first));
             max_flip_error = std::max(bit_flips, max_flip_error);
         }
         return max_flip_error;
