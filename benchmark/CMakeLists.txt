@@ -19,6 +19,15 @@ target_link_libraries(benchmark_iscas_85
         PRIVATE approximation_operators
 )
 
+add_executable(benchmark_approximation_operators operators.cpp)
+
+target_link_libraries(benchmark_approximation_operators
+        PRIVATE aig_parser
+        PRIVATE error_metrics
+        PRIVATE benchmark
+        PRIVATE approximation_operators
+)
+
 # copies the iscas dataset used for benchmarking into the build folder so that they are actually found
 add_custom_command(
         TARGET benchmark_iscas_85 POST_BUILD
