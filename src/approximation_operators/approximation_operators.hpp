@@ -15,6 +15,8 @@ namespace abo::operators {
 
     BDD round(const Cudd &mgr, const BDD &bdd, unsigned int level);
 
+    BDD round_best(const Cudd &mgr, const BDD &bdd, unsigned int level_start, unsigned int level_end);
+
 }
 
 #endif //ABO_APPROXIMATION_OPERATORS_HPP

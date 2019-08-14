@@ -39,7 +39,7 @@ namespace abo::operators {
             auto then_minterm_count = minterm_count.find(Nv);
             auto else_minterm_count = minterm_count.find(Nnv);
             if (then_minterm_count == minterm_count.end() || else_minterm_count == minterm_count.end()) {
-                throw std::logic_error("round_rec: node should be in map");
+                throw std::logic_error("remove_children_rec: node should be in map");
             }
 
             bool then_is_heavy = then_minterm_count->second > else_minterm_count->second;
@@ -154,6 +154,88 @@ namespace abo::operators {
     BDD round(const Cudd &mgr, const BDD &bdd, unsigned int level) {
         std::map<DdNode*, DdNode*> round_map;
         DdNode *node = round_rec(mgr.getManager(), bdd.getNode(), level, abo::util::count_minterms(bdd), round_map);
+        return BDD(mgr, node);
+    }
+
+    static DdNode *round_best_rec(DdManager * dd, DdNode *node, unsigned int level_start, unsigned int level_end,
+                             const std::map<DdNode*, double> &minterm_count, std::map<DdNode*, DdNode*> &round_map) {
+
+        if (Cudd_IsConstant(node)) {
+            return node;
+        }
+
+        auto it = round_map.find(node);
+        if (it != round_map.end()) {
+            return it->second;
+        }
+
+        DdNode *N = Cudd_Regular(node);
+        DdNode *Nv = Cudd_T(N);
+        DdNode *Nnv = Cudd_E(N);
+
+        /* complement if necessary */
+        Nv = Cudd_NotCond(Nv, Cudd_IsComplement(node));
+        Nnv = Cudd_NotCond(Nnv, Cudd_IsComplement(node));
+
+        unsigned int varId = Cudd_NodeReadIndex(N);
+
+        DdNode *then_branch, *else_branch;
+        if (varId < level_start) {
+            then_branch = round_best_rec(dd, Nv, level_start, level_end, minterm_count, round_map);
+            else_branch = round_best_rec(dd, Nnv, level_start, level_end, minterm_count, round_map);
+        } else if (varId >= level_start && varId <= level_end) {
+            auto then_minterm_count = minterm_count.find(Nv);
+            auto else_minterm_count = minterm_count.find(Nnv);
+            if (then_minterm_count == minterm_count.end() || else_minterm_count == minterm_count.end()) {
+                throw std::logic_error("round_best_rec: node should be in map");
+            }
+
+            if (then_minterm_count->second < else_minterm_count->second && then_minterm_count->second < 1 - else_minterm_count->second) {
+                then_branch = Cudd_Not(Cudd_ReadOne(dd));
+                else_branch = round_best_rec(dd, Nnv, level_start, level_end, minterm_count, round_map);
+
+            } else if (else_minterm_count->second < then_minterm_count->second && else_minterm_count->second < 1 - then_minterm_count->second) {
+                then_branch = round_best_rec(dd, Nv, level_start, level_end, minterm_count, round_map);
+                else_branch = Cudd_Not(Cudd_ReadOne(dd));
+
+            } else if (then_minterm_count->second > else_minterm_count->second && then_minterm_count->second > 1 - else_minterm_count->second) {
+                then_branch = Cudd_ReadOne(dd);
+                else_branch = round_best_rec(dd, Nnv, level_start, level_end, minterm_count, round_map);
+
+            } else if (else_minterm_count->second > then_minterm_count->second && else_minterm_count->second > 1 - then_minterm_count->second) {
+                then_branch = round_best_rec(dd, Nv, level_start, level_end, minterm_count, round_map);
+                else_branch = Cudd_ReadOne(dd);
+
+            } else {
+                then_branch = then_minterm_count->second > 0.5 ? Cudd_ReadOne(dd) : Cudd_Not(Cudd_ReadOne(dd));
+                else_branch = else_minterm_count->second > 0.5 ? Cudd_ReadOne(dd) : Cudd_Not(Cudd_ReadOne(dd));
+            }
+
+        } else {
+            return node;
+        }
+        Cudd_Ref(then_branch);
+        Cudd_Ref(else_branch);
+
+        DdNode *topv = Cudd_ReadVars(dd, varId);
+        Cudd_Ref(topv);
+        DdNode *neW =  Cudd_bddIte(dd, topv, then_branch, else_branch);
+        if (neW != nullptr) {
+            // TODO: is this necessary?
+            Cudd_Ref(neW);
+        }
+        Cudd_RecursiveDeref(dd, topv);
+        Cudd_RecursiveDeref(dd, then_branch);
+        Cudd_RecursiveDeref(dd, else_branch);
+
+        round_map[node] = neW;
+
+        return neW;
+    }
+
+    BDD round_best(const Cudd &mgr, const BDD &bdd, unsigned int level_start, unsigned int level_end) {
+        std::map<DdNode*, DdNode*> round_map;
+        DdNode *node = round_best_rec(mgr.getManager(), bdd.getNode(), level_start, level_end, abo::util::count_minterms(bdd), round_map);
         return BDD(mgr, node);
     }
 
