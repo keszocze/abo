@@ -1,5 +1,11 @@
 
 
+# How to cite
+
+If you are using $toolname, please cite the following paper:
+
+TBD
+
 # References
 
 **[Soeken2016]** 
