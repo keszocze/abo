@@ -36,7 +36,7 @@ namespace abo::parser {
 
         const std::vector<std::string> & get_output_names() const { return output_names; }
 
-        aig_parser( Cudd &mgr ) :
+        explicit aig_parser( Cudd &mgr ) :
                         mgr(mgr) {}
 
         virtual ~aig_parser() = default;
