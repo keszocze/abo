@@ -7,6 +7,7 @@
 #include "approximate_adders.hpp"
 #include "average_bit_flip_error.hpp"
 #include "worst_case_bit_flip_error.hpp"
+#include "average_case_relative_error.hpp"
 
 enum ErrorMetric {
     WORST_CASE,
