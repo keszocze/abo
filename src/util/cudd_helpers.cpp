@@ -13,6 +13,7 @@
 #include <stack>
 #include <algorithm>
 #include <assert.h>
+#include <cmath>
 
 namespace abo::util {
 
@@ -366,6 +367,161 @@ namespace abo::util {
         std::vector<BDD> abs = abo::util::bdd_subtract(mgr,tmp,mask);
 
         return abs;
+    }
+
+    std::vector<BDD> bdd_shift(const Cudd &mgr, const std::vector<BDD> &f, int bits_to_shift) {
+        std::vector<BDD> result;
+        result.reserve(f.size());
+
+        for (int i = 0;i<int(f.size());i++) {
+            if (i < bits_to_shift || i >= int(f.size()) + bits_to_shift) {
+                result.push_back(mgr.bddZero());
+            } else {
+                result.push_back(f[i - bits_to_shift]);
+            }
+        }
+
+        return result;
+    }
+
+    std::vector<BDD> bdd_add(const Cudd &mgr, const std::vector<BDD> &f1, const std::vector<BDD> &f2) {
+        std::vector<BDD> sum;
+        sum.reserve(f1.size());
+
+        BDD carry = mgr.bddZero();
+
+        for (unsigned int i = 0; i<f1.size(); ++i) {
+            auto tmp  = full_adder(f1[i], f2[i], carry);
+            sum.push_back(tmp.first);
+            carry = tmp.second;
+
+        }
+
+        return sum;
+    }
+
+    std::vector<BDD> bdd_multiply_constant(const Cudd &mgr, const std::vector<BDD> &f, double factor, unsigned int num_extra_bits) {
+
+        std::vector<BDD> result(f.size() + size_t(std::ceil(std::log2(factor))) + 2, mgr.bddZero());
+
+        std::vector<BDD> fc = f;
+        while (result.size() > fc.size()) {
+            fc.push_back(mgr.bddZero());
+        }
+
+        unsigned long great_factor = static_cast<unsigned long>(factor);
+        for (unsigned long i = 0;i<sizeof(long) * 8;i++) {
+            if (great_factor & (1L << i)) {
+                result = bdd_add(mgr, result, bdd_shift(mgr, fc, i));
+            }
+        }
+        unsigned long lesser_factor = static_cast<unsigned long>((factor - great_factor) * (1L << num_extra_bits));
+        for (unsigned int i = 0;i<num_extra_bits;i++) {
+            if (lesser_factor & (1L << i)) {
+                result = bdd_add(mgr, result, bdd_shift(mgr, fc, -(num_extra_bits - i)));
+            }
+        }
+
+        return result;
+    }
+
+    bool exists_greater_equals(const Cudd &mgr, const std::vector<BDD> &f1, const std::vector<BDD> &f2) {
+        std::vector<BDD> f1_ = f1;
+        std::vector<BDD> f2_ = f2;
+
+        while (f1_.size() < f2_.size()) {
+            f1_.push_back(mgr.bddZero());
+        }
+        while (f2_.size() < f1_.size()) {
+            f2_.push_back(mgr.bddZero());
+        }
+
+        BDD zero_condition = mgr.bddOne();
+        BDD equal_condition = mgr.bddOne();
+        for (int i = int(f1_.size())-1;i>=0;i--) {
+            zero_condition &= !f2_[i];
+            if (!((f1_[i] & zero_condition).IsZero())) {
+                return true;
+            }
+            if (!((f1_[i] & !f2_[i] & equal_condition).IsZero())) {
+                return true;
+            }
+            equal_condition &= (f1_[i] & f2_[i]) | ((!f1_[i]) & (!f2_[i]));
+        }
+        if (!equal_condition.IsZero()) {
+            return true;
+        }
+        return false;
+    }
+
+    std::vector<BDD> bdd_max_one(const Cudd &mgr, const std::vector<BDD> &f) {
+        std::vector<BDD> result = f;
+
+        BDD zero_condition = mgr.bddOne();
+        for (int i = int(result.size())-1;i>0;i--) {
+            zero_condition &= !result[i];
+        }
+        result[0] |= zero_condition;
+
+        return result;
+    }
+
+    BDD greater_equals(const Cudd &mgr, const std::vector<BDD> &f1, const std::vector<BDD> &f2) {
+        std::vector<BDD> f1_ = f1;
+        std::vector<BDD> f2_ = f2;
+
+        while (f1_.size() < f2_.size()) {
+            f1_.push_back(mgr.bddZero());
+        }
+        while (f2_.size() < f1_.size()) {
+            f2_.push_back(mgr.bddZero());
+        }
+
+        BDD zero_condition = mgr.bddOne();
+        BDD equal_condition = mgr.bddOne();
+
+        BDD result = mgr.bddZero();
+        for (int i = int(f1_.size())-1;i>=0;i--) {
+            zero_condition &= !f2_[i];
+            result |= f1_[i] & zero_condition;
+            result |= f1_[i] & !f2_[i] & equal_condition;
+            equal_condition &= (f1_[i] & f2_[i]) | ((!f1_[i]) & (!f2_[i]));
+        }
+        result |= equal_condition;
+        return result;
+    }
+
+    std::vector<BDD> bdd_divide(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &g, unsigned int extra_bits) {
+
+        std::vector<BDD> values(extra_bits, mgr.bddZero());
+        std::vector<BDD> temp = f;
+        temp.insert(temp.begin(), values.begin(), values.end());
+
+        std::vector<BDD> g_ = g;
+        for (unsigned int i = 0;i<f.size()+1;i++) {
+            g_.push_back(mgr.bddZero());
+        }
+        g_.insert(g_.begin(), values.begin(), values.end());
+
+        std::vector<BDD> result;
+        for (int i = int(f.size())+1;i >= -int(extra_bits);i--) {
+            auto shifted = bdd_shift(mgr, g_, i);
+            BDD subtract_condition = greater_equals(mgr, temp, shifted);
+            std::vector<BDD> to_subtract = shifted;
+            for (BDD &b : to_subtract) {
+                b &= subtract_condition;
+            }
+            while (to_subtract.size() < temp.size()) {
+                to_subtract.push_back(mgr.bddZero());
+            }
+            while (temp.size() < to_subtract.size()) {
+                temp.push_back(mgr.bddZero());
+            }
+            temp = bdd_subtract(mgr, temp, to_subtract);
+            result.push_back(subtract_condition);
+        }
+        std::reverse(result.begin(), result.end());
+        return result;
     }
 
 }
