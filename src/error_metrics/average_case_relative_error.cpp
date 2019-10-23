@@ -8,13 +8,15 @@ namespace abo::error_metrics {
             average_relative_value(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &g) {
 
         BDD zero_so_far = mgr.bddOne();
+
         boost::multiprecision::cpp_dec_float_100 min_average_result = 0;
         boost::multiprecision::cpp_dec_float_100 max_average_result = 0;
-        for (int i = g.size()-1;i>=0;i--) {
+        std::vector<BDD> max_one = abo::util::bdd_max_one(mgr, f);
+        for (int i = int(g.size())-1;i>=0;i--) {
             std::vector<BDD> partial_result;
-            partial_result.reserve(f.size());
+            partial_result.reserve(max_one.size());
             BDD modifier = zero_so_far & g[i];
-            for (const BDD &b : f) {
+            for (const BDD &b : max_one) {
                 partial_result.push_back(b & modifier);
             }
             auto average = average_value(partial_result);
@@ -23,15 +25,6 @@ namespace abo::error_metrics {
 
             zero_so_far &= !g[i];
         }
-
-        // handle f(x) = 0
-        std::vector<BDD> partial_result;
-        for (const BDD &b : f) {
-            partial_result.push_back(b & zero_so_far);
-        }
-        auto average = average_value(partial_result);
-        min_average_result += average;
-        max_average_result += average;
 
         return {min_average_result, max_average_result};
     }
