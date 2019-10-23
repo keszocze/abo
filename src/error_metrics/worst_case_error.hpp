@@ -46,21 +46,6 @@ namespace abo::error_metrics {
     boost::multiprecision::uint256_t approximate_worst_case_error(const Cudd &mgr, const std::vector<BDD> &f,
                                                                   const std::vector<BDD> &f_hat, int n);
 
-
-    double worst_case_relative_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat);
-
-    std::pair<boost::multiprecision::cpp_dec_float_100, boost::multiprecision::cpp_dec_float_100>
-            maximum_relative_value(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &g);
-
-    std::pair<boost::multiprecision::cpp_dec_float_100, boost::multiprecision::cpp_dec_float_100>
-            worst_case_relative_error(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat);
-
-    double worst_case_relative_error_search(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat,
-                                            unsigned int num_extra_bits = 16, double precision = 0.0001);
-
-    boost::multiprecision::cpp_dec_float_100 worst_case_relative_error_symbolic_division(const Cudd &mgr, const std::vector<BDD> &f,
-                                                                                         const std::vector<BDD> &f_hat, unsigned int num_extra_bits = 16);
-
 }
 
 #endif //ABO_WORST_CASE_ERROR_HPP
