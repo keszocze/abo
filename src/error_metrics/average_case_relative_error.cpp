@@ -99,4 +99,21 @@ namespace abo::error_metrics {
         }
         return error / samples;
     }
+
+    boost::multiprecision::cpp_dec_float_100 average_relative_error_symbolic_division(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat, unsigned int num_extra_bits) {
+        std::vector<BDD> f_= f;
+        std::vector<BDD> f_hat_ = f_hat;
+
+        f_.push_back(mgr.bddZero());
+        f_hat_.push_back(mgr.bddZero());
+
+        std::vector<BDD> difference = abo::util::bdd_subtract(mgr, f_, f_hat_);
+        std::vector<BDD> absolute_difference = abo::util::abs(mgr,difference);
+
+        std::vector<BDD> no_zero = abo::util::bdd_max_one(mgr, f_);
+        std::vector<BDD> divided = abo::util::bdd_divide(mgr, absolute_difference, no_zero, num_extra_bits);
+
+        return average_value(divided) / std::pow(2.0, num_extra_bits);
+    }
+
 }
