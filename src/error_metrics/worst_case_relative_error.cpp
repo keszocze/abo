@@ -87,12 +87,13 @@ namespace abo::error_metrics {
             std::vector<BDD> partial_result;
             partial_result.reserve(max_one.size());
             BDD modifier = zero_so_far & g[i];
+
             for (const BDD &b : max_one) {
                 partial_result.push_back(b & modifier);
             }
             boost::multiprecision::cpp_dec_float_100 max_val = boost::multiprecision::cpp_dec_float_100(get_max_value(mgr, partial_result));
 
-            min_error = min(min_error, max_val / (std::pow(2.0, i + 1) - 1));
+            min_error = max(min_error, max_val / (std::pow(2.0, i + 1) - 1));
             max_error = max(max_error, max_val  / std::pow(2.0, i));
 
             zero_so_far &= !g[i];
