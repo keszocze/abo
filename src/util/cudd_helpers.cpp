@@ -428,16 +428,20 @@ namespace abo::util {
         return result;
     }
 
+    void equalize_vector_size(const Cudd &mgr, std::vector<BDD> &f1, std::vector<BDD> &f2) {
+        while (f1.size() < f2.size()) {
+            f1.push_back(mgr.bddZero());
+        }
+        while (f2.size() < f1.size()) {
+            f2.push_back(mgr.bddZero());
+        }
+    }
+
     bool exists_greater_equals(const Cudd &mgr, const std::vector<BDD> &f1, const std::vector<BDD> &f2) {
         std::vector<BDD> f1_ = f1;
         std::vector<BDD> f2_ = f2;
 
-        while (f1_.size() < f2_.size()) {
-            f1_.push_back(mgr.bddZero());
-        }
-        while (f2_.size() < f1_.size()) {
-            f2_.push_back(mgr.bddZero());
-        }
+        equalize_vector_size(mgr, f1_, f2_);
 
         BDD zero_condition = mgr.bddOne();
         BDD equal_condition = mgr.bddOne();
@@ -473,12 +477,7 @@ namespace abo::util {
         std::vector<BDD> f_ = f;
         std::vector<BDD> g_ = g;
 
-        while (f_.size() < g_.size()) {
-            f_.push_back(mgr.bddZero());
-        }
-        while (g_.size() < f_.size()) {
-            g_.push_back(mgr.bddZero());
-        }
+        equalize_vector_size(mgr, f_, g_);
 
         BDD zero_condition = mgr.bddOne();
         BDD equal_condition = mgr.bddOne();
@@ -514,12 +513,7 @@ namespace abo::util {
             for (BDD &b : to_subtract) {
                 b &= subtract_condition;
             }
-            while (to_subtract.size() < temp.size()) {
-                to_subtract.push_back(mgr.bddZero());
-            }
-            while (temp.size() < to_subtract.size()) {
-                temp.push_back(mgr.bddZero());
-            }
+            equalize_vector_size(mgr, to_subtract, temp);
             temp = bdd_subtract(mgr, temp, to_subtract);
             result.push_back(subtract_condition);
         }
