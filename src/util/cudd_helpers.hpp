@@ -142,7 +142,7 @@ namespace abo::util {
      * @param f2
      * @return
      */
-    bool exists_greater_equals(const Cudd &mgr, const std::vector<BDD> &f1, const std::vector<BDD> &f2);
+    std::pair<bool, bool> exists_greater_equals(const Cudd &mgr, const std::vector<BDD> &f1, const std::vector<BDD> &f2);
 
 
     /**

@@ -437,7 +437,7 @@ namespace abo::util {
         }
     }
 
-    bool exists_greater_equals(const Cudd &mgr, const std::vector<BDD> &f1, const std::vector<BDD> &f2) {
+    std::pair<bool, bool> exists_greater_equals(const Cudd &mgr, const std::vector<BDD> &f1, const std::vector<BDD> &f2) {
         std::vector<BDD> f1_ = f1;
         std::vector<BDD> f2_ = f2;
 
@@ -448,17 +448,17 @@ namespace abo::util {
         for (int i = int(f1_.size())-1;i>=0;i--) {
             zero_condition &= !f2_[i];
             if (!((f1_[i] & zero_condition).IsZero())) {
-                return true;
+                return {true, false};
             }
             if (!((f1_[i] & !f2_[i] & equal_condition).IsZero())) {
-                return true;
+                return {true, false};
             }
             equal_condition &= (f1_[i] & f2_[i]) | ((!f1_[i]) & (!f2_[i]));
         }
         if (!equal_condition.IsZero()) {
-            return true;
+            return {true, true};
         }
-        return false;
+        return {false, false};
     }
 
     std::vector<BDD> bdd_max_one(const Cudd &mgr, const std::vector<BDD> &f) {

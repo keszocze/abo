@@ -37,7 +37,11 @@ namespace abo::error_metrics {
         double factor = 1;
         for (int i = 0;;i++) {
             std::vector<BDD> multiplied = abo::util::bdd_multiply_constant(mgr, f_, factor);
-            if (!abo::util::exists_greater_equals(mgr, absolute_difference, multiplied)) {
+            auto ge = abo::util::exists_greater_equals(mgr, absolute_difference, multiplied);
+            if (ge.second) { // the correct value was already found
+                return factor;
+            }
+            if (!ge.first) {
                 max = factor;
                 min = factor == 1.0 ? 0 : factor / 2.0;
                 break;
@@ -47,7 +51,11 @@ namespace abo::error_metrics {
         for (int i = 0;max - min > precision;i++) {
             double middle = (min + max) / 2.0;
             std::vector<BDD> multiplied = abo::util::bdd_multiply_constant(mgr, f_, middle);
-            if (abo::util::exists_greater_equals(mgr, absolute_difference, multiplied)) {
+            auto ge = abo::util::exists_greater_equals(mgr, absolute_difference, multiplied);
+            if (ge.second) { // the correct value was already found
+                return middle;
+            }
+            if (ge.first) {
                 min = middle;
             } else {
                 max = middle;
