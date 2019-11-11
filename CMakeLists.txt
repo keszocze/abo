@@ -21,7 +21,7 @@ endif()
 
 add_subdirectory(lib)
 add_subdirectory(src)
-
+add_subdirectory(benchmark)
 
 #IF (BUILD_TESTS)
     add_subdirectory(tests)

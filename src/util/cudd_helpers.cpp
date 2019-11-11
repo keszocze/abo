@@ -8,9 +8,252 @@
 #include <iostream>
 #include <cudd/cudd/cudd.h>
 #include <tuple>
+#include <map>
+#include <set>
+#include <stack>
+#include <algorithm>
 #include <assert.h>
 
 namespace abo::util {
+
+    unsigned int terminal_level(const std::vector<std::vector<BDD>>& bdds) {
+        unsigned int max_index = 0;
+        for (const auto &f : bdds) {
+            for (const BDD &b : f) {
+                std::vector<unsigned int> support = b.SupportIndices();
+                auto max_support_index = std::max_element(support.begin(), support.end());
+                max_index = std::max(max_index, (max_support_index == support.end() ? 0 : *max_support_index) + 1);
+            }
+        }
+        return max_index;
+    }
+
+    long eval_adder(const std::vector<BDD> &adder, long input1, long input2, int bits) {
+        std::vector<int> bdd_inputs;
+        for (int i = 0;i<bits;i++) {
+            bdd_inputs.push_back((input1 & (1 << i)) > 0 ? 1 : 0);
+            bdd_inputs.push_back((input2 & (1 << i)) > 0 ? 1 : 0);
+        }
+
+        long result = 0;
+        for (unsigned int i = 0;i<adder.size();i++) {
+            if (adder[i].Eval(bdd_inputs.data()).IsOne()) {
+                result |= 1 << i;
+            }
+        }
+
+        return result;
+    }
+
+    static double count_minterms_rec(DdNode* node, std::map<DdNode*, double> &minterms_map) {
+        auto it = minterms_map.find(node);
+        if (it != minterms_map.end()) {
+            return it->second;
+        }
+
+        if (Cudd_IsConstant(node)) {
+            double value = Cudd_V(node);
+            if (Cudd_IsComplement(node)) {
+                value = value == 0.0 ? 1.0 : 0.0;
+            }
+            minterms_map[node] = value;
+            return value;
+        }
+
+        DdNode *N = Cudd_Regular(node);
+
+        DdNode *Nv = Cudd_T(N);
+        DdNode *Nnv = Cudd_E(N);
+
+        Nv = Cudd_NotCond(Nv, Cudd_IsComplement(node));
+        Nnv = Cudd_NotCond(Nnv, Cudd_IsComplement(node));
+
+        double highResult = count_minterms_rec(Nv, minterms_map);
+        double lowResult = count_minterms_rec(Nnv, minterms_map);
+        double minTerms = highResult / 2 + lowResult / 2;
+
+        minterms_map[node] = minTerms;
+        return minTerms;
+    }
+
+    std::map<DdNode*, double> count_minterms(const BDD &bdd) {
+        std::map<DdNode*, double> result;
+
+        count_minterms_rec(bdd.getNode(), result);
+        return result;
+    }
+
+    std::vector<int> random_satisfying_input(const BDD &bdd, const std::map<DdNode*, double> &minterm_count, int max_level) {
+            std::vector<int> result;
+
+            DdNode *node = bdd.getNode();
+
+            for(int level = 0;level < max_level;level++) {
+                long node_level = Cudd_IsConstant(node) ? max_level : Cudd_NodeReadIndex(node);
+                if (level < node_level) {
+                    result.push_back(rand() % 2);
+                } else {
+                    assert(!Cudd_IsConstant(node));
+
+                    DdNode *N = Cudd_Regular(node);
+                    DdNode *then_node = Cudd_T(N);
+                    DdNode *else_node = Cudd_E(N);
+
+                    then_node = Cudd_NotCond(then_node, Cudd_IsComplement(node));
+                    else_node = Cudd_NotCond(else_node, Cudd_IsComplement(node));
+
+                    double then_weight = minterm_count.at(then_node);
+                    double else_weight = minterm_count.at(else_node);
+
+                    double r = rand() / double(RAND_MAX);
+                    if (r <= then_weight / (then_weight + else_weight)) {
+                        result.push_back(1);
+                        node = then_node;
+                    } else {
+                        result.push_back(0);
+                        node = else_node;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+    unsigned int const_add_value(const ADD &add) {
+        DdNode *node = add.getNode();
+        if (Cudd_IsConstant(node)) {
+            return static_cast<unsigned int>(Cudd_V(node));
+        }
+        return 0;
+    }
+
+    static std::map<DdNode*, unsigned long> count_paths(DdNode* node, unsigned int terminal_level) {
+        if (Cudd_IsConstant(node)) {
+            return {{node, 1}};
+        }
+
+        // do a sort of breadth first search, visiting all variable levels from top to bottom
+        std::vector<std::stack<DdNode*>> levels;
+        levels.push_back(std::stack<DdNode*>({Cudd_Regular(node)}));
+
+        std::map<DdNode*, unsigned long> node_to_count;
+        std::set<DdNode*> visited;
+        node_to_count[node] = 1;
+        visited.insert(node);
+        for (unsigned int level = 0;level<levels.size();level++) {
+            // a reference can not be used here since the vector may resize and move the data elsewhere
+            std::stack<DdNode*> nodes = levels[level];
+            while (nodes.size() > 0) {
+                DdNode *current = nodes.top();
+                nodes.pop();
+
+
+                if (!Cudd_IsConstant(current)) {
+                    DdNode *then_node = Cudd_Regular(Cudd_T(current));
+                    DdNode *else_node = Cudd_Regular(Cudd_E(current));
+
+                    unsigned long current_count = node_to_count[current];
+
+                    unsigned long then_level = Cudd_IsConstant(then_node) ? terminal_level : Cudd_NodeReadIndex(then_node);
+                    // the map will automatically use 0 if the node is not yet present
+                    node_to_count[then_node] += current_count << (then_level - level - 1);
+                    if (visited.find(then_node) == visited.end()) {
+                        levels.resize(std::max(levels.size(), then_level+1));
+                        levels[then_level].push(then_node);
+                        visited.insert(then_node);
+                    }
+
+                    unsigned long else_level = Cudd_IsConstant(else_node) ? terminal_level : Cudd_NodeReadIndex(else_node);
+                    node_to_count[else_node] += current_count << (else_level - level - 1);
+                    if (visited.find(else_node) == visited.end()) {
+                        levels.resize(std::max(levels.size(), else_level+1));
+                        levels[else_level].push(else_node);
+                        visited.insert(else_node);
+                    }
+                }
+            }
+        }
+
+        return node_to_count;
+    }
+
+    std::vector<std::pair<double, unsigned long>> add_terminal_values(const ADD &add) {
+        std::set<DdNode*> visited;
+        std::stack<DdNode*> toVisit;
+        toVisit.push(add.getNode());
+        visited.insert(add.getNode());
+
+        // determine the level that terminal nodes should be interpreted as
+        std::vector<unsigned int> support = add.SupportIndices();
+        auto max_support_index = std::max_element(support.begin(), support.end());
+        unsigned int terminal_level = (max_support_index == support.end() ? 0 : *max_support_index) + 1;
+
+        auto path_count = count_paths(add.getNode(), terminal_level);
+
+        std::vector<std::pair<double, unsigned long>> result;
+        while (toVisit.size() > 0) {
+            DdNode *node = toVisit.top();
+            toVisit.pop();
+
+            if (Cudd_IsConstant(node)) {
+                result.push_back({Cudd_V(node), path_count[node]});
+            } else {
+                DdNode *thenNode = Cudd_T(node);
+                if (visited.find(thenNode) == visited.end()) {
+                    visited.insert(thenNode);
+                    toVisit.push(thenNode);
+                }
+                DdNode *elseNode = Cudd_E(node);
+                if (visited.find(elseNode) == visited.end()) {
+                    visited.insert(elseNode);
+                    toVisit.push(elseNode);
+                }
+            }
+        }
+        return result;
+    }
+
+    ADD bdd_forest_to_add(const Cudd &mgr, const std::vector<BDD> &bdds) {
+        ADD result = mgr.addZero();
+        ADD two = mgr.addOne() + mgr.addOne();
+        for (auto it = bdds.rbegin();it != bdds.rend();it++) {
+            result *= two;
+            result += it->Add();
+        }
+        return result;
+    }
+
+    ADD xor_difference_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat) {
+        std::vector<BDD> diff;
+        for (unsigned int i = 0;i<f.size();i++) {
+            diff.push_back(f[i] ^ f_hat[i]);
+        }
+
+        return bdd_forest_to_add(mgr, diff);
+    }
+
+    static DdNode * add_absolute_difference_apply(DdManager * dd, DdNode ** f, DdNode ** g) {
+        // basically copied from cuddAddApply.c (the operator is modified of course)
+        DdNode *F = *f;
+        DdNode *G = *g;
+        if (Cudd_IsConstant(F) && Cudd_IsConstant(G)) {
+            CUDD_VALUE_TYPE value = std::abs(Cudd_V(F) - Cudd_V(G));
+            DdNode * res = Cudd_addConst(dd, value);
+            return res;
+        }
+        if (F > G) { /* swap f and g */
+            *f = G;
+            *g = F;
+        }
+        return nullptr;
+    }
+
+    ADD absolute_difference_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat) {
+        ADD a = bdd_forest_to_add(mgr, f);
+        ADD b = bdd_forest_to_add(mgr, f_hat);
+        DdNode *result_node = Cudd_addApply(mgr.getManager(), add_absolute_difference_apply, a.getNode(), b.getNode());
+        return ADD(mgr, result_node);
+    }
 
 
     void dump_dot(
@@ -90,7 +333,6 @@ namespace abo::util {
         std::vector<BDD> diff;
         diff.reserve(minuend.size());
 
-
         // using one as carry in serves as an implicit method to add one to the subtrahend, which is necessary to
         // change its sign
         BDD carry = mgr.bddOne();
@@ -103,7 +345,7 @@ namespace abo::util {
 
         }
 
-        std::cout << "diff.size() " << diff.size() << "\n";
+        //std::cout << "diff.size() " << diff.size() << "\n";
 
         return diff;
     }
@@ -125,7 +367,5 @@ namespace abo::util {
 
         return abs;
     }
-
-
 
 }

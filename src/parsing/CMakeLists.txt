@@ -4,4 +4,5 @@ add_library(pla_parser pla_parser.cpp pla_parser.hpp)
 target_link_libraries(pla_parser lorina cudd)
 target_include_directories(pla_parser PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-target_link_libraries(aig_parser PUBLIC cudd PRIVATE lorina)
+target_link_libraries(aig_parser PUBLIC cudd lorina)
+target_include_directories(aig_parser PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

@@ -7,11 +7,32 @@
 
 #include <vector>
 #include <string>
+#include <map>
 
 
 #include <cudd/cplusplus/cuddObj.hh>
 
 namespace abo::util {
+
+    unsigned int terminal_level(const std::vector<std::vector<BDD>>& bdds);
+
+    long eval_adder(const std::vector<BDD> &adder, long input1, long input2, int bits);
+
+    std::map<DdNode*, double> count_minterms(const BDD &bdd);
+
+    std::vector<int> random_satisfying_input(const BDD &bdd, const std::map<DdNode*, double> &minterm_count, int max_level);
+
+    // return the value of the given add node, it must be a constant
+    unsigned int const_add_value(const ADD &add);
+    // returns a list of values (first) and how often they are reached (second)
+    std::vector<std::pair<double, unsigned long> > add_terminal_values(const ADD &add);
+
+    // assumes that the function represents an unsigned integer
+    ADD bdd_forest_to_add(const Cudd &mgr, const std::vector<BDD> &bdds);
+
+    ADD xor_difference_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat);
+    ADD absolute_difference_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat);
+
     void dump_dot(
             const Cudd &mgr,
             const std::vector<BDD>& bdd,
