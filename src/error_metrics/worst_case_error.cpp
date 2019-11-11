@@ -200,7 +200,6 @@ namespace abo::error_metrics {
             for (const BDD &b : f) {
                 partial_result.push_back(b & modifier);
             }
-            std::vector<int> inputValue;
             boost::multiprecision::cpp_dec_float_100 max_val = boost::multiprecision::cpp_dec_float_100(get_max_value(mgr, partial_result));
 
             min_error = min(min_error, max_val / (std::pow(2.0, i + 1) - 1));
@@ -214,7 +213,6 @@ namespace abo::error_metrics {
         for (const BDD &b : f) {
             partial_result.push_back(b & zero_so_far);
         }
-        std::vector<int> inputValue;
         boost::multiprecision::cpp_dec_float_100 max_val = boost::multiprecision::cpp_dec_float_100(get_max_value(mgr, partial_result));
         min_error = min(min_error, max_val); // divided by one
         max_error = max(max_error, max_val);

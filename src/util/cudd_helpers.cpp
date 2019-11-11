@@ -187,9 +187,9 @@ namespace abo::util {
         // determine the level that terminal nodes should be interpreted as
         std::vector<unsigned int> support = add.SupportIndices();
         auto max_support_index = std::max_element(support.begin(), support.end());
-        unsigned int terminal_level = (max_support_index == support.end() ? 0 : *max_support_index) + 1;
+        unsigned int term_level = (max_support_index == support.end() ? 0 : *max_support_index) + 1;
 
-        auto path_count = count_paths(add.getNode(), terminal_level);
+        auto path_count = count_paths(add.getNode(), term_level);
 
         std::vector<std::pair<double, unsigned long>> result;
         while (toVisit.size() > 0) {
@@ -201,11 +201,13 @@ namespace abo::util {
             } else {
                 DdNode *thenNode = Cudd_T(node);
                 if (visited.find(thenNode) == visited.end()) {
+                    // cppcheck-suppress stlFindInsert
                     visited.insert(thenNode);
                     toVisit.push(thenNode);
                 }
                 DdNode *elseNode = Cudd_E(node);
                 if (visited.find(elseNode) == visited.end()) {
+                    // cppcheck-suppress stlFindInsert
                     visited.insert(elseNode);
                     toVisit.push(elseNode);
                 }

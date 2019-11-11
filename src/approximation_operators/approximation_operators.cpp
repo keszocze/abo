@@ -185,9 +185,12 @@ namespace abo::operators {
 
         unsigned int varId = Cudd_NodeReadIndex(N);
 
-        DdNode *then_branch;
-        DdNode *else_branch;
+
         if (varId < level_start) {
+
+            DdNode *then_branch;
+            DdNode *else_branch;
+
             then_branch = round_rec(dd, Nv, level_start, minterm_count, round_map);
             else_branch = round_rec(dd, Nnv, level_start, minterm_count, round_map);
 

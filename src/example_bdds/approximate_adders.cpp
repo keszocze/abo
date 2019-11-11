@@ -188,6 +188,8 @@ namespace abo::example_bdds {
         }
 
         unsigned int count = resultant_bits;
+
+        // cppcheck-suppress unreadVariable
         BDD temp_carry = mgr.bddZero();
         for (unsigned int i = sub_adder_length-1;i<num_bits;i++) {
             if (count == resultant_bits && i != num_bits-1) {

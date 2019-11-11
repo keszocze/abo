@@ -9,7 +9,6 @@
 namespace abo::example_bdds {
 
     std::vector<BDD> example3(Cudd &mgr) {
-        std::vector<BDD> fun;
 
 
         BDD x1 = mgr.bddVar(0);

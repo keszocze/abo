@@ -63,7 +63,7 @@ namespace abo::parser {
     const std::vector<BDD> aig_parser::get_outputs() const {
         std::vector<BDD> result;
 
-        for (unsigned output : output_indices) {
+        for (const unsigned output : output_indices) {
             result.push_back(find_literal(output));
         }
 

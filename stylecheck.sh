@@ -8,7 +8,7 @@ ALLOWED_ERRS=28
 
 cpp_check() {
 	logfile=cppcheck.log
-	cppcheck --enable=all src 1>/dev/null 2> $logfile
+	cppcheck --enable=all --inline-suppr --suppressions-list=suppressions.txt src/ 1>/dev/null 2> $logfile
 	nerr=$(wc -l < $logfile)
 	#echo "found $nerr cppcheck issues"
 
