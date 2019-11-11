@@ -25,7 +25,7 @@ try_compiling:
         - mkdir -p build/bw_output
         - cd build
         - cmake ..
-          #        - make cudd # needs to be build separately (dunno why)
+        - make cudd # needs to be build separately (dunno why)
         - /opt/sonar-build-wrapper/build-wrapper-linux-x86-64 --out-dir bw_output make all
         - date
 
@@ -35,9 +35,7 @@ run_cppcheck:
     extends: .ciconf
     stage: compile # no need to wait for the actual compilation
     script:
-        - date
         - ./stylecheck.sh
-        - date
 
 run_sonarqube:
     extends: .ciconf

@@ -10,3 +10,4 @@ tests/cudd.pdf
 tests/foo.dot
 tests/foo.png
 .scannerwork
+sonar.sh
