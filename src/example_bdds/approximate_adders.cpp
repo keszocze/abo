@@ -1,4 +1,4 @@
-w#include "approximate_adders.hpp"
+#include "approximate_adders.hpp"
 #include <cassert>
 #include <cudd_helpers.hpp>
 
