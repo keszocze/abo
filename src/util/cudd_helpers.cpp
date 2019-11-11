@@ -323,6 +323,9 @@ namespace abo::util {
         }
     }
 
+    /**
+     * @
+     */
     std::pair<BDD, BDD> full_adder(const BDD &f, const BDD &g, const BDD &carry_in) {
         BDD carry_out = (f * g) | (f * carry_in) | (g * carry_in);
         BDD sum = f ^ g ^carry_in;
@@ -352,7 +355,7 @@ namespace abo::util {
 
     std::vector<BDD> abs(const Cudd &mgr, const std::vector<BDD> &f) {
 
-        // mask consisting of the sign bit only
+        // create mask consisting of the sign bit only
         BDD sign_bit = f.back();
         std::vector<BDD> mask(f.size(), sign_bit);
 
@@ -382,14 +385,14 @@ namespace abo::util {
         return result;
     }
 
-    std::vector<BDD> bdd_add(const Cudd &mgr, const std::vector<BDD> &f1, const std::vector<BDD> &f2) {
+    std::vector<BDD> bdd_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &g) {
         std::vector<BDD> sum;
-        sum.reserve(f1.size());
+        sum.reserve(f.size());
 
         BDD carry = mgr.bddZero();
 
-        for (unsigned int i = 0; i<f1.size(); ++i) {
-            auto tmp  = full_adder(f1[i], f2[i], carry);
+        for (unsigned int i = 0; i < f.size(); ++i) {
+            auto tmp  = full_adder(f[i], g[i], carry);
             sum.push_back(tmp.first);
             carry = tmp.second;
 
@@ -398,7 +401,7 @@ namespace abo::util {
         return sum;
     }
 
-    std::vector<BDD> bdd_multiply_constant(const Cudd &mgr, const std::vector<BDD> &f, double factor, unsigned int num_extra_bits) {
+    std::vector<BDD> bdd_multiply_constant(const Cudd &mgr, const std::vector<BDD> &f, double factor, const unsigned int num_extra_bits) {
 
         std::vector<BDD> result(f.size() + size_t(std::ceil(std::log2(factor))) + 2, mgr.bddZero());
 
@@ -464,26 +467,26 @@ namespace abo::util {
         return result;
     }
 
-    BDD greater_equals(const Cudd &mgr, const std::vector<BDD> &f1, const std::vector<BDD> &f2) {
-        std::vector<BDD> f1_ = f1;
-        std::vector<BDD> f2_ = f2;
+    BDD greater_equals(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &g) {
+        std::vector<BDD> f_ = f;
+        std::vector<BDD> g_ = g;
 
-        while (f1_.size() < f2_.size()) {
-            f1_.push_back(mgr.bddZero());
+        while (f_.size() < g_.size()) {
+            f_.push_back(mgr.bddZero());
         }
-        while (f2_.size() < f1_.size()) {
-            f2_.push_back(mgr.bddZero());
+        while (g_.size() < f_.size()) {
+            g_.push_back(mgr.bddZero());
         }
 
         BDD zero_condition = mgr.bddOne();
         BDD equal_condition = mgr.bddOne();
 
         BDD result = mgr.bddZero();
-        for (int i = int(f1_.size())-1;i>=0;i--) {
-            zero_condition &= !f2_[i];
-            result |= f1_[i] & zero_condition;
-            result |= f1_[i] & !f2_[i] & equal_condition;
-            equal_condition &= (f1_[i] & f2_[i]) | ((!f1_[i]) & (!f2_[i]));
+        for (int i = int(f_.size()) - 1; i >= 0; i--) {
+            zero_condition &= !g_[i];
+            result |= f_[i] & zero_condition;
+            result |= f_[i] & !g_[i] & equal_condition;
+            equal_condition &= (f_[i] & g_[i]) | ((!f_[i]) & (!g_[i]));
         }
         result |= equal_condition;
         return result;

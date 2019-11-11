@@ -14,8 +14,21 @@
 
 namespace abo::util {
 
+    /**
+     * @brief Computes the label/number of the lowest terminal level of a given BDD (forest)
+     * @param bdds BDDs in the forest
+     * @return Lowest level in the forest
+     */
     unsigned int terminal_level(const std::vector<std::vector<BDD>>& bdds);
 
+    /**
+     *
+     * @param adder
+     * @param input1
+     * @param input2
+     * @param bits
+     * @return
+     */
     long eval_adder(const std::vector<BDD> &adder, long input1, long input2, int bits);
 
     std::map<DdNode*, double> count_minterms(const BDD &bdd);
@@ -24,6 +37,7 @@ namespace abo::util {
 
     // return the value of the given add node, it must be a constant
     unsigned int const_add_value(const ADD &add);
+
     // returns a list of values (first) and how often they are reached (second)
     std::vector<std::pair<double, unsigned long> > add_terminal_values(const ADD &add);
 
@@ -31,6 +45,8 @@ namespace abo::util {
     ADD bdd_forest_to_add(const Cudd &mgr, const std::vector<BDD> &bdds);
 
     ADD xor_difference_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat);
+
+
     ADD absolute_difference_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat);
 
     void dump_dot(
@@ -45,10 +61,29 @@ namespace abo::util {
             const std::vector<std::string>& inames={},
             const std::string& funname=std::string());
 
+
+    /**
+     * @brief Retrives high-child of a BDD v
+     * @param v
+     * @return low(v)
+     */
     BDD high(const Cudd& mgr, const BDD& v);
+
+    /**
+     * @brief Retrives low-child of a BDD v
+     * @param v
+     * @return low(v)
+     */
     BDD low(const Cudd& mgr, const BDD& v);
 
 
+    /**
+     * @brief Creates a full adder of two BDDs and a carry BDD
+     * @param f First summand BDD
+     * @param g Second summand BDD
+     * @param carry_in Carry BDD
+     * @return Tuple of BDDs: Summ BDD and Carry BDD
+     */
     std::pair<BDD,BDD> full_adder(const BDD& f, const BDD& g, const BDD &carry_in);
 
 
@@ -64,44 +99,63 @@ namespace abo::util {
      */
     std::vector<BDD> bdd_subtract(const Cudd &mgr, const std::vector<BDD> &minuend, const std::vector<BDD> &subtrahend);
 
-    std::vector<BDD> bdd_add(const Cudd &mgr, const std::vector<BDD> &f1, const std::vector<BDD> &f2);
 
+    /**
+     * @brief Creates the BDD representing the sum of two functions
+     * @param f First summand
+     * @param g Second summand
+     * @return BDD representing f+g
+     */
+    std::vector<BDD> bdd_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &g);
 
+    /**
+     * @brief Creates BDD representing abs(f)
+     * @param f
+     * @return BDD representing ab(f)
+     */
     std::vector<BDD> abs(const Cudd& mgr, const std::vector<BDD>& f);
 
     /**
-     * @brief bdd_shift shifts a function f by a number of bits left or right
+     * @brief Shifts a function f by a number of bits left or right
      *
      * The shifted result has the same number of bits as the input, bits that are shifted above or below
      * the original function bit range will be discarded
      *
-     * @param f function to shift
-     * @param bits_to_shift number of bits to shift. Can be both positive or negative
-     * @return
+     * @param f Function to shift
+     * @param bits_to_shift Number of bits to shift. Can be both positive or negative
+     * @return Shifted BDD
      */
     std::vector<BDD> bdd_shift(const Cudd &mgr, const std::vector<BDD> &f, int bits_to_shift);
 
     /**
-     * @brief bdd_multiply_constant Multiplies a bdd function with a constant
-     * @param f
-     * @param factor
-     * @return
+     * @brief Multiplies a bdd function with a constant
+     * @param f Function that is to be multiplied
+     * @param factor Constant multiplication factor
+     * @param num_extra_bits Additional bits used to make sure that the result can be stored
+     * @return BDD representing the function "factor*f" (extended by up to num_extra_bits)
      */
-    std::vector<BDD> bdd_multiply_constant(const Cudd &mgr, const std::vector<BDD> &f, double factor, unsigned int num_extra_bits = 16);
+    std::vector<BDD> bdd_multiply_constant(const Cudd &mgr, const std::vector<BDD> &f, double factor, const unsigned int num_extra_bits = 16);
 
     /**
-     * @brief exists_greater_equals Checks if an input x exists such that int(f1(x)) >= int(f2(x))
+     * @brief Checks if an input x exists such that int(f1(x)) >= int(f2(x))
      * @param f1
      * @param f2
      * @return
      */
     bool exists_greater_equals(const Cudd &mgr, const std::vector<BDD> &f1, const std::vector<BDD> &f2);
 
-    BDD greater_equals(const Cudd &mgr, const std::vector<BDD> &f1, const std::vector<BDD> &f2);
 
     /**
-     * @brief max_one Computes a function g such that int(g(x)) = max(1, int(f(x)) for an unsigned function f
-     * @return g (same length as f)
+     * @brief Creates a BDD representing f >= g
+     * @param f
+     * @param g
+     * @return BDD representing f >= g
+     */
+    BDD greater_equals(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &g);
+
+    /**
+     * @brief Computes a function g such that int(g(x)) = max(1, int(f(x)) for an unsigned function f
+     * @return Function g as vecotr of BDDS of same length as f
      */
     std::vector<BDD> bdd_max_one(const Cudd &mgr, const std::vector<BDD> &f);
 
