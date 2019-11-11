@@ -25,8 +25,8 @@ try_compiling:
         - mkdir -p build/bw_output
         - cd build
         - cmake ..
-        - make cudd # needs to be build separately (dunno why)
-        - /opt/sonar-build-wrapper/build-wrapper-linux-x86-64 --out-dir bw_output make all
+        - make -j 4 cudd # needs to be build separately (dunno why)
+        - /opt/sonar-build-wrapper/build-wrapper-linux-x86-64 --out-dir bw_output make -j 4 all
         - date
 
 # cpp check is put in a separate script file as we want to perform stuff that
