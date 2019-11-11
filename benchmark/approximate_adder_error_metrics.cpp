@@ -90,7 +90,7 @@ static void generate_adders(benchmark::State& state) {
             abo::error_metrics::average_case_error(mgr, correct, approximate_adder);
             break;
         case AVERAGE_CASE_RELATIVE:
-            abo::error_metrics::avererage_relative_error(mgr, correct, approximate_adder);
+            abo::error_metrics::average_relative_error(mgr, correct, approximate_adder);
             break;
         case MEAN_SQUARED:
             abo::error_metrics::mean_squared_error(mgr, correct, approximate_adder);

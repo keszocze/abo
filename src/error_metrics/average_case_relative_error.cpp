@@ -30,7 +30,7 @@ namespace abo::error_metrics {
     }
 
     std::pair<boost::multiprecision::cpp_dec_float_100, boost::multiprecision::cpp_dec_float_100>
-            avererage_relative_error(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat) {
+            average_relative_error(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat) {
         std::vector<BDD> f_= f;
         std::vector<BDD> f_hat_ = f_hat;
 
