@@ -17,7 +17,7 @@ namespace abo::error_metrics {
 
 
 
-        // TODO use some kind of zip function as soon as C++ actually supports that
+        // maybe: use some kind of zip function as soon as C++ actually supports that in a non-ugly fassion
         for (std::size_t i = 0; i < f.size(); i++) {
             miter_bdd = miter_bdd | (f[i] ^ f_hat[i]);
         }

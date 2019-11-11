@@ -57,11 +57,9 @@ namespace abo::error_metrics {
 
         std::vector<BDD> difference = abo::util::bdd_subtract(mgr, f_, f_hat_);
 
-        // abo::util::dump_dot(mgr, f);
-        // abo::util::dump_dot(mgr,f_hat);
-        // abo::util::dump_dot(mgr,difference);
+
         std::vector<BDD> absolute_difference = abo::util::abs(mgr,difference);
-        // abo::util::dump_dot(mgr,absolute_difference);
+
 
 
         return get_max_value(mgr,absolute_difference);
@@ -133,7 +131,8 @@ namespace abo::error_metrics {
             maximum_relative_value(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &g) {
 
         BDD zero_so_far = mgr.bddOne();
-        boost::multiprecision::cpp_dec_float_100 min_error = std::numeric_limits<double>::infinity(), max_error = 0;
+        boost::multiprecision::cpp_dec_float_100 min_error = std::numeric_limits<double>::infinity();
+        boost::multiprecision::cpp_dec_float_100 max_error = 0;
         for (int i = g.size()-1;i>=0;i--) {
             std::vector<BDD> partial_result;
             partial_result.reserve(f.size());
