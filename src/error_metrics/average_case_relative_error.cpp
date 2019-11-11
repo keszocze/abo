@@ -8,7 +8,8 @@ namespace abo::error_metrics {
             average_relative_value(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &g) {
 
         BDD zero_so_far = mgr.bddOne();
-        boost::multiprecision::cpp_dec_float_100 min_average_result = 0, max_average_result = 0;
+        boost::multiprecision::cpp_dec_float_100 min_average_result = 0;
+        boost::multiprecision::cpp_dec_float_100 max_average_result = 0;
         for (int i = g.size()-1;i>=0;i--) {
             std::vector<BDD> partial_result;
             partial_result.reserve(f.size());
@@ -80,7 +81,8 @@ namespace abo::error_metrics {
         std::vector<int> inputs(terminal_level, 0);
         for (int i = 0;i<samples;i++) {
             std::generate(inputs.begin(), inputs.end(), []() { return rand() % 2; });
-            boost::multiprecision::cpp_dec_float_100 original_value = 0, diff_value = 0;
+            boost::multiprecision::cpp_dec_float_100 original_value = 0;
+            boost::multiprecision::cpp_dec_float_100 diff_value = 0;
             for (auto it = difference.rbegin();it != difference.rend();++it) {
                 diff_value *= 2;
                 if (it->Eval(inputs.data()).IsOne()) {

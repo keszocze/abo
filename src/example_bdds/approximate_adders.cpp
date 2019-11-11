@@ -1,4 +1,4 @@
-#include "approximate_adders.hpp"
+w#include "approximate_adders.hpp"
 #include <cassert>
 #include <cudd_helpers.hpp>
 
@@ -11,9 +11,11 @@ namespace abo::example_bdds {
     std::vector <BDD> almost_correct_adder_1(Cudd &mgr, unsigned int num_bits, unsigned int partition_size) {
         assert(num_bits >= partition_size && partition_size > 0);
 
-        std::vector<BDD> input1, input2;
+        std::vector<BDD> input1;
+        std::vector<BDD> input2;
         input1.reserve(num_bits);
         input2.reserve(num_bits);
+
         for (unsigned int i = 0;i<num_bits;i++) {
             input1.push_back(mgr.bddVar(i * 2));
             input2.push_back(mgr.bddVar(i * 2 + 1));
@@ -62,7 +64,8 @@ namespace abo::example_bdds {
     std::vector <BDD> almost_correct_adder_2(Cudd &mgr, unsigned int num_bits, unsigned int partition_size) {
         assert(num_bits >= partition_size && partition_size > 0);
 
-        std::vector<BDD> input1, input2;
+        std::vector<BDD> input1;
+        std::vector<BDD> input2;
         input1.reserve(num_bits);
         input2.reserve(num_bits);
         for (unsigned int i = 0;i<num_bits;i++) {
@@ -112,7 +115,8 @@ namespace abo::example_bdds {
     }
 
     std::vector <BDD> gracefully_degrading_adder(Cudd &mgr, unsigned int num_bits, unsigned int num_partitions, unsigned int prediction_bits) {
-        std::vector<BDD> input1, input2;
+        std::vector<BDD> input1;
+        std::vector<BDD> input2;
         input1.reserve(num_bits);
         input2.reserve(num_bits);
         for (unsigned int i = 0;i<num_bits;i++) {
@@ -162,7 +166,8 @@ namespace abo::example_bdds {
     std::vector<BDD> generic_accuracy_reconfigurable_adder(Cudd &mgr, unsigned int num_bits, unsigned int resultant_bits,
                                                            unsigned int previous_bits) {
 
-        std::vector<BDD> input1, input2;
+        std::vector<BDD> input1;
+        std::vector<BDD> input2;
         input1.reserve(num_bits);
         input2.reserve(num_bits);
         for (unsigned int i = 0;i<num_bits;i++) {
@@ -218,7 +223,8 @@ namespace abo::example_bdds {
 
     std::vector<BDD> regular_adder(const Cudd &mgr, unsigned int num_bits) {
 
-        std::vector<BDD> input1, input2;
+        std::vector<BDD> input1;
+        std::vector<BDD> input2;
         input1.reserve(num_bits);
         input2.reserve(num_bits);
         for (unsigned int i = 0;i<num_bits;i++) {

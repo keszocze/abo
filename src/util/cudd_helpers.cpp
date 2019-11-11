@@ -346,8 +346,6 @@ namespace abo::util {
 
         }
 
-        //std::cout << "diff.size() " << diff.size() << "\n";
-
         return diff;
     }
 

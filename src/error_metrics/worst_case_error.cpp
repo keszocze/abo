@@ -143,7 +143,8 @@ namespace abo::error_metrics {
         absolute_difference.insert(absolute_difference.begin(), result.begin(), result.begin() + num_extra_bits);
         f_.insert(f_.begin(), result.begin(), result.begin() + num_extra_bits);
 
-        double min, max;
+        double min;
+        double max;
         double factor = 1;
         for (int i = 0;;i++) {
             std::vector<BDD> multiplied = abo::util::bdd_multiply_constant(mgr, f_, factor);

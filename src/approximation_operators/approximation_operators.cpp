@@ -86,7 +86,8 @@ namespace abo::operators {
             const unsigned int level_end,
             const std::map<DdNode *, double> &minterm_count,
             std::map<DdNode *, DdNode *> &round_map,
-            const bool remove_heavy, const bool subset) {
+            const bool remove_heavy,
+            const bool subset) {
 
         if (Cudd_IsConstant(node)) {
             return node;
@@ -97,7 +98,7 @@ namespace abo::operators {
             return it->second;
         }
 
-        DdNode * const N = Cudd_Regular(node);
+        DdNode *const N = Cudd_Regular(node);
         DdNode *Nv = Cudd_T(N);
         DdNode *Nnv = Cudd_E(N);
 
@@ -107,7 +108,9 @@ namespace abo::operators {
 
         const unsigned int varId = Cudd_NodeReadIndex(N);
 
-        DdNode *then_branch, *else_branch;
+        DdNode *then_branch;
+        DdNode *else_branch;
+
         if (varId < level_start) {
             then_branch = remove_children_rec(dd, Nv, level_start, level_end, minterm_count, round_map, remove_heavy,
                                               subset);
@@ -120,7 +123,6 @@ namespace abo::operators {
                 throw std::logic_error("remove_children_rec: node should be in map");
             }
 
-            // TODO hier könnte man eine Strategie übergeben
             bool then_is_heavy = then_minterm_count->second > else_minterm_count->second;
 
             if (remove_heavy == then_is_heavy) {
@@ -139,9 +141,9 @@ namespace abo::operators {
         Cudd_Ref(then_branch);
         Cudd_Ref(else_branch);
 
-        DdNode * const topv = Cudd_ReadVars(dd, varId);
+        DdNode *const topv = Cudd_ReadVars(dd, varId);
         Cudd_Ref(topv);
-        DdNode * const neW = Cudd_bddIte(dd, topv, then_branch, else_branch);
+        DdNode *const neW = Cudd_bddIte(dd, topv, then_branch, else_branch);
         if (neW != nullptr) {
             // TODO: is this necessary?
             Cudd_Ref(neW);
@@ -173,7 +175,7 @@ namespace abo::operators {
             return it->second;
         }
 
-        DdNode * const N = Cudd_Regular(node);
+        DdNode *const N = Cudd_Regular(node);
         DdNode *Nv = Cudd_T(N);
         DdNode *Nnv = Cudd_E(N);
 
@@ -183,7 +185,8 @@ namespace abo::operators {
 
         unsigned int varId = Cudd_NodeReadIndex(N);
 
-        DdNode *then_branch, *else_branch;
+        DdNode *then_branch;
+        DdNode *else_branch;
         if (varId < level_start) {
             then_branch = round_rec(dd, Nv, level_start, minterm_count, round_map);
             else_branch = round_rec(dd, Nnv, level_start, minterm_count, round_map);
@@ -231,7 +234,7 @@ namespace abo::operators {
             return it->second;
         }
 
-        DdNode * const N = Cudd_Regular(node);
+        DdNode *const N = Cudd_Regular(node);
         DdNode *Nv = Cudd_T(N);
         DdNode *Nnv = Cudd_E(N);
 
@@ -241,14 +244,15 @@ namespace abo::operators {
 
         const unsigned int varId = Cudd_NodeReadIndex(N);
 
-        DdNode *then_branch, *else_branch;
+        DdNode *then_branch;
+        DdNode *else_branch;
         if (varId < level_start) {
             // not at the right level yet, simply follow the BDD down
             then_branch = round_best_rec(dd, Nv, level_start, level_end, minterm_count, round_map);
             else_branch = round_best_rec(dd, Nnv, level_start, level_end, minterm_count, round_map);
         }
 
-        // reached range of variable levels  to perform the rounding on
+            // reached range of variable levels  to perform the rounding on
         else if (varId >= level_start && varId <= level_end) {
             const auto then_minterm_count = minterm_count.find(Nv);
             const auto else_minterm_count = minterm_count.find(Nnv);
@@ -289,7 +293,7 @@ namespace abo::operators {
         Cudd_Ref(then_branch);
         Cudd_Ref(else_branch);
 
-        DdNode * const topv = Cudd_ReadVars(dd, varId);
+        DdNode *const topv = Cudd_ReadVars(dd, varId);
         Cudd_Ref(topv);
         DdNode *neW = Cudd_bddIte(dd, topv, then_branch, else_branch);
         if (neW != nullptr) {
