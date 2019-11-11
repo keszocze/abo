@@ -2,9 +2,20 @@
 
 # How to cite
 
-If you are using $toolname, please cite the following paper:
+If you are using *abo*, please cite the following paper:
 
-TBD
+Andreas Wendler and Oliver Keszocze *A fast BDD Minimization Framework for Approximate Computing*. 
+In: Design, Automation and Test in Europe (DATE'20) 
+
+You can use the following bibtex code:
+```
+@inproceedings{Wendler2020,
+  title = {{A Fast BDD Minimization Framework for Approximate Computing}},
+  booktitle = {Design, Automation and Test in Europe},
+  author = {Wendler, Andreas and Keszocze, Oliver},
+  location = {Grenoble, FR}
+}
+```
 
 # References
 
