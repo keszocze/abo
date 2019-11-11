@@ -9,6 +9,8 @@ add_library(error_metrics
     average_bit_flip_error.hpp
     average_case_error.cpp
     average_case_error.hpp
+    average_case_relative_error.cpp
+    average_case_relative_error.hpp
 )
 
 target_link_libraries(error_metrics PUBLIC cudd PRIVATE abo_util)

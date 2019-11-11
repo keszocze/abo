@@ -127,6 +127,65 @@ namespace abo::error_metrics {
         return largest;
     }
 
+    double worst_case_relative_error_search(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat, unsigned int num_extra_bits, double precision) {
+        std::vector<BDD> f_ = f;
+        std::vector<BDD> f_hat_ = f_hat;
+
+        f_.push_back(mgr.bddZero());
+        f_hat_.push_back(mgr.bddZero());
+
+        f_ = abo::util::bdd_max_one(mgr, f_);
+
+        std::vector<BDD> difference = abo::util::bdd_subtract(mgr, f_, f_hat_);
+        std::vector<BDD> absolute_difference = abo::util::abs(mgr, difference);
+
+        std::vector<BDD> result(num_extra_bits, mgr.bddZero());
+        absolute_difference.insert(absolute_difference.begin(), result.begin(), result.begin() + num_extra_bits);
+        f_.insert(f_.begin(), result.begin(), result.begin() + num_extra_bits);
+
+        double min, max;
+        double factor = 1;
+        for (int i = 0;;i++) {
+            std::vector<BDD> multiplied = abo::util::bdd_multiply_constant(mgr, f_, factor);
+            if (!abo::util::exists_greater_equals(mgr, absolute_difference, multiplied)) {
+                max = factor;
+                min = factor == 1.0 ? 0 : factor / 2.0;
+                break;
+            }
+            factor *= 2;
+        }
+        for (int i = 0;max - min > precision;i++) {
+            double middle = (min + max) / 2.0;
+            std::vector<BDD> multiplied = abo::util::bdd_multiply_constant(mgr, f_, middle);
+            if (abo::util::exists_greater_equals(mgr, absolute_difference, multiplied)) {
+                min = middle;
+            } else {
+                max = middle;
+            }
+        }
+        return (min + max) / 2.0;
+    }
+
+    boost::multiprecision::cpp_dec_float_100 worst_case_relative_error_symbolic_division(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat, unsigned int num_extra_bits) {
+
+        std::vector<BDD> f_= f;
+        std::vector<BDD> f_hat_ = f_hat;
+
+        // add sign bits so that
+        f_.push_back(mgr.bddZero());
+        f_hat_.push_back(mgr.bddZero());
+
+        std::vector<BDD> difference = abo::util::bdd_subtract(mgr, f_, f_hat_);
+        std::vector<BDD> absolute_difference = abo::util::abs(mgr,difference);
+
+        std::vector<BDD> no_zero = abo::util::bdd_max_one(mgr, f_);
+        std::vector<BDD> divided = abo::util::bdd_divide(mgr, absolute_difference, no_zero, num_extra_bits);
+        auto max = get_max_value(mgr, divided);
+        boost::multiprecision::cpp_dec_float_100 value(max);
+        value /= std::pow(2, num_extra_bits);
+        return value;
+    }
+
     std::pair<boost::multiprecision::cpp_dec_float_100, boost::multiprecision::cpp_dec_float_100>
             maximum_relative_value(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &g) {
 
