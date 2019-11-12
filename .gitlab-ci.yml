@@ -45,6 +45,11 @@ run_sonarqube:
 run_tests:
     extends: .ciconf
     stage: test
+    artifacts:
+        paths:
+            - build/tests/coverage
+        expire_in: 30 minutes
+
     script:
         - cd build/tests
           # the leading dot seems to be necessary
