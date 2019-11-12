@@ -153,7 +153,7 @@ TEST_CASE("Cofactor works as expected") {
 
 }
 
-TEST_CASE("Differnce in Cofactor and Constrain(?)") {
+TEST_CASE("Difference in Cofactor and Constrain(?)") {
     constexpr size_t n = 30;
 
     Cudd mgr(n);

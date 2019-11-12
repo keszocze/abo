@@ -11,6 +11,7 @@
 
 
 #include <iostream>
+#include <approximation_operators.hpp>
 
 
 
@@ -22,9 +23,17 @@
 TEST_CASE("Example 3 from ASP-DAC 2016 paper") {
     Cudd mgr(2);
 
-    std::vector<BDD> fun = abo::example_bdds::example3(mgr);
+    std::vector<BDD> fun = abo::example_bdds::example1a(mgr);
+    std::vector<BDD> rounded_up_fun = abo::example_bdds::example1c(mgr);
 
-//    abo::util::dump_dot(mgr,fun,{"x_1", "x_2"},{"d_0", "d_1", "d_2", "d_3", "d_4"});
+    std::vector<BDD> self_rounded;
+
+    for (const BDD &f: fun) {
+        self_rounded.push_back(abo::operators::subset_heavy_child(mgr,f,3,4));
+    }
+
+
+    abo::util::dump_dot(mgr,self_rounded,{"x_1", "x_2", "x_3", "x_4"},{"f0", "f1", "f2"});
 
 
 
