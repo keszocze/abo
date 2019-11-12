@@ -19,3 +19,30 @@ add_custom_command(
         ${CMAKE_CURRENT_BINARY_DIR}
         COMMENT "Copying .pla files for testing"
         VERBATIM)
+
+
+
+## coverage
+
+set(BUILD_COVERAGE_DATA TRUE)
+if(CMAKE_COMPILER_IS_GNUCXX)
+    if("${CMAKE_CXX_COMPILER_ID}" MATCHES "(Apple)?[Cc]lang")
+        if("${CMAKE_CXX_COMPILER_VERSION}" VERSION_LESS 3)
+            set(BUILD_COVERAGE_DATA FALSE)
+        endif()
+    endif()
+else()
+    set(BUILD_COVERAGE_DATA FALSE)
+endif()
+
+function(add_cov_stuff tgt)
+    target_compile_options(${tgt} PRIVATE --coverage)
+    target_link_options(${tgt} PRIVATE --coverage)
+endfunction()
+
+if(BUILD_COVERAGE_DATA)
+    add_cov_stuff(parsing_test)
+    add_cov_stuff(operations_test)
+    add_cov_stuff(error_metrics_test)
+    add_cov_stuff(approximation_operations_test)
+endif()
