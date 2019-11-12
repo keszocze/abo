@@ -16,14 +16,14 @@ namespace abo::example_bdds {
         BDD x4 = mgr.bddVar(3);
 
 
-        mgr.pushVariableName("x_1");
-        mgr.pushVariableName("x_2");
-        mgr.pushVariableName("x_3");
-        mgr.pushVariableName("x_4");
+//        mgr.pushVariableName("x_1");
+//        mgr.pushVariableName("x_2");
+//        mgr.pushVariableName("x_3");
+//        mgr.pushVariableName("x_4");
 
 
-        BDD cube01 = !x2 * x1;
-        BDD cube02 = x2 * !x2;
+        BDD cube01 = !x1 * x2;
+        BDD cube02 = x1 * !x2;
 
 
         BDD cube11 = !x1 * x3 * !x4;
@@ -53,14 +53,14 @@ namespace abo::example_bdds {
         BDD x4 = mgr.bddVar(3);
 
 
-        mgr.pushVariableName("x_1");
-        mgr.pushVariableName("x_2");
-        mgr.pushVariableName("x_3");
-        mgr.pushVariableName("x_4");
+//        mgr.pushVariableName("x_1");
+//        mgr.pushVariableName("x_2");
+//        mgr.pushVariableName("x_3");
+//        mgr.pushVariableName("x_4");
 
 
-        BDD cube01 = !x2 * x1;
-        BDD cube02 = x2 * !x2;
+        BDD cube01 = !x1 * x2;
+        BDD cube02 = x1 * !x2;
 
 
         BDD cube11 = x1 * x2 * !x3 *!x4;
@@ -87,10 +87,10 @@ namespace abo::example_bdds {
         BDD x4 = mgr.bddVar(3);
 
 
-        mgr.pushVariableName("x_1");
-        mgr.pushVariableName("x_2");
-        mgr.pushVariableName("x_3");
-        mgr.pushVariableName("x_4");
+//        mgr.pushVariableName("x_1");
+//        mgr.pushVariableName("x_2");
+//        mgr.pushVariableName("x_3");
+//        mgr.pushVariableName("x_4");
 
 
         BDD f0 = (x1 * !x2) | (!x1 * x2);
@@ -109,10 +109,10 @@ namespace abo::example_bdds {
         BDD x4 = mgr.bddVar(3);
 
 
-        mgr.pushVariableName("x_1");
-        mgr.pushVariableName("x_2");
-        mgr.pushVariableName("x_3");
-        mgr.pushVariableName("x_4");
+//        mgr.pushVariableName("x_1");
+//        mgr.pushVariableName("x_2");
+//        mgr.pushVariableName("x_3");
+//        mgr.pushVariableName("x_4");
 
 
         BDD f0 = (x1 * !x2) | (!x1 * x2);
@@ -129,8 +129,8 @@ namespace abo::example_bdds {
         BDD x1 = mgr.bddVar(0);
         BDD x2 = mgr.bddVar(1);
 
-        mgr.pushVariableName("x_1");
-        mgr.pushVariableName("x_2");
+//        mgr.pushVariableName("x_1");
+//        mgr.pushVariableName("x_2");
 
         BDD cube1 = !x2 * !x1;
         BDD cube2 = !x2 * x1;
