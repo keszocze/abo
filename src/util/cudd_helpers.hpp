@@ -131,7 +131,7 @@ namespace abo::util {
      * @brief Multiplies a bdd function with a constant
      * @param f Function that is to be multiplied
      * @param factor Constant multiplication factor
-     * @param num_extra_bits Additional bits used to make sure that the result can be stored
+     * @param num_extra_bits Additional bits used to make sure that the result can be stored (must be less than sizeof(unsigned long) * 8)
      * @return BDD representing the function "factor*f" (extended by up to num_extra_bits)
      */
     std::vector<BDD> bdd_multiply_constant(const Cudd &mgr, const std::vector<BDD> &f, double factor, const unsigned int num_extra_bits = 16);

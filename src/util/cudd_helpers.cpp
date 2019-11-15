@@ -6,6 +6,7 @@
 #include "string_helpers.hpp"
 
 #include <iostream>
+#include <boost/multiprecision/cpp_int.hpp>
 #include <cudd/cudd/cudd.h>
 #include <tuple>
 #include <map>
@@ -412,16 +413,19 @@ namespace abo::util {
             fc.push_back(mgr.bddZero());
         }
 
-        unsigned long great_factor = static_cast<unsigned long>(factor);
-        for (unsigned long i = 0;i<sizeof(long) * 8;i++) {
-            if (great_factor & (1L << i)) {
+        assert (factor <= static_cast<double>(std::numeric_limits<boost::multiprecision::uint256_t>::max()));
+
+        boost::multiprecision::uint256_t great_factor = static_cast<boost::multiprecision::uint256_t>(factor);
+        boost::multiprecision::uint256_t one = 1;
+        for (int i = 0;i<256;i++) {
+            if (great_factor & (one << i)) {
                 result = bdd_add(mgr, result, bdd_shift(mgr, fc, i));
             }
         }
-        unsigned long lesser_factor = static_cast<unsigned long>((factor - great_factor) * (1L << num_extra_bits));
+        unsigned long lesser_factor = static_cast<unsigned long>(std::fmod(factor, 1.0) * (1UL << num_extra_bits));
         for (unsigned int i = 0;i<num_extra_bits;i++) {
-            if (lesser_factor & (1L << i)) {
-                result = bdd_add(mgr, result, bdd_shift(mgr, fc, -(num_extra_bits - i)));
+            if (lesser_factor & (1UL << i)) {
+                result = bdd_add(mgr, result, bdd_shift(mgr, fc, -static_cast<int>(num_extra_bits - i)));
             }
         }
 
