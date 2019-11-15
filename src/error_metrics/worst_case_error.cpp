@@ -42,8 +42,8 @@ namespace abo::error_metrics {
     }
 
     boost::multiprecision::uint256_t
-    worst_case_error(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat,
-                         const NumberRepresentation num_rep) {
+            worst_case_error(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat,
+                                 const NumberRepresentation num_rep) {
 
         std::vector<BDD> f_= f;
         std::vector<BDD> f_hat_ = f_hat;
@@ -65,8 +65,13 @@ namespace abo::error_metrics {
         return get_max_value(mgr,absolute_difference);
     }
 
+    double worst_case_error_percent(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat,
+                                 const NumberRepresentation num_rep) {
+        return double(worst_case_error(mgr, f, f_hat, num_rep)) / (std::pow(2, f.size()) - 1);
+    }
+
     boost::multiprecision::uint256_t
-    worst_case_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat) {
+            worst_case_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat) {
         ADD diff = abo::util::absolute_difference_add(mgr, f, f_hat);
         std::vector<std::pair<double, unsigned long>> terminal_values = abo::util::add_terminal_values(diff);
 
