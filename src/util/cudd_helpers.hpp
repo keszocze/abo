@@ -95,10 +95,20 @@ namespace abo::util {
      *
      * @param minuend Minuend in Two's Complement
      * @param subtrahend  Subtrahend in Two's Complement
-     * @return BDD computing the difference of the outputs of the two suupplied BDDs
+     * @return BDD computing the difference of the outputs of the two supplied BDDs
      */
     std::vector<BDD> bdd_subtract(const Cudd &mgr, const std::vector<BDD> &minuend, const std::vector<BDD> &subtrahend);
 
+    /**
+     * @brief Creates a (vector of) BDDs that represent the absolute difference between to given (vectors of) BDDs
+     *
+     * The supplied BDDs are supposed to compute values represented in Two's Copmlement. The BDD returned by this function
+     * computes the difference between the outputs of these BDDs. It will always return an unsigned number, not a number in Two's complement.
+     *
+     * @param f Function in Two's Complement
+     * @param g Funtion in Two's Complement
+     * @return BDD computing the absolute difference of the outputs of the two supplied BDDs
+     */
     std::vector<BDD> bdd_absolute_difference(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &g);
 
 

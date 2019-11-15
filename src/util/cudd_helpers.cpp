@@ -357,7 +357,19 @@ namespace abo::util {
 
     std::vector<BDD> bdd_absolute_difference(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &g) {
 
-        std::vector<BDD> difference = abo::util::bdd_subtract(mgr, f, g);
+        bool smaller = true;
+        for (std::size_t i = 0;i<f.size();i++) {
+            if (f[i] > g[i]) {
+                smaller = false;
+                break;
+            }
+        }
+
+        // use correct order for the difference calculation to minimize computation time
+        const std::vector<BDD> &f_ = smaller ? g : f;
+        const std::vector<BDD> &g_ = smaller ? f : g;
+
+        std::vector<BDD> difference = abo::util::bdd_subtract(mgr, f_, g_);
         return abo::util::abs(mgr,difference);
     }
 
