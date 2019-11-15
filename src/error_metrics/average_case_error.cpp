@@ -58,8 +58,7 @@ namespace abo::error_metrics {
         f_.push_back(mgr.bddZero());
         f_hat_.push_back(mgr.bddZero());
 
-        std::vector<BDD> difference = abo::util::bdd_subtract(mgr, f_, f_hat_);
-        std::vector<BDD> absolute_difference = abo::util::abs(mgr,difference);
+        std::vector<BDD> absolute_difference = abo::util::bdd_absolute_difference(mgr, f_, f_hat_);
 
         return average_value(absolute_difference);
     }
@@ -72,8 +71,7 @@ namespace abo::error_metrics {
         f_.push_back(mgr.bddZero());
         f_hat_.push_back(mgr.bddZero());
 
-        std::vector<BDD> difference = abo::util::bdd_subtract(mgr, f_, f_hat_);
-        std::vector<BDD> absolute_difference = abo::util::abs(mgr,difference);
+        std::vector<BDD> absolute_difference = abo::util::bdd_absolute_difference(mgr, f_, f_hat_);
 
         return mean_squared_value(absolute_difference);
     }

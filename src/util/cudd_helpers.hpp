@@ -99,6 +99,8 @@ namespace abo::util {
      */
     std::vector<BDD> bdd_subtract(const Cudd &mgr, const std::vector<BDD> &minuend, const std::vector<BDD> &subtrahend);
 
+    std::vector<BDD> bdd_absolute_difference(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &g);
+
 
     /**
      * @brief Creates the BDD representing the sum of two functions

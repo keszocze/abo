@@ -55,12 +55,7 @@ namespace abo::error_metrics {
             f_hat_.push_back(mgr.bddZero());
         }
 
-        std::vector<BDD> difference = abo::util::bdd_subtract(mgr, f_, f_hat_);
-
-
-        std::vector<BDD> absolute_difference = abo::util::abs(mgr,difference);
-
-
+        std::vector<BDD> absolute_difference = abo::util::bdd_absolute_difference(mgr, f_, f_hat_);
 
         return get_max_value(mgr,absolute_difference);
     }
@@ -111,8 +106,7 @@ namespace abo::error_metrics {
         std::reverse(f_.begin(), f_.end());
         std::reverse(f_hat_.begin(), f_hat_.end());
 
-        std::vector<BDD> difference = abo::util::bdd_subtract(mgr, f_, f_hat_);
-        std::vector<BDD> absolute_difference = abo::util::abs(mgr, difference);
+        std::vector<BDD> absolute_difference = abo::util::bdd_absolute_difference(mgr, f_, f_hat_);
 
         unsigned long shift = bit_end + 1;
         boost::multiprecision::uint256_t one = 1;

@@ -355,6 +355,12 @@ namespace abo::util {
         return diff;
     }
 
+    std::vector<BDD> bdd_absolute_difference(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &g) {
+
+        std::vector<BDD> difference = abo::util::bdd_subtract(mgr, f, g);
+        return abo::util::abs(mgr,difference);
+    }
+
 
     std::vector<BDD> abs(const Cudd &mgr, const std::vector<BDD> &f) {
 
