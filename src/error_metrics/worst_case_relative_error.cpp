@@ -83,7 +83,7 @@ namespace abo::error_metrics {
     }
 
     std::pair<boost::multiprecision::cpp_dec_float_100, boost::multiprecision::cpp_dec_float_100>
-            maximum_relative_value(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &g) {
+            maximum_relative_value_bounds(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &g) {
 
         BDD zero_so_far = mgr.bddOne();
         boost::multiprecision::cpp_dec_float_100 min_error = std::numeric_limits<double>::infinity();
@@ -109,7 +109,7 @@ namespace abo::error_metrics {
     }
 
     std::pair<boost::multiprecision::cpp_dec_float_100, boost::multiprecision::cpp_dec_float_100>
-            worst_case_relative_error(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat) {
+            worst_case_relative_error_bounds(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat) {
         std::vector<BDD> f_= f;
         std::vector<BDD> f_hat_ = f_hat;
 
@@ -118,7 +118,7 @@ namespace abo::error_metrics {
 
         std::vector<BDD> absolute_difference = abo::util::bdd_absolute_difference(mgr, f_, f_hat_);
 
-        return maximum_relative_value(mgr, absolute_difference, f_);
+        return maximum_relative_value_bounds(mgr, absolute_difference, f_);
     }
 
 }
