@@ -19,7 +19,7 @@ namespace abo::error_metrics {
      * @return {min, max}, the lower and upper bound on the average case relative error
      */
     std::pair<boost::multiprecision::cpp_dec_float_100, boost::multiprecision::cpp_dec_float_100>
-        average_relative_error(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat);
+        average_relative_error_bounds(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat);
 
     /**
      * @brief Computes the average relative difference between f and f_hat
