@@ -23,13 +23,41 @@ namespace abo::error_metrics {
      */
     boost::multiprecision::uint256_t get_max_value(const Cudd &mgr, const std::vector<BDD> &fun);
 
+    /**
+     * @brief Computes the maximum absolute difference between the f and f_hat for any input
+     * The computation is performed symbolically using BDDs
+     * @param mgr The BDD object manager
+     * @param f The original function
+     * @param f_hat The approximated function. Must have the same number of bits as f
+     * @param num_rep The number representation for f and f_hat
+     * @return The maximum absolute difference
+     */
     boost::multiprecision::uint256_t
-    worst_case_error(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat,
-                         const NumberRepresentation num_rep= NumberRepresentation::BaseTwo);
+        worst_case_error(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat,
+                             const NumberRepresentation num_rep= NumberRepresentation::BaseTwo);
 
+    /**
+     * @brief Computes the maximum absolute difference between the f and f_hat for any input
+     * divided by 2^n - 1 to normalize it to the range [0, 1] regardless of the function size (with n = f.size())
+     * This is mainly intended to be a helper function to make the use of the worst case error easier
+     * @param mgr The BDD object manager
+     * @param f The original function
+     * @param f_hat The approximated function. Must have the same number of bits as f
+     * @param num_rep The number representation for f and f_hat
+     * @return The maximum absolute difference normalized to [0, 1]
+     */
     double worst_case_error_percent(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat,
                          const NumberRepresentation num_rep= NumberRepresentation::BaseTwo);
 
+
+    /**
+     * @brief Computes the maximum absolute difference between the f and f_hat for any input
+     * The computation is performed using BDDs and will be typically slow compared to the BDD based variant
+     * @param mgr The BDD object manager
+     * @param f The original function
+     * @param f_hat The approximated function. Must have the same number of bits as f
+     * @return The maximum absolute difference
+     */
     boost::multiprecision::uint256_t
         worst_case_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat);
 
