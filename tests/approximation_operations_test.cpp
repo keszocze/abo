@@ -28,10 +28,15 @@ TEST_CASE("Example 3 from ASP-DAC 2016 paper") {
 
     std::vector<BDD> self_rounded;
 
-    for (const BDD &f: fun) {
-        self_rounded.push_back(abo::operators::subset_heavy_child(mgr,f,3,4));
-    }
 
+    // rounding up?
+//    for (const BDD &f: fun) {
+//        self_rounded.push_back(abo::operators::subset_heavy_child(mgr,f,2,3));
+//    }
+
+    for (const BDD &f: fun) {
+        self_rounded.push_back(abo::operators::subset_light_child(mgr,f,2,3));
+    }
 
     abo::util::dump_dot(mgr,self_rounded,{"x_1", "x_2", "x_3", "x_4"},{"f0", "f1", "f2"});
 
