@@ -127,8 +127,8 @@ namespace abo::util {
 
     /**
      * @brief Creates BDD representing abs(f)
-     * @param f
-     * @return BDD representing ab(f)
+     * @param f Function in Two's Complement
+     * @return BDD representing abs(f)
      */
     std::vector<BDD> abs(const Cudd& mgr, const std::vector<BDD>& f);
 
@@ -146,7 +146,7 @@ namespace abo::util {
 
     /**
      * @brief Multiplies a bdd function with a constant
-     * @param f Function that is to be multiplied
+     * @param f Function that is to be multiplied. The function is interpreted as returning an unsigned integer
      * @param factor Constant multiplication factor
      * @param num_extra_bits Additional bits used to make sure that the result can be stored (must be less than sizeof(unsigned long) * 8)
      * @return BDD representing the function "factor*f" (extended by up to num_extra_bits)
@@ -155,17 +155,19 @@ namespace abo::util {
 
     /**
      * @brief Checks if an input x exists such that int(f1(x)) >= int(f2(x))
-     * @param f1
-     * @param f2
-     * @return
+     * @param f1 Function to compare in base two (interpreted as returning an unsigned integer)
+     * @param f2 Function to compare in base two (interpreted as returning an unsigned integer)
+     * @return {ge, e}
+     * ge is true iff there exists an x such that int(f1(x)) >= int(f2(x))
+     * e is true iff there exists an x such that int(f1(x)) = int(f2(x)), but no x exists with int(f1(x)) > int(f2(x))
      */
     std::pair<bool, bool> exists_greater_equals(const Cudd &mgr, const std::vector<BDD> &f1, const std::vector<BDD> &f2);
 
 
     /**
      * @brief Creates a BDD representing f >= g
-     * @param f
-     * @param g
+     * @param f Function to compare in base two (interpreted as returning an unsigned integer)
+     * @param g Function to compare in base two (interpreted as returning an unsigned integer)
      * @return BDD representing f >= g
      */
     BDD greater_equals(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &g);
