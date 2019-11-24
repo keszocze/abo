@@ -5,7 +5,11 @@
 #include <cudd/cplusplus/cuddObj.hh>
 #include <boost/multiprecision/cpp_dec_float.hpp>
 
+#include "number_representation.hpp"
+
 namespace abo::error_metrics {
+
+    using abo::util::NumberRepresentation;
 
     /**
      * @brief Computes the average value of the function f over all possible inputs
@@ -51,9 +55,11 @@ namespace abo::error_metrics {
      * @param mgr Cudd manager object
      * @param f The original function (interpreted as an unsigned integer)
      * @param f_hat The approximated function (interpreted as an unsigned integer)
+     * @param num_rep The number representation for f and f_hat
      * @return The average absolute difference between f and f_hat
      */
-    boost::multiprecision::cpp_dec_float_100 average_case_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat);
+    boost::multiprecision::cpp_dec_float_100 average_case_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat,
+                                                                    const NumberRepresentation num_rep = NumberRepresentation::BaseTwo);
 
     /**
      * @brief Computes the average squared absolute difference between the functions f and f_hat
@@ -63,9 +69,11 @@ namespace abo::error_metrics {
      * @param mgr Cudd manager object
      * @param f The original function (interpreted as an unsigned integer)
      * @param f_hat The approximated function (interpreted as an unsigned integer)
+     * @param num_rep The number representation for f and f_hat
      * @return The average squared absolute difference between f and f_hat
      */
-    boost::multiprecision::cpp_dec_float_100 mean_squared_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat);
+    boost::multiprecision::cpp_dec_float_100 mean_squared_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat,
+                                                                    const NumberRepresentation num_rep = NumberRepresentation::BaseTwo);
 
 }
 

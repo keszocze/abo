@@ -5,7 +5,12 @@
 #include <cudd/cplusplus/cuddObj.hh>
 #include <boost/multiprecision/cpp_dec_float.hpp>
 
+#include "number_representation.hpp"
+
 namespace abo::error_metrics {
+
+    using abo::util::NumberRepresentation;
+
     /**
      * @brief Computes bounds on the average relative difference between f and f_hat
      * It is defined as the average of |f(x) - f_hat(x)| / max(1, |f(x)|) for all inputs x
@@ -29,9 +34,11 @@ namespace abo::error_metrics {
      * @param mgr The BDD object manager
      * @param f The original function
      * @param f_hat The approximated function. Must have the same number of bits as f
+     * @param num_rep The number representation for f and f_hat
      * @return the average relative difference of the inputs
      */
-    boost::multiprecision::cpp_dec_float_100 average_relative_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat);
+    boost::multiprecision::cpp_dec_float_100 average_relative_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat,
+                                                                        const NumberRepresentation num_rep = NumberRepresentation::BaseTwo);
 
     /**
      * @brief Approximates the average relative difference between f and f_hat
@@ -60,7 +67,8 @@ namespace abo::error_metrics {
      * with exactly num_extra_bits bits with a lower significance than one. Roughly correlates the the precision of the result
      * @return the average relative difference of the inputs
      */
-    boost::multiprecision::cpp_dec_float_100 average_relative_error_symbolic_division(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat, unsigned int num_extra_bits = 16);
+    boost::multiprecision::cpp_dec_float_100 average_relative_error_symbolic_division(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat,
+                                                                                      unsigned int num_extra_bits = 16);
 }
 
 #endif // AVERAGE_CASE_RELATIVE_ERROR_HPP

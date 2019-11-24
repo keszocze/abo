@@ -50,7 +50,7 @@ namespace abo::util {
 
 
     ADD absolute_difference_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat,
-                                const NumberRepresentation num_rep = NumberRepresentation::BaseTwo);
+                                const NumberRepresentation num_rep);
 
     void dump_dot(
             const Cudd &mgr,

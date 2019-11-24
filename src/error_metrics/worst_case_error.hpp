@@ -59,10 +59,12 @@ namespace abo::error_metrics {
      * @param mgr The BDD object manager
      * @param f The original function
      * @param f_hat The approximated function. Must have the same number of bits as f
+     * @param num_rep The number representation for f and f_hat
      * @return The maximum absolute difference
      */
     boost::multiprecision::uint256_t
-        worst_case_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat);
+        worst_case_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat,
+                             const NumberRepresentation num_rep = NumberRepresentation::BaseTwo);
 
     /**
      * @brief approximate_worst_case_error
@@ -72,7 +74,7 @@ namespace abo::error_metrics {
      * @param mgr
      * @param f
      * @param f_hat
-     * @param n The precision to calculate in number of bits, for more details see the return value. It must be greater than zero.
+     * @param n The precision to calculate in number of bits, for more details see the return value. It must be greater than zero
      * @return The approximated worst case error. It is an upper bound and therefore guaranteed to be larger
      *  than the actual error. Let wc be the correct worst case error and x be the result of this function.
      *  Then it holds that wc <= x <= wc * (1 + 1 / (2 ^ (n + 1) - 1)))

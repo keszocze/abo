@@ -31,6 +31,7 @@ namespace abo::error_metrics {
 
     std::pair<boost::multiprecision::cpp_dec_float_100, boost::multiprecision::cpp_dec_float_100>
             average_relative_error_bounds(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat) {
+
         std::vector<BDD> f_= f;
         std::vector<BDD> f_hat_ = f_hat;
 
@@ -42,9 +43,11 @@ namespace abo::error_metrics {
         return average_relative_value(mgr, absolute_difference, f_);
     }
 
-    boost::multiprecision::cpp_dec_float_100 average_relative_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat) {
-        ADD diff = abo::util::absolute_difference_add(mgr, f, f_hat);
-        ADD respective_diff = diff.Divide(abo::util::bdd_forest_to_add(mgr, f).Maximum(mgr.addOne()));
+    boost::multiprecision::cpp_dec_float_100 average_relative_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat,
+                                                                        const NumberRepresentation num_rep) {
+
+        ADD diff = abo::util::absolute_difference_add(mgr, f, f_hat, num_rep);
+        ADD respective_diff = diff.Divide(abo::util::bdd_forest_to_add(mgr, abo::util::abs(mgr, f)).Maximum(mgr.addOne()));
         std::vector<std::pair<double, unsigned long>> terminal_values = abo::util::add_terminal_values(respective_diff);
 
         boost::multiprecision::cpp_dec_float_100 sum = 0;
@@ -59,6 +62,7 @@ namespace abo::error_metrics {
     }
 
     boost::multiprecision::cpp_dec_float_100 average_relative_error_sampling(const std::vector<BDD>& f, const std::vector<BDD>& f_hat, long samples) {
+
         assert(f.size() == f_hat.size());
         std::vector<BDD> difference;
 
@@ -92,7 +96,9 @@ namespace abo::error_metrics {
         return error / samples;
     }
 
-    boost::multiprecision::cpp_dec_float_100 average_relative_error_symbolic_division(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat, unsigned int num_extra_bits) {
+    boost::multiprecision::cpp_dec_float_100 average_relative_error_symbolic_division(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat,
+                                                                                      unsigned int num_extra_bits) {
+
         std::vector<BDD> f_= f;
         std::vector<BDD> f_hat_ = f_hat;
 

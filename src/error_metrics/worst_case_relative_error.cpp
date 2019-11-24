@@ -4,9 +4,11 @@
 
 namespace abo::error_metrics {
 
-    double worst_case_relative_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat) {
-        ADD diff = abo::util::absolute_difference_add(mgr, f, f_hat);
-        ADD respective_diff = diff.Divide(abo::util::bdd_forest_to_add(mgr, f).Maximum(mgr.addOne()));
+    double worst_case_relative_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat,
+                                         const util::NumberRepresentation num_rep) {
+
+        ADD diff = abo::util::absolute_difference_add(mgr, f, f_hat, num_rep);
+        ADD respective_diff = diff.Divide(abo::util::bdd_forest_to_add(mgr, abo::util::abs(mgr, f)).Maximum(mgr.addOne()));
         std::vector<std::pair<double, unsigned long>> terminal_values = abo::util::add_terminal_values(respective_diff);
 
         double largest = 0;
@@ -16,7 +18,8 @@ namespace abo::error_metrics {
         return largest;
     }
 
-    double worst_case_relative_error_search(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat, unsigned int num_extra_bits, double precision) {
+    double worst_case_relative_error_search(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat,
+                                            unsigned int num_extra_bits, double precision) {
         std::vector<BDD> f_ = f;
         std::vector<BDD> f_hat_ = f_hat;
 
@@ -63,7 +66,8 @@ namespace abo::error_metrics {
         return (min + max) / 2.0;
     }
 
-    boost::multiprecision::cpp_dec_float_100 worst_case_relative_error_symbolic_division(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat, unsigned int num_extra_bits) {
+    boost::multiprecision::cpp_dec_float_100 worst_case_relative_error_symbolic_division(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat,
+                                                                                         unsigned int num_extra_bits) {
 
         std::vector<BDD> f_= f;
         std::vector<BDD> f_hat_ = f_hat;
@@ -110,6 +114,7 @@ namespace abo::error_metrics {
 
     std::pair<boost::multiprecision::cpp_dec_float_100, boost::multiprecision::cpp_dec_float_100>
             worst_case_relative_error_bounds(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat) {
+
         std::vector<BDD> f_= f;
         std::vector<BDD> f_hat_ = f_hat;
 

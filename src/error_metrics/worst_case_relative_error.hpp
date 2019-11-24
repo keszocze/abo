@@ -5,7 +5,11 @@
 #include <cudd/cplusplus/cuddObj.hh>
 #include <boost/multiprecision/cpp_dec_float.hpp>
 
+#include "number_representation.hpp"
+
 namespace abo::error_metrics {
+
+    using abo::util::NumberRepresentation;
 
     /**
      * @brief Computes the maximum relative difference between f and f_hat for any input
@@ -15,9 +19,11 @@ namespace abo::error_metrics {
      * @param mgr The BDD object manager
      * @param f The original function
      * @param f_hat The approximated function. Must have the same number of bits as f
+     * @param num_rep The number representation for f and f_hat
      * @return the maximum relative difference of the inputs
      */
-    double worst_case_relative_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat);
+    double worst_case_relative_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat,
+                                         const NumberRepresentation num_rep = NumberRepresentation::BaseTwo);
 
     /**
      * @brief Computes bounds on the maximum relative value of f in relation to g

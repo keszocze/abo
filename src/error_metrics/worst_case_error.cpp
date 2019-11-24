@@ -66,8 +66,10 @@ namespace abo::error_metrics {
     }
 
     boost::multiprecision::uint256_t
-            worst_case_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat) {
-        ADD diff = abo::util::absolute_difference_add(mgr, f, f_hat);
+            worst_case_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat,
+                                 const NumberRepresentation num_rep) {
+
+        ADD diff = abo::util::absolute_difference_add(mgr, f, f_hat, num_rep);
         std::vector<std::pair<double, unsigned long>> terminal_values = abo::util::add_terminal_values(diff);
 
         boost::multiprecision::uint256_t max_value = 0;
