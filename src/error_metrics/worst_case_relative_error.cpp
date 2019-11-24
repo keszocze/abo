@@ -82,13 +82,13 @@ namespace abo::error_metrics {
         BDD zero_so_far = mgr.bddOne();
         boost::multiprecision::cpp_dec_float_100 min_error = std::numeric_limits<double>::infinity();
         boost::multiprecision::cpp_dec_float_100 max_error = 0;
-        std::vector<BDD> max_one = abo::util::bdd_max_one(mgr, f);
+        std::vector<BDD> max_one = abo::util::bdd_max_one(mgr, g);
         for (int i = int(g.size())-1;i>=0;i--) {
             std::vector<BDD> partial_result;
-            partial_result.reserve(max_one.size());
-            BDD modifier = zero_so_far & g[i];
+            partial_result.reserve(f.size());
+            BDD modifier = zero_so_far & max_one[i];
 
-            for (const BDD &b : max_one) {
+            for (const BDD &b : f) {
                 partial_result.push_back(b & modifier);
             }
             boost::multiprecision::cpp_dec_float_100 max_val = boost::multiprecision::cpp_dec_float_100(get_max_value(mgr, partial_result));
@@ -96,7 +96,7 @@ namespace abo::error_metrics {
             min_error = max(min_error, max_val / (std::pow(2.0, i + 1) - 1));
             max_error = max(max_error, max_val  / std::pow(2.0, i));
 
-            zero_so_far &= !g[i];
+            zero_so_far &= !max_one[i];
         }
 
         return {min_error, max_error};

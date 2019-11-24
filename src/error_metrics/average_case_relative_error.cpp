@@ -11,19 +11,19 @@ namespace abo::error_metrics {
 
         boost::multiprecision::cpp_dec_float_100 min_average_result = 0;
         boost::multiprecision::cpp_dec_float_100 max_average_result = 0;
-        std::vector<BDD> max_one = abo::util::bdd_max_one(mgr, f);
+        std::vector<BDD> max_one = abo::util::bdd_max_one(mgr, g);
         for (int i = int(g.size())-1;i>=0;i--) {
             std::vector<BDD> partial_result;
             partial_result.reserve(max_one.size());
-            BDD modifier = zero_so_far & g[i];
-            for (const BDD &b : max_one) {
+            BDD modifier = zero_so_far & max_one[i];
+            for (const BDD &b : f) {
                 partial_result.push_back(b & modifier);
             }
             auto average = average_value(partial_result);
             min_average_result += average  / (std::pow(2.0, i + 1) - 1);
             max_average_result += average  / std::pow(2.0, i);
 
-            zero_so_far &= !g[i];
+            zero_so_far &= !max_one[i];
         }
 
         return {min_average_result, max_average_result};
