@@ -217,13 +217,25 @@ namespace abo::util {
         return result;
     }
 
-    ADD bdd_forest_to_add(const Cudd &mgr, const std::vector<BDD> &bdds) {
+    ADD bdd_forest_to_add(const Cudd &mgr, const std::vector<BDD> &bdds, const NumberRepresentation num_rep) {
+
+        std::vector<BDD> bdds_ = bdds;
+        if (num_rep == NumberRepresentation::BaseTwo) {
+            bdds_.push_back(mgr.bddZero());
+        }
+
         ADD result = mgr.addZero();
         ADD two = mgr.addOne() + mgr.addOne();
-        for (auto it = bdds.rbegin();it != bdds.rend();it++) {
+        ADD signBitPower = mgr.addOne();
+
+        for (auto it = bdds_.rbegin() + 1;it != bdds_.rend();it++) {
             result *= two;
+            signBitPower *= two;
             result += it->Add();
         }
+
+        result -= bdds.back().Add() * signBitPower;
+
         return result;
     }
 
@@ -233,7 +245,7 @@ namespace abo::util {
             diff.push_back(f[i] ^ f_hat[i]);
         }
 
-        return bdd_forest_to_add(mgr, diff);
+        return bdd_forest_to_add(mgr, diff, NumberRepresentation::BaseTwo);
     }
 
     static DdNode * add_absolute_difference_apply(DdManager * dd, DdNode ** f, DdNode ** g) {
@@ -252,9 +264,9 @@ namespace abo::util {
         return nullptr;
     }
 
-    ADD absolute_difference_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat) {
-        ADD a = bdd_forest_to_add(mgr, f);
-        ADD b = bdd_forest_to_add(mgr, f_hat);
+    ADD absolute_difference_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat, const NumberRepresentation num_rep) {
+        ADD a = bdd_forest_to_add(mgr, f, num_rep);
+        ADD b = bdd_forest_to_add(mgr, f_hat, num_rep);
         DdNode *result_node = Cudd_addApply(mgr.getManager(), add_absolute_difference_apply, a.getNode(), b.getNode());
         return ADD(mgr, result_node);
     }

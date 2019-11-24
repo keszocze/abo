@@ -9,8 +9,9 @@
 #include <string>
 #include <map>
 
-
 #include <cudd/cplusplus/cuddObj.hh>
+
+#include "number_representation.hpp"
 
 namespace abo::util {
 
@@ -42,12 +43,14 @@ namespace abo::util {
     std::vector<std::pair<double, unsigned long> > add_terminal_values(const ADD &add);
 
     // assumes that the function represents an unsigned integer
-    ADD bdd_forest_to_add(const Cudd &mgr, const std::vector<BDD> &bdds);
+    ADD bdd_forest_to_add(const Cudd &mgr, const std::vector<BDD> &bdds,
+                          const NumberRepresentation num_rep = NumberRepresentation::BaseTwo);
 
     ADD xor_difference_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat);
 
 
-    ADD absolute_difference_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat);
+    ADD absolute_difference_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat,
+                                const NumberRepresentation num_rep = NumberRepresentation::BaseTwo);
 
     void dump_dot(
             const Cudd &mgr,
