@@ -15,6 +15,6 @@ add_library(error_metrics
     average_case_relative_error.hpp
 )
 
-target_link_libraries(error_metrics PUBLIC cudd PRIVATE abo_util)
+target_link_libraries(error_metrics PUBLIC cudd abo_util)
 
 target_include_directories(error_metrics PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

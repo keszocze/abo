@@ -10,8 +10,11 @@
 #include <boost/multiprecision/cpp_int.hpp>
 #include <boost/multiprecision/cpp_dec_float.hpp>
 
+#include "number_representation.hpp"
+
 namespace abo::error_metrics {
-    enum class NumberRepresentation: bool { BaseTwo, TwosComplement};
+
+    using abo::util::NumberRepresentation;
 
     /**
      * @brief Computes the maximal value of a function represented by a vector of BDDs
