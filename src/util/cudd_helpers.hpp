@@ -110,9 +110,11 @@ namespace abo::util {
      *
      * @param f Function in Two's Complement
      * @param g Funtion in Two's Complement
+     * @param num_rep The number representation for f and g
      * @return BDD computing the absolute difference of the outputs of the two supplied BDDs
      */
-    std::vector<BDD> bdd_absolute_difference(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &g);
+    std::vector<BDD> bdd_absolute_difference(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &g,
+                                             const NumberRepresentation num_rep);
 
 
     /**

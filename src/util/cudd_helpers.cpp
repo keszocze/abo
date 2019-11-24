@@ -367,21 +367,32 @@ namespace abo::util {
         return diff;
     }
 
-    std::vector<BDD> bdd_absolute_difference(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &g) {
+    std::vector<BDD> bdd_absolute_difference(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &g,
+                                             const NumberRepresentation num_rep) {
+
+        std::vector<BDD> f_= f;
+        std::vector<BDD> g_ = g;
+
+        if (num_rep == NumberRepresentation::BaseTwo) {
+            // we need to add sign bits to the functions as they don't have one right now
+            // these are necessary to be able to add the negative number instead of actually subtracting
+            f_.push_back(mgr.bddZero());
+            g_.push_back(mgr.bddZero());
+        }
 
         bool smaller = true;
-        for (std::size_t i = 0;i<f.size();i++) {
-            if (f[i] > g[i]) {
+        for (std::size_t i = 0;i<f_.size();i++) {
+            if (f_[i] > g_[i]) {
                 smaller = false;
                 break;
             }
         }
 
         // use correct order for the difference calculation to minimize computation time
-        const std::vector<BDD> &f_ = smaller ? g : f;
-        const std::vector<BDD> &g_ = smaller ? f : g;
+        const std::vector<BDD> &f__ = smaller ? g_ : f_;
+        const std::vector<BDD> &g__ = smaller ? f_ : g_;
 
-        std::vector<BDD> difference = abo::util::bdd_subtract(mgr, f_, g_);
+        std::vector<BDD> difference = abo::util::bdd_subtract(mgr, f__, g__);
         return abo::util::abs(mgr,difference);
     }
 

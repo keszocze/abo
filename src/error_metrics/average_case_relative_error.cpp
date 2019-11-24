@@ -30,17 +30,11 @@ namespace abo::error_metrics {
     }
 
     std::pair<boost::multiprecision::cpp_dec_float_100, boost::multiprecision::cpp_dec_float_100>
-            average_relative_error_bounds(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat) {
+            average_relative_error_bounds(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat,
+                                          const util::NumberRepresentation num_rep) {
 
-        std::vector<BDD> f_= f;
-        std::vector<BDD> f_hat_ = f_hat;
-
-        f_.push_back(mgr.bddZero());
-        f_hat_.push_back(mgr.bddZero());
-
-        std::vector<BDD> absolute_difference = abo::util::bdd_absolute_difference(mgr, f_, f_hat_);
-
-        return average_relative_value(mgr, absolute_difference, f_);
+        std::vector<BDD> absolute_difference = abo::util::bdd_absolute_difference(mgr, f, f_hat, num_rep);
+        return average_relative_value(mgr, absolute_difference, abo::util::abs(mgr, f));
     }
 
     boost::multiprecision::cpp_dec_float_100 average_relative_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat,
@@ -97,17 +91,11 @@ namespace abo::error_metrics {
     }
 
     boost::multiprecision::cpp_dec_float_100 average_relative_error_symbolic_division(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat,
-                                                                                      unsigned int num_extra_bits) {
+                                                                                      unsigned int num_extra_bits, const NumberRepresentation num_rep) {
 
-        std::vector<BDD> f_= f;
-        std::vector<BDD> f_hat_ = f_hat;
+        std::vector<BDD> absolute_difference = abo::util::bdd_absolute_difference(mgr, f, f_hat, num_rep);
 
-        f_.push_back(mgr.bddZero());
-        f_hat_.push_back(mgr.bddZero());
-
-        std::vector<BDD> absolute_difference = abo::util::bdd_absolute_difference(mgr, f_, f_hat_);
-
-        std::vector<BDD> no_zero = abo::util::bdd_max_one(mgr, f_);
+        std::vector<BDD> no_zero = abo::util::bdd_max_one(mgr, abo::util::abs(mgr, f));
         std::vector<BDD> divided = abo::util::bdd_divide(mgr, absolute_difference, no_zero, num_extra_bits);
 
         return average_value(divided) / std::pow(2.0, num_extra_bits);

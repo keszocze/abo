@@ -45,18 +45,7 @@ namespace abo::error_metrics {
             worst_case_error(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat,
                                  const NumberRepresentation num_rep) {
 
-        std::vector<BDD> f_= f;
-        std::vector<BDD> f_hat_ = f_hat;
-
-        if (num_rep == NumberRepresentation::BaseTwo) {
-            // we need to add sign bits to the functions as they don't have one right now
-            // these are necessary to be able to add the negative number instead of actually subtracting
-            f_.push_back(mgr.bddZero());
-            f_hat_.push_back(mgr.bddZero());
-        }
-
-        std::vector<BDD> absolute_difference = abo::util::bdd_absolute_difference(mgr, f_, f_hat_);
-
+        std::vector<BDD> absolute_difference = abo::util::bdd_absolute_difference(mgr, f, f_hat, num_rep);
         return get_max_value(mgr,absolute_difference);
     }
 
@@ -80,18 +69,17 @@ namespace abo::error_metrics {
     }
 
     boost::multiprecision::uint256_t approximate_worst_case_error(const Cudd &mgr, const std::vector<BDD> &f,
-                                                                  const std::vector<BDD> &f_hat, int n) {
+                                                                  const std::vector<BDD> &f_hat, int n,
+                                                                  const NumberRepresentation num_rep) {
         assert(f.size() == f_hat.size() && n >= 1);
 
         std::vector<BDD> f_;
         std::vector<BDD> f_hat_;
 
-        f_.push_back(mgr.bddZero());
-        f_hat_.push_back(mgr.bddZero());
-
         int bit_start = -1;
         int bit_end = -1;
-        for (int i = f.size()-1;i >= 0;i--) {
+        int offset = num_rep == NumberRepresentation::TwosComplement ? 1 : 0;
+        for (int i = static_cast<int>(f.size()) - 1 - offset;i >= 0;i--) {
             if (bit_start == -1 && f[i] != f_hat[i]) {
                 bit_start = i;
             }
@@ -108,7 +96,12 @@ namespace abo::error_metrics {
         std::reverse(f_.begin(), f_.end());
         std::reverse(f_hat_.begin(), f_hat_.end());
 
-        std::vector<BDD> absolute_difference = abo::util::bdd_absolute_difference(mgr, f_, f_hat_);
+        if (num_rep == NumberRepresentation::TwosComplement) {
+            f_.push_back(f.back());
+            f_hat_.push_back(f_hat.back());
+        }
+
+        std::vector<BDD> absolute_difference = abo::util::bdd_absolute_difference(mgr, f_, f_hat_, num_rep);
 
         unsigned long shift = bit_end + 1;
         boost::multiprecision::uint256_t one = 1;

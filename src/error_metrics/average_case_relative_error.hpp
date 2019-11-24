@@ -21,10 +21,12 @@ namespace abo::error_metrics {
      * @param mgr The BDD object manager
      * @param f The original function
      * @param f_hat The approximated function. Must have the same number of bits as f
+     * @param num_rep The number representation for f and f_hat
      * @return {min, max}, the lower and upper bound on the average case relative error
      */
     std::pair<boost::multiprecision::cpp_dec_float_100, boost::multiprecision::cpp_dec_float_100>
-        average_relative_error_bounds(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat);
+        average_relative_error_bounds(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat,
+                                      const NumberRepresentation num_rep = NumberRepresentation::BaseTwo);
 
     /**
      * @brief Computes the average relative difference between f and f_hat
@@ -65,10 +67,12 @@ namespace abo::error_metrics {
      * @param num_extra_bits The number of additional fixed precision bits to use during the division
      * As the result of each division is not an integer, the result is described as a fixed point number
      * with exactly num_extra_bits bits with a lower significance than one. Roughly correlates the the precision of the result
+     * @param num_rep The number representation for f and f_hat
      * @return the average relative difference of the inputs
      */
     boost::multiprecision::cpp_dec_float_100 average_relative_error_symbolic_division(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat,
-                                                                                      unsigned int num_extra_bits = 16);
+                                                                                      unsigned int num_extra_bits = 16,
+                                                                                      const NumberRepresentation num_rep = NumberRepresentation::BaseTwo);
 }
 
 #endif // AVERAGE_CASE_RELATIVE_ERROR_HPP

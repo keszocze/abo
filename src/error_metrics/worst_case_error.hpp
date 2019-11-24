@@ -75,12 +75,14 @@ namespace abo::error_metrics {
      * @param f
      * @param f_hat
      * @param n The precision to calculate in number of bits, for more details see the return value. It must be greater than zero
+     * @param num_rep The number representation for f and f_hat
      * @return The approximated worst case error. It is an upper bound and therefore guaranteed to be larger
      *  than the actual error. Let wc be the correct worst case error and x be the result of this function.
      *  Then it holds that wc <= x <= wc * (1 + 1 / (2 ^ (n + 1) - 1)))
      */
     boost::multiprecision::uint256_t approximate_worst_case_error(const Cudd &mgr, const std::vector<BDD> &f,
-                                                                  const std::vector<BDD> &f_hat, int n);
+                                                                  const std::vector<BDD> &f_hat, int n,
+                                                                  const NumberRepresentation num_rep = NumberRepresentation::BaseTwo);
 
 }
 
