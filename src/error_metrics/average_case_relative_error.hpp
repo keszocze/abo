@@ -43,20 +43,6 @@ namespace abo::error_metrics {
                                                                         const NumberRepresentation num_rep = NumberRepresentation::BaseTwo);
 
     /**
-     * @brief Approximates the average relative difference between f and f_hat
-     * It is defined as the average of |f(x) - f_hat(x)| / max(1, |f(x)|) for all inputs x
-     * As it is not symmetric, it is not a metric in the mathematical sense
-     * The computation is performed via sampling of the inputs, therefore no proper guarantee
-     * on the error introduced by the approximation can be given
-     * @param mgr The BDD object manager
-     * @param f The original function
-     * @param f_hat The approximated function. Must have the same number of bits as f
-     * @param samples The number of samples to use. The run-time of this function scales linearly with the number of samples
-     * @return the approximated average relative difference of the inputs
-     */
-    boost::multiprecision::cpp_dec_float_100 average_relative_error_sampling(const std::vector<BDD> &f, const std::vector<BDD> &f_hat, long samples);
-
-    /**
      * @brief Computes the average relative difference between f and f_hat
      * It is defined as the average of |f(x) - f_hat(x)| / max(1, |f(x)|) for all inputs x
      * As it is not symmetric, it is not a metric in the mathematical sense
