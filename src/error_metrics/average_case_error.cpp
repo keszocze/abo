@@ -50,37 +50,25 @@ namespace abo::error_metrics {
                 boost::multiprecision::cpp_dec_float_100(one << max_support_size);
     }
 
-    boost::multiprecision::cpp_dec_float_100 average_case_error(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat) {
-        std::vector<BDD> f_= f;
-        std::vector<BDD> f_hat_ = f_hat;
+    boost::multiprecision::cpp_dec_float_100 average_case_error(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat,
+                                                                const util::NumberRepresentation num_rep) {
 
-        // add sign bits so that
-        f_.push_back(mgr.bddZero());
-        f_hat_.push_back(mgr.bddZero());
-
-        std::vector<BDD> difference = abo::util::bdd_subtract(mgr, f_, f_hat_);
-        std::vector<BDD> absolute_difference = abo::util::abs(mgr,difference);
-
+        std::vector<BDD> absolute_difference = abo::util::bdd_absolute_difference(mgr, f, f_hat, num_rep);
         return average_value(absolute_difference);
     }
 
-    boost::multiprecision::cpp_dec_float_100 mean_squared_error(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat) {
-        std::vector<BDD> f_= f;
-        std::vector<BDD> f_hat_ = f_hat;
+    boost::multiprecision::cpp_dec_float_100 mean_squared_error(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat,
+                                                                const util::NumberRepresentation num_rep) {
 
-        // add sign bits so that
-        f_.push_back(mgr.bddZero());
-        f_hat_.push_back(mgr.bddZero());
-
-        std::vector<BDD> difference = abo::util::bdd_subtract(mgr, f_, f_hat_);
-        std::vector<BDD> absolute_difference = abo::util::abs(mgr,difference);
-
+        std::vector<BDD> absolute_difference = abo::util::bdd_absolute_difference(mgr, f, f_hat, num_rep);
         return mean_squared_value(absolute_difference);
     }
 
 
-    boost::multiprecision::cpp_dec_float_100 average_case_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat) {
-        ADD diff = abo::util::absolute_difference_add(mgr, f, f_hat);
+    boost::multiprecision::cpp_dec_float_100 average_case_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat,
+                                                                    const NumberRepresentation num_rep) {
+
+        ADD diff = abo::util::absolute_difference_add(mgr, f, f_hat, num_rep);
         std::vector<std::pair<double, unsigned long>> terminal_values = abo::util::add_terminal_values(diff);
 
         boost::multiprecision::uint256_t sum = 0;
@@ -93,8 +81,10 @@ namespace abo::error_metrics {
                 boost::multiprecision::cpp_dec_float_100(path_sum);
     }
 
-    boost::multiprecision::cpp_dec_float_100 mean_squared_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat) {
-        ADD diff = abo::util::absolute_difference_add(mgr, f, f_hat);
+    boost::multiprecision::cpp_dec_float_100 mean_squared_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat,
+                                                                    const NumberRepresentation num_rep) {
+
+        ADD diff = abo::util::absolute_difference_add(mgr, f, f_hat, num_rep);
         std::vector<std::pair<double, unsigned long>> terminal_values = abo::util::add_terminal_values(diff);
 
         boost::multiprecision::uint256_t sum = 0;

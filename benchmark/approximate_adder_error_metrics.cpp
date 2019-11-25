@@ -8,6 +8,7 @@
 #include "average_bit_flip_error.hpp"
 #include "worst_case_bit_flip_error.hpp"
 #include "average_case_relative_error.hpp"
+#include "worst_case_relative_error.hpp"
 
 enum ErrorMetric {
     WORST_CASE,
@@ -83,13 +84,13 @@ static void generate_adders(benchmark::State& state) {
             abo::error_metrics::worst_case_error(mgr, correct, approximate_adder);
             break;
         case WORST_CASE_RELATIVE:
-            abo::error_metrics::worst_case_relative_error(mgr, correct, approximate_adder);
+            abo::error_metrics::worst_case_relative_error_bounds(mgr, correct, approximate_adder);
             break;
         case AVERAGE_CASE:
             abo::error_metrics::average_case_error(mgr, correct, approximate_adder);
             break;
         case AVERAGE_CASE_RELATIVE:
-            abo::error_metrics::avererage_relative_error(mgr, correct, approximate_adder);
+            abo::error_metrics::average_relative_error_bounds(mgr, correct, approximate_adder);
             break;
         case MEAN_SQUARED:
             abo::error_metrics::mean_squared_error(mgr, correct, approximate_adder);

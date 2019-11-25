@@ -6,6 +6,7 @@
 #include "string_helpers.hpp"
 
 #include <iostream>
+#include <boost/multiprecision/cpp_int.hpp>
 #include <cudd/cudd/cudd.h>
 #include <tuple>
 #include <map>
@@ -216,13 +217,25 @@ namespace abo::util {
         return result;
     }
 
-    ADD bdd_forest_to_add(const Cudd &mgr, const std::vector<BDD> &bdds) {
+    ADD bdd_forest_to_add(const Cudd &mgr, const std::vector<BDD> &bdds, const NumberRepresentation num_rep) {
+
+        std::vector<BDD> bdds_ = bdds;
+        if (num_rep == NumberRepresentation::BaseTwo) {
+            bdds_.push_back(mgr.bddZero());
+        }
+
         ADD result = mgr.addZero();
         ADD two = mgr.addOne() + mgr.addOne();
-        for (auto it = bdds.rbegin();it != bdds.rend();it++) {
+        ADD signBitPower = mgr.addOne();
+
+        for (auto it = bdds_.rbegin() + 1;it != bdds_.rend();it++) {
             result *= two;
+            signBitPower *= two;
             result += it->Add();
         }
+
+        result -= bdds.back().Add() * signBitPower;
+
         return result;
     }
 
@@ -232,7 +245,7 @@ namespace abo::util {
             diff.push_back(f[i] ^ f_hat[i]);
         }
 
-        return bdd_forest_to_add(mgr, diff);
+        return bdd_forest_to_add(mgr, diff, NumberRepresentation::BaseTwo);
     }
 
     static DdNode * add_absolute_difference_apply(DdManager * dd, DdNode ** f, DdNode ** g) {
@@ -251,9 +264,9 @@ namespace abo::util {
         return nullptr;
     }
 
-    ADD absolute_difference_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat) {
-        ADD a = bdd_forest_to_add(mgr, f);
-        ADD b = bdd_forest_to_add(mgr, f_hat);
+    ADD absolute_difference_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat, const NumberRepresentation num_rep) {
+        ADD a = bdd_forest_to_add(mgr, f, num_rep);
+        ADD b = bdd_forest_to_add(mgr, f_hat, num_rep);
         DdNode *result_node = Cudd_addApply(mgr.getManager(), add_absolute_difference_apply, a.getNode(), b.getNode());
         return ADD(mgr, result_node);
     }
@@ -354,6 +367,35 @@ namespace abo::util {
         return diff;
     }
 
+    std::vector<BDD> bdd_absolute_difference(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &g,
+                                             const NumberRepresentation num_rep) {
+
+        std::vector<BDD> f_= f;
+        std::vector<BDD> g_ = g;
+
+        if (num_rep == NumberRepresentation::BaseTwo) {
+            // we need to add sign bits to the functions as they don't have one right now
+            // these are necessary to be able to add the negative number instead of actually subtracting
+            f_.push_back(mgr.bddZero());
+            g_.push_back(mgr.bddZero());
+        }
+
+        bool smaller = true;
+        for (std::size_t i = 0;i<f_.size();i++) {
+            if (f_[i] > g_[i]) {
+                smaller = false;
+                break;
+            }
+        }
+
+        // use correct order for the difference calculation to minimize computation time
+        const std::vector<BDD> &f__ = smaller ? g_ : f_;
+        const std::vector<BDD> &g__ = smaller ? f_ : g_;
+
+        std::vector<BDD> difference = abo::util::bdd_subtract(mgr, f__, g__);
+        return abo::util::abs(mgr,difference);
+    }
+
 
     std::vector<BDD> abs(const Cudd &mgr, const std::vector<BDD> &f) {
 
@@ -412,49 +454,56 @@ namespace abo::util {
             fc.push_back(mgr.bddZero());
         }
 
-        unsigned long great_factor = static_cast<unsigned long>(factor);
-        for (unsigned long i = 0;i<sizeof(long) * 8;i++) {
-            if (great_factor & (1L << i)) {
+        assert (factor <= static_cast<double>(std::numeric_limits<boost::multiprecision::uint256_t>::max()));
+
+        boost::multiprecision::uint256_t great_factor = static_cast<boost::multiprecision::uint256_t>(factor);
+        boost::multiprecision::uint256_t one = 1;
+        for (int i = 0;i<256;i++) {
+            if (great_factor & (one << i)) {
                 result = bdd_add(mgr, result, bdd_shift(mgr, fc, i));
             }
         }
-        unsigned long lesser_factor = static_cast<unsigned long>((factor - great_factor) * (1L << num_extra_bits));
+        unsigned long lesser_factor = static_cast<unsigned long>(std::fmod(factor, 1.0) * (1UL << num_extra_bits));
         for (unsigned int i = 0;i<num_extra_bits;i++) {
-            if (lesser_factor & (1L << i)) {
-                result = bdd_add(mgr, result, bdd_shift(mgr, fc, -(num_extra_bits - i)));
+            if (lesser_factor & (1UL << i)) {
+                result = bdd_add(mgr, result, bdd_shift(mgr, fc, -static_cast<int>(num_extra_bits - i)));
             }
         }
 
         return result;
     }
 
-    bool exists_greater_equals(const Cudd &mgr, const std::vector<BDD> &f1, const std::vector<BDD> &f2) {
+    void equalize_vector_size(const Cudd &mgr, std::vector<BDD> &f1, std::vector<BDD> &f2) {
+        while (f1.size() < f2.size()) {
+            f1.push_back(mgr.bddZero());
+        }
+        while (f2.size() < f1.size()) {
+            f2.push_back(mgr.bddZero());
+        }
+    }
+
+    std::pair<bool, bool> exists_greater_equals(const Cudd &mgr, const std::vector<BDD> &f1, const std::vector<BDD> &f2) {
         std::vector<BDD> f1_ = f1;
         std::vector<BDD> f2_ = f2;
 
-        while (f1_.size() < f2_.size()) {
-            f1_.push_back(mgr.bddZero());
-        }
-        while (f2_.size() < f1_.size()) {
-            f2_.push_back(mgr.bddZero());
-        }
+        equalize_vector_size(mgr, f1_, f2_);
 
         BDD zero_condition = mgr.bddOne();
         BDD equal_condition = mgr.bddOne();
         for (int i = int(f1_.size())-1;i>=0;i--) {
             zero_condition &= !f2_[i];
             if (!((f1_[i] & zero_condition).IsZero())) {
-                return true;
+                return {true, false};
             }
             if (!((f1_[i] & !f2_[i] & equal_condition).IsZero())) {
-                return true;
+                return {true, false};
             }
             equal_condition &= (f1_[i] & f2_[i]) | ((!f1_[i]) & (!f2_[i]));
         }
         if (!equal_condition.IsZero()) {
-            return true;
+            return {true, true};
         }
-        return false;
+        return {false, false};
     }
 
     std::vector<BDD> bdd_max_one(const Cudd &mgr, const std::vector<BDD> &f) {
@@ -473,12 +522,7 @@ namespace abo::util {
         std::vector<BDD> f_ = f;
         std::vector<BDD> g_ = g;
 
-        while (f_.size() < g_.size()) {
-            f_.push_back(mgr.bddZero());
-        }
-        while (g_.size() < f_.size()) {
-            g_.push_back(mgr.bddZero());
-        }
+        equalize_vector_size(mgr, f_, g_);
 
         BDD zero_condition = mgr.bddOne();
         BDD equal_condition = mgr.bddOne();
@@ -514,12 +558,7 @@ namespace abo::util {
             for (BDD &b : to_subtract) {
                 b &= subtract_condition;
             }
-            while (to_subtract.size() < temp.size()) {
-                to_subtract.push_back(mgr.bddZero());
-            }
-            while (temp.size() < to_subtract.size()) {
-                temp.push_back(mgr.bddZero());
-            }
+            equalize_vector_size(mgr, to_subtract, temp);
             temp = bdd_subtract(mgr, temp, to_subtract);
             result.push_back(subtract_condition);
         }

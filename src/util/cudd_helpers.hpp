@@ -9,8 +9,9 @@
 #include <string>
 #include <map>
 
-
 #include <cudd/cplusplus/cuddObj.hh>
+
+#include "number_representation.hpp"
 
 namespace abo::util {
 
@@ -42,12 +43,14 @@ namespace abo::util {
     std::vector<std::pair<double, unsigned long> > add_terminal_values(const ADD &add);
 
     // assumes that the function represents an unsigned integer
-    ADD bdd_forest_to_add(const Cudd &mgr, const std::vector<BDD> &bdds);
+    ADD bdd_forest_to_add(const Cudd &mgr, const std::vector<BDD> &bdds,
+                          const NumberRepresentation num_rep = NumberRepresentation::BaseTwo);
 
     ADD xor_difference_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat);
 
 
-    ADD absolute_difference_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat);
+    ADD absolute_difference_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat,
+                                const NumberRepresentation num_rep);
 
     void dump_dot(
             const Cudd &mgr,
@@ -95,9 +98,23 @@ namespace abo::util {
      *
      * @param minuend Minuend in Two's Complement
      * @param subtrahend  Subtrahend in Two's Complement
-     * @return BDD computing the difference of the outputs of the two suupplied BDDs
+     * @return BDD computing the difference of the outputs of the two supplied BDDs
      */
     std::vector<BDD> bdd_subtract(const Cudd &mgr, const std::vector<BDD> &minuend, const std::vector<BDD> &subtrahend);
+
+    /**
+     * @brief Creates a (vector of) BDDs that represent the absolute difference between to given (vectors of) BDDs
+     *
+     * The supplied BDDs are supposed to compute values represented in Two's Copmlement. The BDD returned by this function
+     * computes the difference between the outputs of these BDDs. It will always return an unsigned number, not a number in Two's complement.
+     *
+     * @param f Function in Two's Complement
+     * @param g Funtion in Two's Complement
+     * @param num_rep The number representation for f and g
+     * @return BDD computing the absolute difference of the outputs of the two supplied BDDs
+     */
+    std::vector<BDD> bdd_absolute_difference(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &g,
+                                             const NumberRepresentation num_rep);
 
 
     /**
@@ -110,8 +127,8 @@ namespace abo::util {
 
     /**
      * @brief Creates BDD representing abs(f)
-     * @param f
-     * @return BDD representing ab(f)
+     * @param f Function in Two's Complement
+     * @return BDD representing abs(f)
      */
     std::vector<BDD> abs(const Cudd& mgr, const std::vector<BDD>& f);
 
@@ -129,26 +146,28 @@ namespace abo::util {
 
     /**
      * @brief Multiplies a bdd function with a constant
-     * @param f Function that is to be multiplied
+     * @param f Function that is to be multiplied. The function is interpreted as returning an unsigned integer
      * @param factor Constant multiplication factor
-     * @param num_extra_bits Additional bits used to make sure that the result can be stored
+     * @param num_extra_bits Additional bits used to make sure that the result can be stored (must be less than sizeof(unsigned long) * 8)
      * @return BDD representing the function "factor*f" (extended by up to num_extra_bits)
      */
     std::vector<BDD> bdd_multiply_constant(const Cudd &mgr, const std::vector<BDD> &f, double factor, const unsigned int num_extra_bits = 16);
 
     /**
      * @brief Checks if an input x exists such that int(f1(x)) >= int(f2(x))
-     * @param f1
-     * @param f2
-     * @return
+     * @param f1 Function to compare in base two (interpreted as returning an unsigned integer)
+     * @param f2 Function to compare in base two (interpreted as returning an unsigned integer)
+     * @return {ge, e}
+     * ge is true iff there exists an x such that int(f1(x)) >= int(f2(x))
+     * e is true iff there exists an x such that int(f1(x)) = int(f2(x)), but no x exists with int(f1(x)) > int(f2(x))
      */
-    bool exists_greater_equals(const Cudd &mgr, const std::vector<BDD> &f1, const std::vector<BDD> &f2);
+    std::pair<bool, bool> exists_greater_equals(const Cudd &mgr, const std::vector<BDD> &f1, const std::vector<BDD> &f2);
 
 
     /**
      * @brief Creates a BDD representing f >= g
-     * @param f
-     * @param g
+     * @param f Function to compare in base two (interpreted as returning an unsigned integer)
+     * @param g Function to compare in base two (interpreted as returning an unsigned integer)
      * @return BDD representing f >= g
      */
     BDD greater_equals(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &g);
