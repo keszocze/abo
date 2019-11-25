@@ -163,7 +163,9 @@ namespace abo::util {
         std::ofstream outfile;
         outfile.open(filename, std::ios::out | std::ios::trunc);
 
-        dump_dot_readable(mgr, bdds, function_names, outfile, conf);
+        if (outfile.is_open()) {
+            dump_dot_readable(mgr, bdds, function_names, outfile, conf);
+        }
     }
 
 }
