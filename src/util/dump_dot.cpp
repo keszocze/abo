@@ -75,7 +75,11 @@ namespace abo::util {
                 indentation++;
                 indent(); output <<"rank = same;"<<std::endl;
                 for (DdNode *n : level_nodes[i]) {
-                    indent(); output <<"\""<<n<<"\" [label = <<I>x&#832"<<i+1<<";</I>>, shape = circle, fixedsize=true, width=0.35];"<<std::endl;
+                    indent(); output <<"\""<<n<<"\" [label = <<I>x";
+                    for (char c : std::to_string(i+1)) {
+                        output <<"&#832"<<c<<";";
+                    }
+                    output <<"</I>>, shape = circle, fixedsize=true, width=0.35];"<<std::endl;
                 }
                 indentation--;
                 indent(); output <<"}"<<std::endl;
