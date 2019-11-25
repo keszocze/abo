@@ -37,7 +37,20 @@ namespace abo::util {
 
     void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds, const std::vector<std::string> &function_names, std::ostream &output) {
 
-        assert(bdds.size() == function_names.size());
+        assert(bdds.size() == function_names.size() || function_names.empty());
+
+        // default populate function names
+        std::vector<std::string> function_names_ = function_names;
+        if (function_names.empty() && bdds.size() > 1) {
+            for (std::size_t i = 0;i<bdds.size();i++) {
+                std::string name = "<<I>f";
+                for (char c : std::to_string(i)) {
+                    name += std::string("&#832") + std::to_string(c - '0') + std::string(";");
+                }
+                name += "</I>>";
+                function_names_.push_back(name);
+            }
+        }
 
         std::vector<std::vector<DdNode*>> level_nodes;
         std::set<DdNode*> visited;
@@ -64,8 +77,11 @@ namespace abo::util {
         indent(); output <<"node [shape = none, fixedsize = true, width = 0.2];"<<std::endl;
         indent(); output <<"edge [style = invis];"<<std::endl;
         indent();
-        for (std::size_t i = 0;i<function_names.size();i++) {
-            output <<"\""<<function_names[i]<<"\" "<<(i < function_names.size()-1 ? " -> " : "");
+        for (std::size_t i = 0;i<function_names_.size();i++) {
+            output <<"\""<<function_names_[i]<<"\" [label = "<<function_names_[i]<<"];"<<std::endl;
+        }
+        for (std::size_t i = 0;i<function_names_.size();i++) {
+            output <<"\""<<function_names_[i]<<"\" "<<(i < function_names_.size()-1 ? " -> " : "");
         }
         output <<std::endl;
         indentation--;
@@ -73,8 +89,8 @@ namespace abo::util {
 
         indent(); output <<"{"<<std::endl;
         indentation++;
-        for (std::size_t i = 0;i<function_names.size();i++) {
-            indent(); output <<"\""<<function_names[i]<<"\":s -> \""<<bdds[i].getNode()<<"\":n [arrowhead = none];"<<std::endl;
+        for (std::size_t i = 0;i<function_names_.size();i++) {
+            indent(); output <<"\""<<function_names_[i]<<"\":s -> \""<<bdds[i].getNode()<<"\":n [arrowhead = none];"<<std::endl;
         }
         indentation--;
         indent(); output <<"}"<<std::endl;
@@ -84,7 +100,9 @@ namespace abo::util {
         indentation++;
 
         indent(); output <<"edge [style = invis];"<<std::endl;
-        indent(); output <<"\""<<function_names[0]<<"\" -> ";
+        if (function_names_.size() > 0) {
+            indent(); output <<"\""<<function_names_[0]<<"\" -> ";
+        }
         for (unsigned int i = 0;i<level_nodes.size();i++) {
             if (level_nodes[i].size() > 0) {
                 output <<"\""<<level_nodes[i][0]<<"\" -> ";
