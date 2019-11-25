@@ -6,6 +6,7 @@
 #include <functional>
 #include <iostream>
 #include <fstream>
+#include <cassert>
 
 namespace abo::util {
 
@@ -34,7 +35,9 @@ namespace abo::util {
         }
     }
 
-    void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds, std::ostream &output) {
+    void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds, const std::vector<std::string> &function_names, std::ostream &output) {
+
+        assert(bdds.size() == function_names.size());
 
         std::vector<std::vector<DdNode*>> level_nodes;
         std::set<DdNode*> visited;
@@ -54,11 +57,31 @@ namespace abo::util {
         indent(); output <<"ranksep = \"0.25\";"<<std::endl;
         indent(); output <<"margin=0;"<<std::endl;
 
+        // create nodes for function names
+        indent(); output <<"{"<<std::endl;
+        indentation++;
+        indent(); output <<"rank = same;"<<std::endl;
+        indent(); output <<"node [shape = none, fixedsize = true, width = 0.2];"<<std::endl;
+        for (auto f : function_names) {
+            indent(); output <<"\""<<f<<"\""<<std::endl;
+        }
+        indentation--;
+        indent(); output <<"}"<<std::endl;
+
+        indent(); output <<"{"<<std::endl;
+        indentation++;
+        for (std::size_t i = 0;i<function_names.size();i++) {
+            indent(); output <<"\""<<function_names[i]<<"\" -> \""<<bdds[i].getNode()<<"\" [arrowhead = none];"<<std::endl;
+        }
+        indentation--;
+        indent(); output <<"}"<<std::endl;
+
+        // create invisible connections to properly order the nodes
         indent(); output <<"{"<<std::endl;
         indentation++;
 
         indent(); output <<"edge [style = invis];"<<std::endl;
-        indent();
+        indent(); output <<"\""<<function_names[0]<<"\" -> ";
         for (unsigned int i = 0;i<level_nodes.size();i++) {
             if (level_nodes[i].size() > 0) {
                 output <<"\""<<level_nodes[i][0]<<"\" -> ";
@@ -107,11 +130,11 @@ namespace abo::util {
         output <<"}"<<std::endl;
     }
 
-    void dump_dot_readable_to_file(const Cudd &mgr, const std::vector<BDD> &bdds, std::string filename) {
+    void dump_dot_readable_to_file(const Cudd &mgr, const std::vector<BDD> &bdds, const std::vector<std::string> &function_names, std::string filename) {
         std::ofstream outfile;
         outfile.open(filename, std::ios::out | std::ios::trunc);
 
-        dump_dot_readable(mgr, bdds, outfile);
+        dump_dot_readable(mgr, bdds, function_names, outfile);
     }
 
 }
