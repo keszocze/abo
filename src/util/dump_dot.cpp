@@ -47,10 +47,10 @@ namespace abo::util {
 
         int indentation = 0;
         std::function<void()> indent([&]() { for (int i = 0;i<indentation;i++) output <<"\t"; });
+
         output <<"digraph \"DD\"{"<<std::endl;
         indentation++;
 
-        indent(); output <<"size = \"5,10\""<<std::endl;
         indent(); output <<"center = true;"<<std::endl;
         indent(); output <<"edge [dir = non];"<<std::endl;
         indent(); output <<"nodesep = \"0.2\";"<<std::endl;
@@ -62,16 +62,19 @@ namespace abo::util {
         indentation++;
         indent(); output <<"rank = same;"<<std::endl;
         indent(); output <<"node [shape = none, fixedsize = true, width = 0.2];"<<std::endl;
-        for (auto f : function_names) {
-            indent(); output <<"\""<<f<<"\""<<std::endl;
+        indent(); output <<"edge [style = invis];"<<std::endl;
+        indent();
+        for (std::size_t i = 0;i<function_names.size();i++) {
+            output <<"\""<<function_names[i]<<"\" "<<(i < function_names.size()-1 ? " -> " : "");
         }
+        output <<std::endl;
         indentation--;
         indent(); output <<"}"<<std::endl;
 
         indent(); output <<"{"<<std::endl;
         indentation++;
         for (std::size_t i = 0;i<function_names.size();i++) {
-            indent(); output <<"\""<<function_names[i]<<"\" -> \""<<bdds[i].getNode()<<"\" [arrowhead = none];"<<std::endl;
+            indent(); output <<"\""<<function_names[i]<<"\":s -> \""<<bdds[i].getNode()<<"\":n [arrowhead = none];"<<std::endl;
         }
         indentation--;
         indent(); output <<"}"<<std::endl;
