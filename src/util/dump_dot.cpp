@@ -35,7 +35,8 @@ namespace abo::util {
         }
     }
 
-    void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds, const std::vector<std::string> &function_names, std::ostream &output) {
+    void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds, const std::vector<std::string> &function_names,
+                           std::ostream &output, DotPresentationConfig conf) {
 
         assert(bdds.size() == function_names.size() || function_names.empty());
 
@@ -66,20 +67,20 @@ namespace abo::util {
 
         indent(); output <<"center = true;"<<std::endl;
         indent(); output <<"edge [dir = non];"<<std::endl;
-        indent(); output <<"nodesep = \"0.2\";"<<std::endl;
-        indent(); output <<"ranksep = \"0.25\";"<<std::endl;
+        indent(); output <<"nodesep = \""<<conf.node_seperation<<"\";"<<std::endl;
+        indent(); output <<"ranksep = \""<<conf.rank_seperation<<"\";"<<std::endl;
         indent(); output <<"margin=0;"<<std::endl;
 
         // create nodes for function names
         indent(); output <<"{"<<std::endl;
         indentation++;
         indent(); output <<"rank = same;"<<std::endl;
-        indent(); output <<"node [shape = none, fixedsize = true, width = 0.2];"<<std::endl;
+        indent(); output <<"node [shape = "<<conf.function_name_shape<<", fixedsize = true, width = "<<conf.function_name_width<<"];"<<std::endl;
         indent(); output <<"edge [style = invis];"<<std::endl;
-        indent();
         for (std::size_t i = 0;i<function_names_.size();i++) {
-            output <<"\""<<function_names_[i]<<"\" [label = "<<function_names_[i]<<"];"<<std::endl;
+            indent(); output <<"\""<<function_names_[i]<<"\" [label = "<<function_names_[i]<<"];"<<std::endl;
         }
+        indent();
         for (std::size_t i = 0;i<function_names_.size();i++) {
             output <<"\""<<function_names_[i]<<"\" "<<(i < function_names_.size()-1 ? " -> " : "");
         }
@@ -103,6 +104,7 @@ namespace abo::util {
         if (function_names_.size() > 0) {
             indent(); output <<"\""<<function_names_[0]<<"\" -> ";
         }
+        indent();
         for (unsigned int i = 0;i<level_nodes.size();i++) {
             if (level_nodes[i].size() > 0) {
                 output <<"\""<<level_nodes[i][0]<<"\" -> ";
@@ -123,16 +125,21 @@ namespace abo::util {
                     for (char c : std::to_string(i+1)) {
                         output <<"&#832"<<c<<";";
                     }
-                    output <<"</I>>, shape = circle, fixedsize=true, width=0.35];"<<std::endl;
+                    output <<"</I>>, shape = "<<conf.node_shape<<", fixedsize=true, width="<<conf.node_width<<"];"<<std::endl;
                 }
                 indentation--;
                 indent(); output <<"}"<<std::endl;
             }
         }
 
-        indent(); output <<"{ ranke = same;"<<std::endl;
-        indent(); output <<"node [shape = box]; \""<<mgr.bddOne().getNode()<<"\" [label = <&#8868;>, shape = square, fixedsize=true, width=0.35];"<<std::endl;
-        indent(); output <<"\""<<mgr.bddZero().getNode()<<"\" [label = <&#8869;>, shape = square, fixedsize=true, width=0.35]; }"<<std::endl;
+        // terminal nodes
+        indent(); output <<"{"<<std::endl;
+        indentation++;
+        indent(); output <<"ranke = same;"<<std::endl;
+        indent(); output <<"\""<<mgr.bddOne().getNode()<<"\" [label = <&#8868;>, shape = "<<conf.terminal_shape<<", width="<<conf.terminal_width<<", fixedsize=true];"<<std::endl;
+        indent(); output <<"\""<<mgr.bddZero().getNode()<<"\" [label = <&#8869;>, shape = "<<conf.terminal_shape<<", width="<<conf.terminal_width<<", fixedsize=true];"<<std::endl;
+        indentation--;
+        indent(); output <<"}"<<std::endl;
 
         for (auto &nodes : level_nodes) {
             for (auto node : nodes) {
@@ -151,11 +158,12 @@ namespace abo::util {
         output <<"}"<<std::endl;
     }
 
-    void dump_dot_readable_to_file(const Cudd &mgr, const std::vector<BDD> &bdds, const std::vector<std::string> &function_names, std::string filename) {
+    void dump_dot_readable_to_file(const Cudd &mgr, const std::vector<BDD> &bdds, const std::vector<std::string> &function_names,
+                                   std::string filename, DotPresentationConfig conf) {
         std::ofstream outfile;
         outfile.open(filename, std::ios::out | std::ios::trunc);
 
-        dump_dot_readable(mgr, bdds, function_names, outfile);
+        dump_dot_readable(mgr, bdds, function_names, outfile, conf);
     }
 
 }
