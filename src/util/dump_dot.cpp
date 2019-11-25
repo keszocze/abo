@@ -34,11 +34,13 @@ namespace abo::util {
         }
     }
 
-    void dump_dot_readable(const Cudd &mgr, const BDD &b, std::ostream &output) {
+    void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds, std::ostream &output) {
 
         std::vector<std::vector<DdNode*>> level_nodes;
         std::set<DdNode*> visited;
-        collect_nodes_rec(b.getNode(), visited, level_nodes);
+        for (BDD b : bdds) {
+            collect_nodes_rec(b.getNode(), visited, level_nodes);
+        }
 
         int indentation = 0;
         std::function<void()> indent([&]() { for (int i = 0;i<indentation;i++) output <<"\t"; });
@@ -101,11 +103,11 @@ namespace abo::util {
         output <<"}"<<std::endl;
     }
 
-    void dump_dot_readable_to_file(const Cudd &mgr, const BDD &b, std::string filename) {
+    void dump_dot_readable_to_file(const Cudd &mgr, const std::vector<BDD> &bdds, std::string filename) {
         std::ofstream outfile;
         outfile.open(filename, std::ios::out | std::ios::trunc);
 
-        dump_dot_readable(mgr, b, outfile);
+        dump_dot_readable(mgr, bdds, outfile);
     }
 
 }
