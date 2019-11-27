@@ -21,6 +21,7 @@ if(UNIX)
 endif()
 
 include(BuildLorina)
+include(BuildCatch2)
 
 add_subdirectory(lib)
 add_subdirectory(src)
