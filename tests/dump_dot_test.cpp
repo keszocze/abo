@@ -17,4 +17,5 @@ TEST_CASE("Display BDD in a fancy way") {
 
   abo::util::dump_dot_readable(mgr, std::vector<BDD>{and_bdd},std::cout, names);
   abo::util::dump_dot_readable(mgr, std::vector<BDD>{and_bdd},std::cout);
+  abo::util::dump_dot_readable(mgr, and_bdd,std::cout);
 }

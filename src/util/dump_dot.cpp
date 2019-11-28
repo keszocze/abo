@@ -202,4 +202,14 @@ void dump_dot_readable_to_file(const Cudd &mgr, const std::vector<BDD> &bdds,
   }
 }
 
+void dump_dot_readable(const Cudd &mgr, const BDD &bdd, std::ostream &output,
+                                 const std::vector<std::string> &function_names, DotPresentationConfig conf) {
+            dump_dot_readable(mgr,std::vector<BDD>{bdd},output, function_names, conf);
+}
+
+void dump_dot_readable_to_file(const Cudd &mgr, const BDD &bdd,
+                                   std::string filename, const std::vector<std::string> &function_names, DotPresentationConfig conf) {
+    dump_dot_readable_to_file(mgr, std::vector<BDD>{bdd}, filename, function_names, conf);
+}
+
 } // namespace abo::util
