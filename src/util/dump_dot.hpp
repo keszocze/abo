@@ -28,8 +28,8 @@ namespace abo::util {
      * @param output The stream to write the result to
      * @param conf The presentation parameters like shapes and distances
      */
-    void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds, const std::vector<std::string> &function_names,
-                           std::ostream &output, DotPresentationConfig conf = {});
+    void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
+                           std::ostream &output,  const std::vector<std::string> &function_names = std::vector<std::string>(), DotPresentationConfig conf = DotPresentationConfig{});
 
     /**
      * @brief Dump the given BDD forest to a file that can be given to dot. The graph created by this function
@@ -41,8 +41,8 @@ namespace abo::util {
      * @param filename The name of the file to output the result to. Must be writable
      * @param conf The presentation parameters like shapes and distances
      */
-    void dump_dot_readable_to_file(const Cudd &mgr, const std::vector<BDD> &bdds, const std::vector<std::string> &function_names,
-                                   std::string filename, DotPresentationConfig conf = {});
+    void dump_dot_readable_to_file(const Cudd &mgr, const std::vector<BDD> &bdds,
+                                   std::string filename, const std::vector<std::string> &function_names = std::vector<std::string>(), DotPresentationConfig conf = DotPresentationConfig{});
 
 }
 
