@@ -15,7 +15,7 @@ TEST_CASE("Display BDD in a fancy way") {
   std::vector<std::string> names{"and", "xor with spaces"};
 
   BDD and_bdd = abo::example_bdds::and_bdd(mgr, 2);
-  BDD xor_bdd = abo::example_bdds::xor_bdd(mgr, 2);
+  BDD xor_bdd = abo::example_bdds::xor_bdd(mgr, 12);
 
 
   std::stringstream s1, s2, s3;

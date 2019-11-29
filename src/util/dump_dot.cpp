@@ -44,6 +44,19 @@ void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
 
   assert(bdds.size() == function_names.size() || function_names.empty());
 
+  /**
+   * This function creates the UTF subscript numbers for the node names.
+   *
+   * f + subscript(23) becomes f_{23} (in LaTeX notation)
+   */
+  std::function<std::string(int)> subscript([](int n){
+      std::string s;
+     for (char c: std::to_string(n)) {
+         s += std::string("&#832") + std::to_string(c - '0') + std::string(";");
+     }
+     return s;
+  });
+
   /*
    * Populate function names if none are given
    */
@@ -53,10 +66,7 @@ void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
       if( bdds.size() > 1) {
         for (std::size_t i = 0; i < bdds.size(); i++) {
             std::string name = "<<I>f";
-            for (char c : std::to_string(i)) {
-                name +=
-                        std::string("&#832") + std::to_string(c - '0') + std::string(";");
-            }
+            name += subscript(i);
             name += "</I>>";
             function_names_.push_back(name);
         }
@@ -190,9 +200,7 @@ void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
       indent();output << "rank = same;" << std::endl;
       for (DdNode *n : level_nodes[i]) {
         indent();output << "\"" << n << "\" [label = <<I>x";
-        for (char c : std::to_string(i + 1)) {
-          output << "&#832" << c << ";";
-        }
+        output << subscript(i+1);
         output << "</I>>, shape = " << conf.node_shape
                << ", fixedsize=true, width=" << conf.node_width << "];"
                << std::endl;
