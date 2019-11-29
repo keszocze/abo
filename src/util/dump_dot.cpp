@@ -44,19 +44,29 @@ void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
 
   assert(bdds.size() == function_names.size() || function_names.empty());
 
-  // default populate function names
+  /*
+   * Populate function names if none are given
+   */
   std::vector<std::string> function_names_ = function_names;
-  if (function_names.empty() && bdds.size() > 1) {
-    for (std::size_t i = 0; i < bdds.size(); i++) {
-      std::string name = "<<I>f";
-      for (char c : std::to_string(i)) {
-        name +=
-            std::string("&#832") + std::to_string(c - '0') + std::string(";");
+  if (function_names.empty())
+  {
+      if( bdds.size() > 1) {
+        for (std::size_t i = 0; i < bdds.size(); i++) {
+            std::string name = "<<I>f";
+            for (char c : std::to_string(i)) {
+                name +=
+                        std::string("&#832") + std::to_string(c - '0') + std::string(";");
+            }
+            name += "</I>>";
+            function_names_.push_back(name);
+        }
       }
-      name += "</I>>";
-      function_names_.push_back(name);
-    }
+      if (bdds.size() == 1)
+      {
+          function_names_.push_back("f");
+      }
   }
+  //------------------------------------------------------------------------------------------
 
   std::vector<std::vector<DdNode *>> level_nodes;
   std::set<DdNode *> visited;
@@ -118,12 +128,9 @@ void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
   //------------------------------------------------------------------------------
 
 
-
-
   /*
    * link function name nodes to their corresponding BDD node
    */
-
     indent();output << "{" << std::endl;
     indentation++;
 
