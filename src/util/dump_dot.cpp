@@ -71,15 +71,24 @@ void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
   });
 
   output << "digraph \"DD\"{" << std::endl;
-  indentation++;
 
+
+  /*
+   * Create graph header
+   */
+  indentation++;
   indent();output << "center = true;" << std::endl;
   indent();output << "edge [dir = non];" << std::endl;
   indent();output << "nodesep = \"" << conf.node_seperation << "\";" << std::endl;
   indent();output << "ranksep = \"" << conf.rank_seperation << "\";" << std::endl;
   indent();output << "margin=0;" << std::endl;
+  //-------------------------------------------------------------------------------
 
-  // create nodes for function names
+
+
+  /*
+   * create nodes for function names
+   */
   indent();output << "{" << std::endl;
   indentation++;
   indent();output << "rank = same;" << std::endl;
@@ -88,6 +97,9 @@ void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
          << std::endl;
   indent();output << "edge [style = invis];" << std::endl;
 
+
+  // manually arrange function names next to each other in the first layer of the dot file
+  // this works as the edge style is "invis"
   for (std::size_t i = 0; i < function_names_.size(); i++) {
     indent();
     output << "\"" << function_names_[i] << "\" [label = " << function_names_[i]
@@ -103,9 +115,17 @@ void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
   indentation--;
 
   indent();output << "}" << std::endl;
+  //------------------------------------------------------------------------------
 
-  indent();output << "{" << std::endl;
-  indentation++;
+
+
+
+  /*
+   * link function name nodes to their corresponding BDD node
+   */
+
+    indent();output << "{" << std::endl;
+    indentation++;
 
   for (std::size_t i = 0; i < function_names_.size(); i++) {
     indent();
@@ -114,8 +134,11 @@ void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
   }
   indentation--;
   indent();output << "}" << std::endl;
+  //---------------------------------------------------------
 
-  // create invisible connections to properly order the nodes
+  /*
+   * create invisible connections to properly order the nodes
+   */
   indent();output << "{" << std::endl;
   indentation++;
 
@@ -134,7 +157,13 @@ void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
 
   indentation--;
   indent();output << "}" << std::endl;
+  //-------------------------------------------------------
 
+
+
+  /*
+   * Create internal nodes level by level
+   */
   for (unsigned int i = 0; i < level_nodes.size(); i++) {
     if (level_nodes[i].size() > 0) {
       indent();output << "{" << std::endl;
@@ -153,8 +182,11 @@ void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
       indent();output << "}" << std::endl;
     }
   }
+  //----------------------------------------------------------------------
 
-  // terminal nodes
+  /*
+   * Create the terminal nodes
+   */
   indent();output << "{" << std::endl;
   indentation++;
   indent();output << "ranke = same;" << std::endl;
@@ -169,7 +201,11 @@ void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
   indentation--;
   indent();
   output << "}" << std::endl;
+  //-----------------------------------------------------------------
 
+  /*
+   * Finally add the connections between the nodes
+   */
   for (auto &nodes : level_nodes) {
     for (auto node : nodes) {
       DdNode *N = Cudd_Regular(node);
@@ -184,6 +220,8 @@ void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
              << "\" [arrowhead = none, style = dashed];" << std::endl;
     }
   }
+  //----------------------------------------------------------------------
+
 
   indentation--;
   output << "}" << std::endl;
