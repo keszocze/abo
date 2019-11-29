@@ -162,7 +162,7 @@ void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
   for (std::size_t i = 0; i < function_names_.size(); i++) {
     indent();
     output << "\"" << function_names_[i] << "\":s -> \"" << bdds[i].getNode()
-           << "\":n [arrowhead = none];" << std::endl;
+           << "\":n [arrowhead = none, weight = 10];" << std::endl;
   }
   indentation--;
   indent();output << "}" << std::endl;
