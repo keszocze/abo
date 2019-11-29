@@ -111,24 +111,25 @@ void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
   indent();output << "edge [style = invis];" << std::endl;
 
 
-  // manually arrange function names next to each other in the first layer of the dot file
-  // this works as the edge style is "invis"
+
   for (std::size_t i = 0; i < function_names_.size(); i++) {
     indent();
     output << "\"" << function_names_[i] << "\" [label = \"" << function_names_[i]
            << "\"];" << std::endl;
   }
 
-  if (function_names_.size()>1)
-  {
-      output<< std::endl; indent(); output << "# Arrange function name nodes in correct order" << std::endl;
-      indent();
-      for (std::size_t i = 0; i < function_names_.size(); i++) {
-          output << "\"" << function_names_[i] << "\""
-                 << (i < function_names_.size() - 1 ? " -> " : "");
-      }
-      output << std::endl;
-  }
+    // manually arrange function names next to each other in the first layer of the dot file
+    // this works as the edge style is "invis"
+//  if (function_names_.size()>1)
+//  {
+//      output<< std::endl; indent(); output << "# Arrange function name nodes in correct order" << std::endl;
+//      indent();
+//      for (std::size_t i = 0; i < function_names_.size(); i++) {
+//          output << "\"" << function_names_[i] << "\""
+//                 << (i < function_names_.size() - 1 ? " -> " : "");
+//      }
+//      output << std::endl;
+//  }
 
   indentation--;
 
