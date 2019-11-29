@@ -99,6 +99,9 @@ void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
   /*
    * create nodes for function names
    */
+
+
+  output << std::endl; indent();output << "# create function name nodes" << std::endl;
   indent();output << "{" << std::endl;
   indentation++;
   indent();output << "rank = same;" << std::endl;
@@ -116,12 +119,17 @@ void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
            << "];" << std::endl;
   }
 
-  indent();
-  for (std::size_t i = 0; i < function_names_.size(); i++) {
-    output << "\"" << function_names_[i] << "\" "
-           << (i < function_names_.size() - 1 ? " -> " : "");
+  if (function_names_.size()>1)
+  {
+      output<< std::endl; indent(); output << "# Arrange function name nodes in correct order" << std::endl;
+      indent();
+      for (std::size_t i = 0; i < function_names_.size(); i++) {
+          output << "\"" << function_names_[i] << "\" "
+                 << (i < function_names_.size() - 1 ? " -> " : "");
+      }
+      output << std::endl;
   }
-  output << std::endl;
+
   indentation--;
 
   indent();output << "}" << std::endl;
@@ -131,6 +139,8 @@ void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
   /*
    * link function name nodes to their corresponding BDD node
    */
+
+    output << std::endl; indent(); output << "# link function name nodes to the BDDs" << std::endl;
     indent();output << "{" << std::endl;
     indentation++;
 
@@ -173,6 +183,7 @@ void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
    */
   for (unsigned int i = 0; i < level_nodes.size(); i++) {
     if (level_nodes[i].size() > 0) {
+        output << std::endl; indent(); output << "# create nodes for level " << i << std::endl;
       indent();output << "{" << std::endl;
       indentation++;
       indent();output << "rank = same;" << std::endl;
@@ -194,6 +205,7 @@ void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
   /*
    * Create the terminal nodes
    */
+  output << std::endl; indent(); output << "# create terminal nodes" << std::endl;
   indent();output << "{" << std::endl;
   indentation++;
   indent();output << "ranke = same;" << std::endl;
@@ -213,6 +225,7 @@ void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
   /*
    * Finally add the connections between the nodes
    */
+  output << std::endl; indent(); output << "# create inter-node high-/low-child connections" << std::endl;
   for (auto &nodes : level_nodes) {
     for (auto node : nodes) {
       DdNode *N = Cudd_Regular(node);
