@@ -60,7 +60,7 @@ void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
   /*
    * Populate function names if none are given
    */
-  std::vector<std::string> function_names_ = function_names;
+  std::vector<std::string> function_names_;
   if (function_names.empty())
   {
       if( bdds.size() > 1) {
@@ -74,6 +74,10 @@ void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
       if (bdds.size() == 1)
       {
           function_names_.push_back("f");
+      }
+  } else {
+      for (auto function : function_names) {
+          function_names_.push_back("<" + function + ">");
       }
   }
   //------------------------------------------------------------------------------------------
@@ -124,8 +128,8 @@ void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
 
   for (std::size_t i = 0; i < function_names_.size(); i++) {
     indent();
-    output << "\"" << function_names_[i] << "\" [label = \"" << function_names_[i]
-           << "\"];" << std::endl;
+    output << "\"" << function_names_[i] << "\" [label = " << function_names_[i]
+           << "];" << std::endl;
   }
 
     // manually arrange function names next to each other in the first layer of the dot file
