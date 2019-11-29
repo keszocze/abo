@@ -12,7 +12,7 @@ TEST_CASE("Display BDD in a fancy way") {
 
 
   Cudd mgr(2);
-  std::vector<std::string> names{"and", "xor"};
+  std::vector<std::string> names{"and", "xor with spaces"};
 
   BDD and_bdd = abo::example_bdds::and_bdd(mgr, 2);
   BDD xor_bdd = abo::example_bdds::xor_bdd(mgr, 2);

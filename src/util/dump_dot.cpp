@@ -115,8 +115,8 @@ void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
   // this works as the edge style is "invis"
   for (std::size_t i = 0; i < function_names_.size(); i++) {
     indent();
-    output << "\"" << function_names_[i] << "\" [label = " << function_names_[i]
-           << "];" << std::endl;
+    output << "\"" << function_names_[i] << "\" [label = \"" << function_names_[i]
+           << "\"];" << std::endl;
   }
 
   if (function_names_.size()>1)
@@ -124,7 +124,7 @@ void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
       output<< std::endl; indent(); output << "# Arrange function name nodes in correct order" << std::endl;
       indent();
       for (std::size_t i = 0; i < function_names_.size(); i++) {
-          output << "\"" << function_names_[i] << "\" "
+          output << "\"" << function_names_[i] << "\""
                  << (i < function_names_.size() - 1 ? " -> " : "");
       }
       output << std::endl;
