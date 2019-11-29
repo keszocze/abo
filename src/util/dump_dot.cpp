@@ -85,7 +85,7 @@ void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
   }
 
   int indentation = 0;
-  std::function<void()> indent([&]() {
+  std::function<void()> indent([&output, &indentation]() {
     for (int i = 0; i < indentation; i++)
       output << "\t";
   });
