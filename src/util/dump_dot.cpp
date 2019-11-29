@@ -134,16 +134,16 @@ void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
 
     // manually arrange function names next to each other in the first layer of the dot file
     // this works as the edge style is "invis"
-//  if (function_names_.size()>1)
-//  {
-//      output<< std::endl; indent(); output << "# Arrange function name nodes in correct order" << std::endl;
-//      indent();
-//      for (std::size_t i = 0; i < function_names_.size(); i++) {
-//          output << "\"" << function_names_[i] << "\""
-//                 << (i < function_names_.size() - 1 ? " -> " : "");
-//      }
-//      output << std::endl;
-//  }
+    if (function_names_.size() > 1)
+    {
+        output<< std::endl; indent(); output << "# Arrange function name nodes in correct order" << std::endl;
+        indent();
+        for (std::size_t i = 0; i < function_names_.size(); i++) {
+          output << "\"" << function_names_[i] << "\""
+                 << (i < function_names_.size() - 1 ? " -> " : "");
+        }
+        output << std::endl;
+    }
 
   indentation--;
 
