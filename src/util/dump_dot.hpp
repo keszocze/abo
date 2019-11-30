@@ -32,10 +32,16 @@ namespace abo::util {
      * @param output The stream to write the result to
      * @param function_names The names of the functions. Will be default populated to f_i for the i'th function
      * if an empty vector is given. Must always either be exactly the same length as bdds or empty
+     * @param variable_names The names of the variables used in the BDD. It will be default populated to x_i
+     * for the i'th variable if an empty vector is given. Must be either empty or containt names for all used variables
      * @param conf The presentation parameters like shapes and distances
      */
-    void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
-                           std::ostream &output,  const std::vector<std::string> &function_names = std::vector<std::string>(), DotPresentationConfig conf = DotPresentationConfig{});
+    void dump_dot_readable(const Cudd &mgr,
+                           const std::vector<BDD> &bdds,
+                           std::ostream &output,
+                           const std::vector<std::string> &function_names = std::vector<std::string>(),
+                           const std::vector<std::string> &variable_names = std::vector<std::string>(),
+                           DotPresentationConfig conf = DotPresentationConfig{});
 
     /**
      * @brief Dump the given BDD forest as text that can be given to dot. The graph created by this function
@@ -44,11 +50,17 @@ namespace abo::util {
      * @param bdd The function to show in the dot representation
      * @param function_names The names of the functions. Will be default populated to f_i for the i'th function
      * if an empty vector is given. Must always either be exactly the same length as bdds or empty
+     * @param variable_names The names of the variables used in the BDD. It will be default populated to x_i
+     * for the i'th variable if an empty vector is given. Must be either empty or containt names for all used variables
      * @param output The stream to write the result to
      * @param conf The presentation parameters like shapes and distances
      */
-    void dump_dot_readable(const Cudd &mgr, const BDD &bdd,
-                           std::ostream &output,  const std::vector<std::string> &function_names = std::vector<std::string>(), DotPresentationConfig conf = DotPresentationConfig{});
+    void dump_dot_readable(const Cudd &mgr,
+                           const BDD &bdd,
+                           std::ostream &output,
+                           const std::vector<std::string> &function_names = std::vector<std::string>(),
+                           const std::vector<std::string> &variable_names = std::vector<std::string>(),
+                           DotPresentationConfig conf = DotPresentationConfig{});
 
     /**
      * @brief Dump the given BDD forest to a file that can be given to dot. The graph created by this function
@@ -57,11 +69,17 @@ namespace abo::util {
      * @param bdds The functions to print to the dot file
      * @param function_names The names of the functions. Will be default populated to f_i for the i'th function
      * if an empty vector is given. Must always either be exactly the same length as bdds or empty
+     * @param variable_names The names of the variables used in the BDD. It will be default populated to x_i
+     * for the i'th variable if an empty vector is given. Must be either empty or containt names for all used variables
      * @param filename The name of the file to output the result to. Must be writable
      * @param conf The presentation parameters like shapes and distances
      */
-    void dump_dot_readable_to_file(const Cudd &mgr, const std::vector<BDD> &bdds,
-                                   std::string filename, const std::vector<std::string> &function_names = std::vector<std::string>(), DotPresentationConfig conf = DotPresentationConfig{});
+    void dump_dot_readable_to_file(const Cudd &mgr, const
+                                   std::vector<BDD> &bdds,
+                                   std::string filename,
+                                   const std::vector<std::string> &function_names = std::vector<std::string>(),
+                                   const std::vector<std::string> &variable_names = std::vector<std::string>(),
+                                   DotPresentationConfig conf = DotPresentationConfig{});
 
 
     /**
@@ -71,11 +89,17 @@ namespace abo::util {
     * @param bdds The function to print to the dot file
     * @param function_names The names of the functions. Will be default populated to f_i for the i'th function
     * if an empty vector is given. Must always either be exactly the same length as bdds or empty
+    * @param variable_names The names of the variables used in the BDD. It will be default populated to x_i
+     * for the i'th variable if an empty vector is given. Must be either empty or containt names for all used variables
     * @param filename The name of the file to output the result to. Must be writable
     * @param conf The presentation parameters like shapes and distances
     */
-    void dump_dot_readable_to_file(const Cudd &mgr, const BDD &bdd,
-                                   std::string filename, const std::vector<std::string> &function_names = std::vector<std::string>(), DotPresentationConfig conf = DotPresentationConfig{});
+    void dump_dot_readable_to_file(const Cudd &mgr,
+                                   const BDD &bdd,
+                                   std::string filename,
+                                   const std::vector<std::string> &function_names = std::vector<std::string>(),
+                                   const std::vector<std::string> &variable_names = std::vector<std::string>(),
+                                   DotPresentationConfig conf = DotPresentationConfig{});
 }
 
 #endif // DUMP_DOT_H

@@ -40,6 +40,7 @@ void collect_nodes_rec(DdNode *node, std::set<DdNode *> &visited,
 void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
                        std::ostream &output,
                        const std::vector<std::string> &function_names,
+                       const std::vector<std::string> &variable_names,
                        DotPresentationConfig conf) {
 
     assert(bdds.size() == function_names.size() || function_names.empty());
@@ -49,7 +50,7 @@ void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
    *
    * f + subscript(23) becomes f_{23} (in LaTeX notation)
    */
-    std::function<std::string(int)> subscript([](int n){
+    std::function<std::string(int)> subscript([](std::size_t n){
         std::string s;
         for (char c: std::to_string(n)) {
             s += std::string("&#832") + std::to_string(c - '0') + std::string(";");
@@ -86,6 +87,19 @@ void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
     std::set<DdNode *> visited;
     for (BDD b : bdds) {
         collect_nodes_rec(b.getNode(), visited, level_nodes);
+    }
+
+    // generate variable names
+    std::vector<std::string> variable_names_ = variable_names;
+    if (variable_names.empty()) {
+        for (std::size_t i = 0; i < level_nodes.size(); i++) {
+            std::string name = "<I>x";
+            name += subscript(i+1);
+            name += "</I>";
+            variable_names_.push_back(name);
+        }
+    } else {
+        assert(variable_names.size() >= level_nodes.size());
     }
 
     int indentation = 0;
@@ -203,9 +217,9 @@ void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
             indentation++;
             indent();output << "rank = same;" << std::endl;
             for (DdNode *n : level_nodes[i]) {
-                indent();output << "\"" << n << "\" [label = <<I>x";
-                output << subscript(i+1);
-                output << "</I>>, shape = " << conf.node_shape
+                indent();output << "\"" << n << "\" [label = <";
+                output << variable_names_[i];
+                output << ">, shape = " << conf.node_shape
                        << ", fixedsize=true, width=" << conf.node_width << "];"
                        << std::endl;
             }
@@ -263,24 +277,27 @@ void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
 void dump_dot_readable_to_file(const Cudd &mgr, const std::vector<BDD> &bdds,
                                std::string filename,
                                const std::vector<std::string> &function_names,
+                               const std::vector<std::string> &variable_names,
                                DotPresentationConfig conf) {
     std::ofstream outfile;
     outfile.open(filename, std::ios::out | std::ios::trunc);
 
     if (outfile.is_open()) {
-        dump_dot_readable(mgr, bdds, outfile, function_names, conf);
+        dump_dot_readable(mgr, bdds, outfile, function_names, variable_names, conf);
         outfile.close();
     }
 }
 
 void dump_dot_readable(const Cudd &mgr, const BDD &bdd, std::ostream &output,
-                       const std::vector<std::string> &function_names, DotPresentationConfig conf) {
-    dump_dot_readable(mgr,std::vector<BDD>{bdd},output, function_names, conf);
+                       const std::vector<std::string> &function_names,
+                       const std::vector<std::string> &variable_names, DotPresentationConfig conf) {
+    dump_dot_readable(mgr,std::vector<BDD>{bdd},output, function_names, variable_names, conf);
 }
 
 void dump_dot_readable_to_file(const Cudd &mgr, const BDD &bdd,
-                               std::string filename, const std::vector<std::string> &function_names, DotPresentationConfig conf) {
-    dump_dot_readable_to_file(mgr, std::vector<BDD>{bdd}, filename, function_names, conf);
+                               std::string filename, const std::vector<std::string> &function_names,
+                               const std::vector<std::string> &variable_names, DotPresentationConfig conf) {
+    dump_dot_readable_to_file(mgr, std::vector<BDD>{bdd}, filename, function_names, variable_names, conf);
 }
 
 } // namespace abo::util
