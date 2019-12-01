@@ -41,6 +41,7 @@ void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
                        std::ostream &output,
                        const std::vector<std::string> &function_names,
                        const std::vector<std::string> &variable_names,
+                       const std::optional<bool> left_terminal,
                        DotPresentationConfig conf) {
 
     assert(bdds.size() == function_names.size() || function_names.empty());
@@ -132,7 +133,7 @@ void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
     output << std::endl; indent();output << "# create function name nodes" << std::endl;
     indent();output << "{" << std::endl;
     indentation++;
-    indent();output << "rank = same;" << std::endl;
+    indent();output << "rank = source;" << std::endl;
     indent();output << "node [shape = " << conf.function_name_shape
                     << ", fixedsize = true, width = " << conf.function_name_width << "];"
                     << std::endl;
@@ -230,20 +231,29 @@ void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
     //----------------------------------------------------------------------
 
     /*
-     * Create the terminal nodes
+     * Create the terminal nodes and arrange them in the desired order
      */
     output << std::endl; indent(); output << "# create terminal nodes" << std::endl;
     indent();output << "{" << std::endl;
     indentation++;
-    indent();output << "ranke = same;" << std::endl;
+    indent();output << "rankdir=\"LR\"; rank = same;" << std::endl;
     indent();output << "\"" << mgr.bddOne().getNode()
                     << "\" [label = <&#8868;>, shape = " << conf.terminal_shape
-                    << ", width=" << conf.terminal_width << ", fixedsize=true];"
+                    << ", width=" << conf.terminal_width << ", fixedsize=true;]"
                     << std::endl;
     indent(); output << "\"" << mgr.bddZero().getNode()
                      << "\" [label = <&#8869;>, shape = " << conf.terminal_shape
                      << ", width=" << conf.terminal_width << ", fixedsize=true];"
                      << std::endl;
+
+    // arrange terminal nodes in the desired order by creating an invisible connection between them
+    if (left_terminal.has_value()) {
+        output<< std::endl; indent(); output << "# Arrange terminal nodes in correct order" << std::endl;
+        indent();output << "edge [style = invis];" << std::endl;
+        BDD left = left_terminal.value() ? mgr.bddOne() : mgr.bddZero();
+        BDD right = left_terminal.value() ? mgr.bddZero() : mgr.bddOne();
+        indent();output << "\"" << left.getNode() << "\" -> \""<<right.getNode()<<"\";"<<std::endl;
+    }
     indentation--;
     indent();
     output << "}" << std::endl;
@@ -278,26 +288,31 @@ void dump_dot_readable_to_file(const Cudd &mgr, const std::vector<BDD> &bdds,
                                std::string filename,
                                const std::vector<std::string> &function_names,
                                const std::vector<std::string> &variable_names,
+                               const std::optional<bool> left_terminal,
                                DotPresentationConfig conf) {
     std::ofstream outfile;
     outfile.open(filename, std::ios::out | std::ios::trunc);
 
     if (outfile.is_open()) {
-        dump_dot_readable(mgr, bdds, outfile, function_names, variable_names, conf);
+        dump_dot_readable(mgr, bdds, outfile, function_names, variable_names, left_terminal, conf);
         outfile.close();
     }
 }
 
 void dump_dot_readable(const Cudd &mgr, const BDD &bdd, std::ostream &output,
                        const std::vector<std::string> &function_names,
-                       const std::vector<std::string> &variable_names, DotPresentationConfig conf) {
-    dump_dot_readable(mgr,std::vector<BDD>{bdd},output, function_names, variable_names, conf);
+                       const std::vector<std::string> &variable_names,
+                       const std::optional<bool> left_terminal,
+                       DotPresentationConfig conf) {
+    dump_dot_readable(mgr,std::vector<BDD>{bdd},output, function_names, variable_names, left_terminal, conf);
 }
 
 void dump_dot_readable_to_file(const Cudd &mgr, const BDD &bdd,
                                std::string filename, const std::vector<std::string> &function_names,
-                               const std::vector<std::string> &variable_names, DotPresentationConfig conf) {
-    dump_dot_readable_to_file(mgr, std::vector<BDD>{bdd}, filename, function_names, variable_names, conf);
+                               const std::vector<std::string> &variable_names,
+                               const std::optional<bool> left_terminal,
+                               DotPresentationConfig conf) {
+    dump_dot_readable_to_file(mgr, std::vector<BDD>{bdd}, filename, function_names, variable_names, left_terminal, conf);
 }
 
 } // namespace abo::util

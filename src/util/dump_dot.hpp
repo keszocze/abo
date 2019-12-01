@@ -4,6 +4,7 @@
 #include <cudd/cplusplus/cuddObj.hh>
 
 #include <string>
+#include <optional>
 
 namespace abo::util {
 
@@ -34,6 +35,9 @@ namespace abo::util {
      * if an empty vector is given. Must always either be exactly the same length as bdds or empty
      * @param variable_names The names of the variables used in the BDD. It will be default populated to x_i
      * for the i'th variable if an empty vector is given. Must be either empty or containt names for all used variables
+     * @param left_terminal Whether or not and how the terminal nodes should be arranged. If the optional is empty,
+     * no ordering on the terminal nodes is enforced and dot will select one. If it is set, the boolean specifies which terminal
+     * the leftmost one should be
      * @param conf The presentation parameters like shapes and distances
      */
     void dump_dot_readable(const Cudd &mgr,
@@ -41,6 +45,7 @@ namespace abo::util {
                            std::ostream &output,
                            const std::vector<std::string> &function_names = std::vector<std::string>(),
                            const std::vector<std::string> &variable_names = std::vector<std::string>(),
+                           const std::optional<bool> left_terminal = std::optional<bool>{},
                            DotPresentationConfig conf = DotPresentationConfig{});
 
     /**
@@ -48,11 +53,14 @@ namespace abo::util {
      * is more readable than the Cudd variant as no inverted edges are used. The corresponding variable is used as a nodes text
      * @param mgr The BDD object manager
      * @param bdd The function to show in the dot representation
+     * @param output The stream to write the result to
      * @param function_names The names of the functions. Will be default populated to f_i for the i'th function
      * if an empty vector is given. Must always either be exactly the same length as bdds or empty
      * @param variable_names The names of the variables used in the BDD. It will be default populated to x_i
      * for the i'th variable if an empty vector is given. Must be either empty or containt names for all used variables
-     * @param output The stream to write the result to
+     * @param left_terminal Whether or not and how the terminal nodes should be arranged. If the optional is empty,
+     * no ordering on the terminal nodes is enforced and dot will select one. If it is set, the boolean specifies which terminal
+     * the leftmost one should be
      * @param conf The presentation parameters like shapes and distances
      */
     void dump_dot_readable(const Cudd &mgr,
@@ -60,6 +68,7 @@ namespace abo::util {
                            std::ostream &output,
                            const std::vector<std::string> &function_names = std::vector<std::string>(),
                            const std::vector<std::string> &variable_names = std::vector<std::string>(),
+                           const std::optional<bool> left_terminal = std::optional<bool>{},
                            DotPresentationConfig conf = DotPresentationConfig{});
 
     /**
@@ -67,11 +76,14 @@ namespace abo::util {
      * is more readable than the Cudd variant as no inverted edges are used. The corresponding variable is used as a nodes text
      * @param mgr The BDD object manager
      * @param bdds The functions to print to the dot file
+     * @param filename The name of the file to output the result to. Must be writable
      * @param function_names The names of the functions. Will be default populated to f_i for the i'th function
      * if an empty vector is given. Must always either be exactly the same length as bdds or empty
      * @param variable_names The names of the variables used in the BDD. It will be default populated to x_i
      * for the i'th variable if an empty vector is given. Must be either empty or containt names for all used variables
-     * @param filename The name of the file to output the result to. Must be writable
+     * @param left_terminal Whether or not and how the terminal nodes should be arranged. If the optional is empty,
+     * no ordering on the terminal nodes is enforced and dot will select one. If it is set, the boolean specifies which terminal
+     * the leftmost one should be
      * @param conf The presentation parameters like shapes and distances
      */
     void dump_dot_readable_to_file(const Cudd &mgr, const
@@ -79,26 +91,31 @@ namespace abo::util {
                                    std::string filename,
                                    const std::vector<std::string> &function_names = std::vector<std::string>(),
                                    const std::vector<std::string> &variable_names = std::vector<std::string>(),
+                                   const std::optional<bool> left_terminal = std::optional<bool>{},
                                    DotPresentationConfig conf = DotPresentationConfig{});
 
 
     /**
-    * @brief Dump the given BDD forest to a file that can be given to dot. The graph created by this function
-    * is more readable than the Cudd variant as no inverted edges are used. The corresponding variable is used as a nodes text
-    * @param mgr The BDD object manager
-    * @param bdds The function to print to the dot file
-    * @param function_names The names of the functions. Will be default populated to f_i for the i'th function
-    * if an empty vector is given. Must always either be exactly the same length as bdds or empty
-    * @param variable_names The names of the variables used in the BDD. It will be default populated to x_i
+     * @brief Dump the given BDD forest to a file that can be given to dot. The graph created by this function
+     * is more readable than the Cudd variant as no inverted edges are used. The corresponding variable is used as a nodes text
+     * @param mgr The BDD object manager
+     * @param bdds The function to print to the dot file
+     * @param filename The name of the file to output the result to. Must be writable
+     * @param function_names The names of the functions. Will be default populated to f_i for the i'th function
+     * if an empty vector is given. Must always either be exactly the same length as bdds or empty
+     * @param variable_names The names of the variables used in the BDD. It will be default populated to x_i
      * for the i'th variable if an empty vector is given. Must be either empty or containt names for all used variables
-    * @param filename The name of the file to output the result to. Must be writable
-    * @param conf The presentation parameters like shapes and distances
-    */
+     * @param left_terminal Whether or not and how the terminal nodes should be arranged. If the optional is empty,
+     * no ordering on the terminal nodes is enforced and dot will select one. If it is set, the boolean specifies which terminal
+     * the leftmost one should be
+     * @param conf The presentation parameters like shapes and distances
+     */
     void dump_dot_readable_to_file(const Cudd &mgr,
                                    const BDD &bdd,
                                    std::string filename,
                                    const std::vector<std::string> &function_names = std::vector<std::string>(),
                                    const std::vector<std::string> &variable_names = std::vector<std::string>(),
+                                   const std::optional<bool> left_terminal = std::optional<bool>{},
                                    DotPresentationConfig conf = DotPresentationConfig{});
 }
 
