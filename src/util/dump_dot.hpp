@@ -35,6 +35,7 @@ namespace abo::util {
      * if an empty vector is given. Must always either be exactly the same length as bdds or empty
      * @param variable_names The names of the variables used in the BDD. It will be default populated to x_i
      * for the i'th variable if an empty vector is given. Must be either empty or containt names for all used variables
+     * @param enforce_function_order Whether or not to enforce the order of function from left to right in which they occur in the input
      * @param left_terminal Whether or not and how the terminal nodes should be arranged. If the optional is empty,
      * no ordering on the terminal nodes is enforced and dot will select one. If it is set, the boolean specifies which terminal
      * the leftmost one should be
@@ -45,6 +46,7 @@ namespace abo::util {
                            std::ostream &output,
                            const std::vector<std::string> &function_names = std::vector<std::string>(),
                            const std::vector<std::string> &variable_names = std::vector<std::string>(),
+                           const bool enforce_function_order = true,
                            const std::optional<bool> left_terminal = std::optional<bool>{},
                            DotPresentationConfig conf = DotPresentationConfig{});
 
@@ -81,6 +83,7 @@ namespace abo::util {
      * if an empty vector is given. Must always either be exactly the same length as bdds or empty
      * @param variable_names The names of the variables used in the BDD. It will be default populated to x_i
      * for the i'th variable if an empty vector is given. Must be either empty or containt names for all used variables
+     * @param enforce_function_order Whether or not to enforce the order of function from left to right in which they occur in the input
      * @param left_terminal Whether or not and how the terminal nodes should be arranged. If the optional is empty,
      * no ordering on the terminal nodes is enforced and dot will select one. If it is set, the boolean specifies which terminal
      * the leftmost one should be
@@ -91,6 +94,7 @@ namespace abo::util {
                                    std::string filename,
                                    const std::vector<std::string> &function_names = std::vector<std::string>(),
                                    const std::vector<std::string> &variable_names = std::vector<std::string>(),
+                                   const bool enforce_function_order = true,
                                    const std::optional<bool> left_terminal = std::optional<bool>{},
                                    DotPresentationConfig conf = DotPresentationConfig{});
 

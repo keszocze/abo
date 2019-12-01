@@ -41,6 +41,7 @@ void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
                        std::ostream &output,
                        const std::vector<std::string> &function_names,
                        const std::vector<std::string> &variable_names,
+                       const bool enforce_function_order,
                        const std::optional<bool> left_terminal,
                        DotPresentationConfig conf) {
 
@@ -149,21 +150,20 @@ void dump_dot_readable(const Cudd &mgr, const std::vector<BDD> &bdds,
 
     // manually arrange function names next to each other in the first layer of the dot file
     // this works as the edge style is "invis"
-    if (function_names_.size() > 1)
-    {
-        output<< std::endl; indent(); output << "# Arrange function name nodes in correct order" << std::endl;
-        indent();
-        for (std::size_t i = 0; i < function_names_.size(); i++) {
-            output << "\"" << function_names_[i] << "\""
-                   << (i < function_names_.size() - 1 ? " -> " : "");
+    if (enforce_function_order) {
+        if (function_names_.size() > 1) {
+            output<< std::endl; indent(); output << "# Arrange function name nodes in correct order" << std::endl;
+            indent();
+            for (std::size_t i = 0; i < function_names_.size(); i++) {
+                output << "\"" << function_names_[i] << "\""
+                       << (i < function_names_.size() - 1 ? " -> " : "");
+            }
+            output << std::endl;
         }
-        output << std::endl;
     }
 
     indentation--;
-
     indent();output << "}" << std::endl;
-    //------------------------------------------------------------------------------
 
 
     /*
@@ -288,13 +288,14 @@ void dump_dot_readable_to_file(const Cudd &mgr, const std::vector<BDD> &bdds,
                                std::string filename,
                                const std::vector<std::string> &function_names,
                                const std::vector<std::string> &variable_names,
+                               const bool enforce_function_order,
                                const std::optional<bool> left_terminal,
                                DotPresentationConfig conf) {
     std::ofstream outfile;
     outfile.open(filename, std::ios::out | std::ios::trunc);
 
     if (outfile.is_open()) {
-        dump_dot_readable(mgr, bdds, outfile, function_names, variable_names, left_terminal, conf);
+        dump_dot_readable(mgr, bdds, outfile, function_names, variable_names, enforce_function_order, left_terminal, conf);
         outfile.close();
     }
 }
@@ -304,7 +305,7 @@ void dump_dot_readable(const Cudd &mgr, const BDD &bdd, std::ostream &output,
                        const std::vector<std::string> &variable_names,
                        const std::optional<bool> left_terminal,
                        DotPresentationConfig conf) {
-    dump_dot_readable(mgr,std::vector<BDD>{bdd},output, function_names, variable_names, left_terminal, conf);
+    dump_dot_readable(mgr,std::vector<BDD>{bdd},output, function_names, variable_names, false, left_terminal, conf);
 }
 
 void dump_dot_readable_to_file(const Cudd &mgr, const BDD &bdd,
@@ -312,7 +313,7 @@ void dump_dot_readable_to_file(const Cudd &mgr, const BDD &bdd,
                                const std::vector<std::string> &variable_names,
                                const std::optional<bool> left_terminal,
                                DotPresentationConfig conf) {
-    dump_dot_readable_to_file(mgr, std::vector<BDD>{bdd}, filename, function_names, variable_names, left_terminal, conf);
+    dump_dot_readable_to_file(mgr, std::vector<BDD>{bdd}, filename, function_names, variable_names, false, left_terminal, conf);
 }
 
 } // namespace abo::util
