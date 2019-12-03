@@ -23,8 +23,8 @@ endif()
 include(BuildLorina)
 include(BuildCatch2)
 include(BuildBenchmark)
+include(BuildCudd)
 
-add_subdirectory(lib)
 add_subdirectory(src)
 add_subdirectory(benchmark)
 

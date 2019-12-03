@@ -1,3 +1,0 @@
-[submodule "lib/cudd"]
-	path = lib/cudd
-	url = https://github.com/keszocze/cudd

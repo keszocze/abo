@@ -1,0 +1,56 @@
+diff --git a/cplusplus/cuddObj.cc b/cplusplus/cuddObj.cc
+index 3525612..3d681c6 100644
+--- a/cplusplus/cuddObj.cc
++++ b/cplusplus/cuddObj.cc
+@@ -2250,6 +2250,11 @@ Cudd::DisableGarbageCollection() const
+ 
+ } // Cudd::DisableGarbageCollection
+ 
++void Cudd::CollectGarbage(void)
++{
++    Cudd_CollectGarbage(p->manager);
++}
++
+ 
+ bool
+ Cudd::DeadAreCounted() const
+diff --git a/cplusplus/cuddObj.hh b/cplusplus/cuddObj.hh
+index c9b02e8..82a11ec 100644
+--- a/cplusplus/cuddObj.hh
++++ b/cplusplus/cuddObj.hh
+@@ -580,6 +580,7 @@ public:
+     bool GarbageCollectionEnabled(void) const;
+     void EnableGarbageCollection(void) const;
+     void DisableGarbageCollection(void) const;
++    void CollectGarbage(void);
+     bool DeadAreCounted(void) const;
+     void TurnOnCountDead(void) const;
+     void TurnOffCountDead(void) const;
+diff --git a/cudd/cudd.h b/cudd/cudd.h
+index 7d6f10e..dd6a684 100644
+--- a/cudd/cudd.h
++++ b/cudd/cudd.h
+@@ -834,6 +834,7 @@ extern int Cudd_addRead(FILE *fp, DdManager *dd, DdNode **E, DdNode ***x, DdNode
+ extern int Cudd_bddRead(FILE *fp, DdManager *dd, DdNode **E, DdNode ***x, DdNode ***y, int *nx, int *ny, int *m, int *n, int bx, int sx, int by, int sy);
+ extern void Cudd_Ref(DdNode *n);
+ extern void Cudd_RecursiveDeref(DdManager *table, DdNode *n);
++extern void Cudd_CollectGarbage(DdManager *table);
+ extern void Cudd_IterDerefBdd(DdManager *table, DdNode *n);
+ extern void Cudd_DelayedDerefBdd(DdManager * table, DdNode * n);
+ extern void Cudd_RecursiveDerefZdd(DdManager *table, DdNode *n);
+diff --git a/cudd/cuddRef.c b/cudd/cuddRef.c
+index 53dee8e..a788a52 100644
+--- a/cudd/cuddRef.c
++++ b/cudd/cuddRef.c
+@@ -161,6 +161,11 @@ Cudd_RecursiveDeref(
+ 
+ } /* end of Cudd_RecursiveDeref */
+ 
++void Cudd_CollectGarbage(DdManager *table)
++{
++    cuddGarbageCollect(table, 1);
++}
++
+ 
+ /**
+   @brief Decreases the reference count of %BDD node n.
