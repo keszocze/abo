@@ -20,7 +20,7 @@ externalproject_get_property(project_benchmark install_dir)
 # cmake enforces that the include directory exists
 file(MAKE_DIRECTORY "${install_dir}/include/")
 set_target_properties(benchmark PROPERTIES
-    IMPORTED_LOCATION "${install_dir}/lib/libbenchmark.a"
+    IMPORTED_LOCATION "${install_dir}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}benchmark${CMAKE_STATIC_LIBRARY_SUFFIX}"
     INTERFACE_INCLUDE_DIRECTORIES "${install_dir}/include/"
 )
 find_package(Threads REQUIRED)

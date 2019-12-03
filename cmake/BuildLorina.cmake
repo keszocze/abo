@@ -7,13 +7,13 @@ ExternalProject_Add(project_lorina
     INSTALL_COMMAND cmake -E echo "Skipping install step."
 )
 
-externalproject_get_property(project_lorina install_dir)
+externalproject_get_property(project_lorina source_dir)
 
 add_library(lorina INTERFACE)
 add_dependencies(lorina project_lorina)
 target_include_directories(lorina INTERFACE
-    "${install_dir}/src/project_lorina/include"
-    "${install_dir}/src/project_lorina/lib/fmt"
-    "${install_dir}/src/project_lorina/lib/rang"
+    "${source_dir}/include"
+    "${source_dir}/lib/fmt"
+    "${source_dir}/lib/rang"
 )
 target_compile_definitions(lorina INTERFACE FMT_HEADER_ONLY)
