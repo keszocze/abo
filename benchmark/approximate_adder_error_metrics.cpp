@@ -48,7 +48,7 @@ BENCHMARK(generate_adders)->Unit(benchmark::kMillisecond)->Apply([](auto *b) {
                 ->Args({metric, static_cast<int>(ApproximateAdder::GEAR), 8, 1, 2})
                 ->Args({metric, static_cast<int>(ApproximateAdder::GEAR), 8, 1, 3})
                 ->Args({metric, static_cast<int>(ApproximateAdder::GEAR), 8, 1, 4})
-                ->Args({metric, static_cast<int>(ApproximateAdder::GEAR), 8, 1, 4})
+                ->Args({metric, static_cast<int>(ApproximateAdder::GEAR), 8, 1, 5})
                 ->Args({metric, static_cast<int>(ApproximateAdder::GEAR), 8, 2, 2})
                 ->Args({metric, static_cast<int>(ApproximateAdder::GEAR), 8, 2, 4});
     }
