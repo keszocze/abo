@@ -2,7 +2,6 @@
 #include <cudd/cplusplus/cuddObj.hh>
 
 #include "approximation_operators.hpp"
-#include "cudd_helpers.hpp"
 #include "benchmark_util.hpp"
 
 using namespace abo::benchmark;

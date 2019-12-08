@@ -13,9 +13,7 @@ target_link_libraries(benchmark_approximate_adder
 add_executable(benchmark_iscas_85 iscas85.cpp)
 
 target_link_libraries(benchmark_iscas_85
-        PRIVATE bdd_examples
         PRIVATE benchmark
-        PRIVATE abo_util
         PRIVATE approximation_operators
         PRIVATE benchmark_util
 )
@@ -23,8 +21,7 @@ target_link_libraries(benchmark_iscas_85
 add_executable(benchmark_approximation_operators operators.cpp)
 
 target_link_libraries(benchmark_approximation_operators
-        PRIVATE aig_parser
-        PRIVATE error_metrics
+        PRIVATE benchmark_util
         PRIVATE benchmark
         PRIVATE approximation_operators
 )
@@ -43,9 +40,7 @@ add_executable(benchmark_average_case_error average_case_error.cpp)
 
 target_link_libraries(benchmark_average_case_error
         PRIVATE approximation_operators
-        PRIVATE error_metrics
         PRIVATE benchmark
-        PRIVATE abo_util
         PRIVATE benchmark_util
 )
 
@@ -53,7 +48,6 @@ add_executable(benchmark_acr_approx acr_approx.cpp)
 
 target_link_libraries(benchmark_acr_approx
         PRIVATE bdd_examples
-        PRIVATE error_metrics
         PRIVATE benchmark
         PRIVATE benchmark_util
 )
