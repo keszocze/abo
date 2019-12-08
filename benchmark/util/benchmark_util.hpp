@@ -35,6 +35,18 @@ namespace abo::benchmark {
 
     std::vector<BDD> load_iscas_85_file(Cudd &mgr, ISCAS85File file);
 
+
+    enum class ApproximateAdder {
+        ACA1,
+        ACA2,
+        GDA,
+        GEAR
+    };
+
+    std::string approximate_adder_name(ApproximateAdder adder, std::size_t bits, std::size_t par1, std::size_t par2 = 0);
+
+    std::vector<BDD> get_approximate_adder(Cudd &mgr, ApproximateAdder adder, std::size_t bits, std::size_t par1, std::size_t par2 = 0);
+
 }
 
 #endif // BENCHMARK_UTIL_H

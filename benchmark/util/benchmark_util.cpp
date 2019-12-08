@@ -9,6 +9,7 @@
 #include "average_case_relative_error.hpp"
 
 #include "aig_parser.hpp"
+#include "approximate_adders.hpp"
 
 namespace abo::benchmark {
 
@@ -82,5 +83,36 @@ std::vector<BDD> load_iscas_85_file(Cudd &mgr, ISCAS85File file) {
 
     return parser.get_outputs();
 }
+
+std::string approximate_adder_name(ApproximateAdder adder, std::size_t bits, std::size_t par1, std::size_t par2) {
+    switch(adder) {
+    case ApproximateAdder::ACA1:
+        return "ACA_1_N" + std::to_string(bits) + "_Q" + std::to_string(par1);
+    case ApproximateAdder::ACA2:
+        return "ACA_2_N" + std::to_string(bits) + "_Q" + std::to_string(par1);
+    case ApproximateAdder::GDA:
+        return "GDA_St_N" + std::to_string(bits) + "_M" + std::to_string(par1) + "_P" + std::to_string(par2);
+    case ApproximateAdder::GEAR:
+        return "GeAr_N" + std::to_string(bits) + "_R" + std::to_string(par1) + "_P" + std::to_string(par2);
+    }
+
+    throw new std::logic_error("encountered unknown approximate adder");
+}
+
+std::vector<BDD> get_approximate_adder(Cudd &mgr, ApproximateAdder adder, std::size_t bits, std::size_t par1, std::size_t par2) {
+    switch(adder) {
+    case ApproximateAdder::ACA1:
+        return abo::example_bdds::almost_correct_adder_1(mgr, bits, par1);
+    case ApproximateAdder::ACA2:
+        return abo::example_bdds::almost_correct_adder_2(mgr, bits, par1);
+    case ApproximateAdder::GDA:
+        return abo::example_bdds::gracefully_degrading_adder(mgr, bits, par1, par2);
+    case ApproximateAdder::GEAR:
+        return abo::example_bdds::generic_accuracy_reconfigurable_adder(mgr, bits, par1, par2);
+    }
+
+    throw new std::logic_error("encountered unknown approximate adder");
+}
+
 
 }
