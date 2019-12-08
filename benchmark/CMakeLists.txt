@@ -49,6 +49,15 @@ target_link_libraries(benchmark_average_case_error
         PRIVATE benchmark_util
 )
 
+add_executable(benchmark_acr_approx acr_approx.cpp)
+
+target_link_libraries(benchmark_acr_approx
+        PRIVATE bdd_examples
+        PRIVATE error_metrics
+        PRIVATE benchmark
+        PRIVATE benchmark_util
+)
+
 # copies the iscas dataset used for benchmarking into the build folder so that they are actually found
 add_custom_command(
         TARGET benchmark_iscas_85 POST_BUILD
