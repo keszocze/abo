@@ -8,6 +8,8 @@
 #include "worst_case_relative_error.hpp"
 #include "average_case_relative_error.hpp"
 
+#include "aig_parser.hpp"
+
 namespace abo::benchmark {
 
 std::string error_metric_name(ErrorMetric metric) {
@@ -57,6 +59,28 @@ double compute_error_metric(const Cudd &mgr, const std::vector<BDD> &original, c
     }
 
     throw new std::logic_error("error metric not handled for computation");
+}
+
+std::string iscas_85_filename_by_id(ISCAS85File file) {
+    const std::vector<std::string> files = {"c17.aig", "c432.aig", "c499.aig", "c880.aig", "c1355.aig", "c1908.aig",
+                                            "c2670.aig", "c3540.aig", "c5315.aig", "c6288.aig", "c7552.aig"};
+
+    std::size_t file_id = static_cast<std::size_t>(file);
+    if (file_id >= files.size()) {
+        throw new std::logic_error("Unknown ISCAS 85 file number!");
+    }
+
+    return files[file_id];
+}
+
+std::vector<BDD> load_iscas_85_file(Cudd &mgr, ISCAS85File file) {
+
+    std::string filename = iscas_85_filename_by_id(file);
+
+    abo::parser::aig_parser parser(mgr);
+    lorina::read_aiger("iscas85/" + filename, parser);
+
+    return parser.get_outputs();
 }
 
 }

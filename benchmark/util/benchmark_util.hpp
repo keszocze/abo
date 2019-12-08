@@ -24,6 +24,17 @@ namespace abo::benchmark {
 
     double compute_error_metric(const Cudd &mgr, const std::vector<BDD> &original, const std::vector<BDD> &approx, ErrorMetric metric);
 
+
+    enum class ISCAS85File {
+        C17 = 0, C432 = 1, C499 = 2, C880 = 3,
+        C1355 = 4, C1908 = 5, C2670 = 6, C3540 = 7,
+        C5315 = 8, C6288 = 9, C7552 = 10
+    };
+
+    std::string iscas_85_filename_by_id(ISCAS85File file);
+
+    std::vector<BDD> load_iscas_85_file(Cudd &mgr, ISCAS85File file);
+
 }
 
 #endif // BENCHMARK_UTIL_H

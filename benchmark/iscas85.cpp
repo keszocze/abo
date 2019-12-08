@@ -1,19 +1,11 @@
 #include <benchmark/benchmark.h>
 #include <cudd/cplusplus/cuddObj.hh>
 
-#include "aig_parser.hpp"
 #include "approximation_operators.hpp"
 #include "cudd_helpers.hpp"
 #include "benchmark_util.hpp"
 
 using namespace abo::benchmark;
-
-
-enum TestFile {
-    C17 = 0, C432 = 1, C499 = 2, C880 = 3,
-    C1355 = 4, C1908 = 5, C2670 = 6, C3540 = 7,
-    C5315 = 8, C6288 = 9, C7552 = 10
-};
 
 enum RoundingOperation {
     ROUND_UP,
@@ -24,15 +16,9 @@ enum RoundingOperation {
 // input: error metric, test file, rounding operation, rounding level
 static void benchmark_iscas85(benchmark::State& state) {
 
-    const std::vector<std::string> files = {"c17.aig", "c432.aig", "c499.aig", "c880.aig", "c1355.aig", "c1908.aig",
-                                            "c2670.aig", "c3540.aig", "c5315.aig", "c6288.aig", "c7552.aig"};
-
-    if (state.range(1) >= files.size()) {
-        throw new std::logic_error("Unknown ISCAS 85 file number!");
-    }
-
+    const ISCAS85File file_id = static_cast<ISCAS85File>(state.range(1));
     const ErrorMetric metric = static_cast<ErrorMetric>(state.range(0));
-    const std::string file = files[static_cast<std::size_t>(state.range(1))];
+    const std::string file = iscas_85_filename_by_id(file_id);
 
     std::string error_metric_name = abo::benchmark::error_metric_name(metric);
     std::string rounding_text;
@@ -46,10 +32,7 @@ static void benchmark_iscas85(benchmark::State& state) {
         state.PauseTiming();
         Cudd mgr(64); // the exact number does not matter, it will be expanded if necessary
 
-        abo::parser::aig_parser parser(mgr);
-        lorina::read_aiger("iscas85/" + file, parser);
-
-        std::vector<BDD> original = parser.get_outputs();
+        std::vector<BDD> original = load_iscas_85_file(mgr, file_id);
 
         std::vector<BDD> rounded;
         rounded.reserve(original.size());
@@ -77,26 +60,26 @@ BENCHMARK(benchmark_iscas85)->Unit(benchmark::kMillisecond)->Apply([](auto *b) {
     std::vector<ErrorMetric> metrics = {ErrorMetric::ERROR_RATE, ErrorMetric::WORST_CASE, ErrorMetric::AVERAGE_CASE};
     for (auto metric_ : metrics) {
         int metric = static_cast<int>(metric_);
-        b = b->Args({metric, C432, ROUND_DOWN, 34})
-                ->Args({metric, C432, ROUND_UP, 34})
-                ->Args({metric, C432, ROUND_FULL, 34})
-                ->Args({metric, C499, ROUND_DOWN, 39})
-                ->Args({metric, C499, ROUND_DOWN, 35})
-                ->Args({metric, C499, ROUND_UP, 39})
-                ->Args({metric, C499, ROUND_UP, 35})
-                ->Args({metric, C499, ROUND_FULL, 39})
-                ->Args({metric, C499, ROUND_FULL, 35})
-                ->Args({metric, C1355, ROUND_DOWN, 39})
-                ->Args({metric, C1355, ROUND_UP, 39})
-                ->Args({metric, C1908, ROUND_DOWN, 31})
-                ->Args({metric, C1908, ROUND_DOWN, 26})
-                ->Args({metric, C1908, ROUND_DOWN, 22})
-                ->Args({metric, C1908, ROUND_UP, 31})
-                ->Args({metric, C1908, ROUND_UP, 26})
-                ->Args({metric, C1908, ROUND_UP, 22})
-                ->Args({metric, C1908, ROUND_FULL, 31})
-                ->Args({metric, C1908, ROUND_FULL, 26})
-                ->Args({metric, C1908, ROUND_FULL, 22});
+        b = b->Args({metric, static_cast<int>(ISCAS85File::C432), ROUND_DOWN, 34})
+                ->Args({metric, static_cast<int>(ISCAS85File::C432), ROUND_UP, 34})
+                ->Args({metric, static_cast<int>(ISCAS85File::C432), ROUND_FULL, 34})
+                ->Args({metric, static_cast<int>(ISCAS85File::C499), ROUND_DOWN, 39})
+                ->Args({metric, static_cast<int>(ISCAS85File::C499), ROUND_DOWN, 35})
+                ->Args({metric, static_cast<int>(ISCAS85File::C499), ROUND_UP, 39})
+                ->Args({metric, static_cast<int>(ISCAS85File::C499), ROUND_UP, 35})
+                ->Args({metric, static_cast<int>(ISCAS85File::C499), ROUND_FULL, 39})
+                ->Args({metric, static_cast<int>(ISCAS85File::C499), ROUND_FULL, 35})
+                ->Args({metric, static_cast<int>(ISCAS85File::C1355), ROUND_DOWN, 39})
+                ->Args({metric, static_cast<int>(ISCAS85File::C1355), ROUND_UP, 39})
+                ->Args({metric, static_cast<int>(ISCAS85File::C1908), ROUND_DOWN, 31})
+                ->Args({metric, static_cast<int>(ISCAS85File::C1908), ROUND_DOWN, 26})
+                ->Args({metric, static_cast<int>(ISCAS85File::C1908), ROUND_DOWN, 22})
+                ->Args({metric, static_cast<int>(ISCAS85File::C1908), ROUND_UP, 31})
+                ->Args({metric, static_cast<int>(ISCAS85File::C1908), ROUND_UP, 26})
+                ->Args({metric, static_cast<int>(ISCAS85File::C1908), ROUND_UP, 22})
+                ->Args({metric, static_cast<int>(ISCAS85File::C1908), ROUND_FULL, 31})
+                ->Args({metric, static_cast<int>(ISCAS85File::C1908), ROUND_FULL, 26})
+                ->Args({metric, static_cast<int>(ISCAS85File::C1908), ROUND_FULL, 22});
     }
 });
 
