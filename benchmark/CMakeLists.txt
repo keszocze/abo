@@ -29,6 +29,16 @@ target_link_libraries(benchmark_approximation_operators
         PRIVATE approximation_operators
 )
 
+add_executable(benchmark_ace_steps ace_steps.cpp)
+
+target_link_libraries(benchmark_ace_steps
+        PRIVATE error_metrics
+        PRIVATE benchmark
+        PRIVATE abo_util
+        PRIVATE benchmark_util
+        PRIVATE approximation_operators
+)
+
 add_executable(benchmark_average_case_error average_case_error.cpp)
 
 target_link_libraries(benchmark_average_case_error
