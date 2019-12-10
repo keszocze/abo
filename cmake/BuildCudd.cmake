@@ -4,10 +4,9 @@ set(CUDD_PATCH_FILE ${CMAKE_CURRENT_LIST_DIR}/public_gc.patch)
 
 ExternalProject_Add(project_cudd
     GIT_REPOSITORY https://github.com/keszocze/cudd.git
-    GIT_TAG cmake
+    GIT_TAG c71b5fe1147d036bc37e584c99bd3ba616c22064
     INSTALL_COMMAND cmake -E echo "Skipping install step."
     SOURCE_DIR "${CMAKE_CURRENT_BINARY_DIR}/project_cudd-prefix/src/cudd"
-    PATCH_COMMAND cat ${CUDD_PATCH_FILE} | patch -p1
     CMAKE_ARGS
         -DCUDD_BUILD_TESTS:BOOL=FALSE
         -DCMAKE_CXX_COMPILER:PATH=${CMAKE_CXX_COMPILER}
