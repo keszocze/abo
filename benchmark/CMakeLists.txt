@@ -1,6 +1,5 @@
 add_subdirectory(util)
 
-add_compile_options(-isystem -lpthread) # required by the benchmark library
 
 add_executable(benchmark_approximate_adder approximate_adder_error_metrics.cpp)
 

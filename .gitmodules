@@ -1,6 +1,0 @@
-[submodule "lib/cudd"]
-	path = lib/cudd
-	url = https://github.com/keszocze/cudd
-[submodule "lib/benchmark"]
-	path = lib/benchmark
-	url = https://github.com/google/benchmark.git
