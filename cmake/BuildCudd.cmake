@@ -1,7 +1,5 @@
 include(ExternalProject)
 
-set(CUDD_PATCH_FILE ${CMAKE_CURRENT_LIST_DIR}/public_gc.patch)
-
 ExternalProject_Add(project_cudd
     GIT_REPOSITORY https://github.com/keszocze/cudd.git
     GIT_TAG c71b5fe1147d036bc37e584c99bd3ba616c22064
