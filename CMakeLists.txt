@@ -4,6 +4,8 @@ project(abo)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+
 option(BUILD_TESTS "Build tests" ON)
 
 if(UNIX)
@@ -18,8 +20,11 @@ if(UNIX)
     endforeach()
 endif()
 
+include(BuildLorina)
+include(BuildCatch2)
+include(BuildBenchmark)
+include(BuildCudd)
 
-add_subdirectory(lib)
 add_subdirectory(src)
 add_subdirectory(benchmark)
 
