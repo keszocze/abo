@@ -8,9 +8,6 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 option(BUILD_TESTS "Build tests" ON)
 
-
-add_compile_options("-v")
-
 if(UNIX)
     # show quite some warnings (but remove some intentionally)
     include(CheckCXXCompilerFlag)

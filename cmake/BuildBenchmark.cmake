@@ -10,7 +10,7 @@ ExternalProject_Add(project_benchmark
         -DBENCHMARK_ENABLE_TESTING:BOOL=OFF
         -DBENCHMARK_ENABLE_INSTALL:BOOL=ON
         -DCMAKE_BUILD_TYPE=Release
-        -DBENCHMARK_ENABLE_LTO=true
+        -DBENCHMARK_ENABLE_LTO=false
 )
 
 add_library(benchmark UNKNOWN IMPORTED)
