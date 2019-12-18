@@ -62,7 +62,7 @@ namespace abo::minimization {
 
         auto before = std::chrono::high_resolution_clock::now();
 
-        auto buckets = bucket_greedy_minimize(mgr, function, metrics, operator_functions);
+        auto buckets = bucket_greedy_minimize(mgr, function, metrics, operator_functions, info.populate_all_buckets);
 
         auto after = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> minimization_time = std::chrono::duration_cast<std::chrono::duration<double>>(after - before);

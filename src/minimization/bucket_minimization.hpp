@@ -63,12 +63,14 @@ namespace abo::minimization {
         std::vector<BDD> function;
         std::size_t bdd_size;
         std::vector<double> metric_values;
+        std::vector<bool> possible_operators;
     };
 
     std::vector<Bucket> bucket_greedy_minimize(Cudd &mgr,
                            const std::vector<BDD> &function,
                            const std::vector<MetricDimension> &metrics,
-                           const std::vector<OperatorFunction> &operators);
+                           const std::vector<OperatorFunction> &operators,
+                           const bool populate_all_buckets);
 
 }
 

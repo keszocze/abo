@@ -35,6 +35,9 @@ namespace abo::minimization {
         OperatorConstructionMode operator_mode = OperatorConstructionMode::SINGLE_BDD;
         // only used when operator_mode == RANDOM: the number of operator functions to construct
         std::size_t num_operator_functions;
+        // whether or not the algorithm should populate all buckets with a higher node count (if the error metrics match) or only the exactly matching one
+        // the algorithm generally performs slightly better when only the exact bucket is populated
+        bool populate_all_buckets = false;
     };
 
     struct MinimizationResult {

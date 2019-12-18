@@ -43,7 +43,8 @@ namespace abo::minimization {
     std::vector<Bucket> bucket_greedy_minimize(Cudd &mgr,
                        const std::vector<BDD> &function,
                        const std::vector<MetricDimension> &metrics,
-                       const std::vector<OperatorFunction> &operators) {
+                       const std::vector<OperatorFunction> &operators,
+                       const bool populate_all_buckets) {
 
         std::size_t num_metrics = metrics.size();
         if (num_metrics == 0) {
@@ -56,7 +57,8 @@ namespace abo::minimization {
         }
 
         std::size_t total_buckets = std::accumulate(bucket_grid_size.begin(), bucket_grid_size.end(), 1UL, std::multiplies<std::size_t>());
-        std::vector<Bucket> buckets(total_buckets, {function, static_cast<std::size_t>(mgr.nodeCount(function)), {}});
+        std::vector<Bucket> buckets(total_buckets, {function, static_cast<std::size_t>(mgr.nodeCount(function)), std::vector<double>(metrics.size(), 0),
+                                                    std::vector<bool>(operators.size(), true)});
 
         std::set<std::vector<std::size_t>> test;
         test.insert(create_multi_dim_index(0, bucket_grid_size));
@@ -72,14 +74,24 @@ namespace abo::minimization {
 
             // a copy is necessary as the current bucket might get overwritten
             const std::vector<BDD> bucket_function = buckets[current_index].function;
+            std::vector<bool> bucket_possible_operators = buckets[current_index].possible_operators;
+            std::map<std::size_t, std::size_t> replace_possible_operators;
 
-            for (const auto &op : operators) {
+            for (std::size_t opnum = 0;opnum<operators.size();opnum++) {
+                const auto op = operators[opnum];
+
+                if (!bucket_possible_operators[opnum]) {
+                    continue;
+                }
 
                 std::vector<BDD> modified = bucket_function;
                 op(mgr, modified);
 
                 std::size_t nodes = static_cast<std::size_t>(mgr.nodeCount(modified));
                 if (nodes >= buckets[current_index].bdd_size) {
+                    if (nodes > buckets[current_index].bdd_size * 3 / 2) {
+                        bucket_possible_operators[opnum] = false;
+                    }
                     continue;
                 }
 
@@ -92,6 +104,7 @@ namespace abo::minimization {
                     std::size_t dimension_index = std::size_t(bucket_grid_size[i] * error / metrics[i].bound);
                     if (dimension_index >= bucket_grid_size[i]) {
                         better = false;
+                        bucket_possible_operators[opnum] = false;
                         break;
                     }
                     new_bucket_index[i] = dimension_index;
@@ -108,7 +121,12 @@ namespace abo::minimization {
                 }
 
                 // update buckets with new function
-                for (std::size_t i = reduce_multi_dim_index(new_bucket_index, bucket_grid_size);i<buckets.size();i++) {
+                std::size_t reduced_bucket_start = reduce_multi_dim_index(new_bucket_index, bucket_grid_size);
+                std::size_t bucket_end = populate_all_buckets ? buckets.size() : reduced_bucket_start + 1;
+                for (std::size_t i = reduced_bucket_start;i<bucket_end;i++) {
+                    if (buckets[i].bdd_size <= nodes) {
+                        continue;
+                    }
                     auto index = create_multi_dim_index(i, bucket_grid_size);
                     bool invalid = false;
                     for (std::size_t b = 0;b<num_metrics;b++) {
@@ -120,11 +138,18 @@ namespace abo::minimization {
                     if (invalid) {
                         continue;
                     }
+                    replace_possible_operators[i] = opnum;
                     buckets[i].function = modified;
                     buckets[i].bdd_size = nodes;
                     buckets[i].metric_values = metric_values;
                     test.insert(index);
                 }
+            }
+
+            // only insert this after the operator loop to have the biggest set of operators removed
+            for (auto [bucket, op] : replace_possible_operators) {
+                buckets[bucket].possible_operators = bucket_possible_operators;
+                buckets[bucket].possible_operators[op] = false;
             }
         }
 
