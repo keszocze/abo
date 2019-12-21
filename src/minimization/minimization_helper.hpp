@@ -4,6 +4,7 @@
 #include "bucket_minimization.hpp"
 
 #include <vector>
+#include <string>
 
 namespace abo::minimization {
 
@@ -54,6 +55,8 @@ namespace abo::minimization {
     };
 
     MinimizationResult bucket_minimize_helper(const MinimizationInputInfo &info);
+
+    std::string format_time(double milliseconds);
 
 }
 

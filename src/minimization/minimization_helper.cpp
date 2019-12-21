@@ -77,4 +77,14 @@ namespace abo::minimization {
         return result;
     }
 
+    std::string format_time(double milliseconds) {
+        if (milliseconds < 1000.0) {
+            return std::to_string(static_cast<int>(milliseconds)) + " ms";
+        } else if (milliseconds < 300000.0) {
+            return std::to_string(static_cast<int>(milliseconds / 1000.0)) + " s";
+        } else {
+            return std::to_string(static_cast<int>(milliseconds / 60000.0)) + " m";
+        }
+    }
+
 }

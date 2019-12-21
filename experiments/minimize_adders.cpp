@@ -23,7 +23,7 @@ int main() {
 
         auto result = bucket_minimize_helper(info);
         cout <<result.original_size<<", "<<result.smallest_function.bdd_size<<", "<<result.smallest_function.metric_values[0]<<", "<<
-               result.smallest_function.metric_values[1]<<", "<<result.minimization_time<<endl;
+               result.smallest_function.metric_values[1]<<", "<<abo::minimization::format_time(result.minimization_time)<<endl;
 
         cout <<endl<<"Buckets:"<<endl;
         for (auto bucket : result.all_buckets) {
