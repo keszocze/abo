@@ -24,6 +24,7 @@ include(BuildLorina)
 include(BuildCatch2)
 include(BuildBenchmark)
 include(BuildCudd)
+include(BuildPagmo2)
 
 add_subdirectory(src)
 add_subdirectory(benchmark)
