@@ -75,6 +75,21 @@ namespace abo::operators {
         return BDD(mgr, node);
     }
 
+
+    BDD round_up(const Cudd &mgr, const BDD &bdd, unsigned int level_start, unsigned int level_end) {
+        std::map<DdNode *, DdNode *> round_map;
+        DdNode *node = remove_children_rec(mgr.getManager(), bdd.getNode(), level_start, level_end,
+                                           abo::util::count_minterms(bdd), round_map, false, true);
+        return BDD(mgr, node);
+    }
+
+    BDD round_down(const Cudd &mgr, const BDD &bdd, unsigned int level_start, unsigned int level_end) {
+        std::map<DdNode *, DdNode *> round_map;
+        DdNode *node = remove_children_rec(mgr.getManager(), bdd.getNode(), level_start, level_end,
+                                           abo::util::count_minterms(bdd), round_map, true, true);
+        return BDD(mgr, node);
+    }
+
     static DdNode *remove_children_rec(
             DdManager *const dd,
             DdNode *const node,
