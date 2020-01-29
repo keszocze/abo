@@ -8,6 +8,7 @@
 #include <vector>
 #include <string>
 #include <iterator>
+#include <sstream>
 
 
 namespace abo::util {
