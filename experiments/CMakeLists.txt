@@ -44,3 +44,13 @@ target_link_libraries(nsga2_adders
     bucket_minimization
     bdd_examples
 )
+
+# copies the script to run all experiments into build folder
+add_custom_command(
+        TARGET minimize_iscas POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+        ${CMAKE_SOURCE_DIR}/run_experiments.sh
+        ${CMAKE_BINARY_DIR}/run_experiments.sh
+        COMMENT "Copying run experiments script"
+        VERBATIM
+)
