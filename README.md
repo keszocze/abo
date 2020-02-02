@@ -2,11 +2,17 @@
 
 
 
-# How to reproduce the results
+## How to reproduce the results
+Build the code using cmake
+* ```mkdir build && cd build```
+* ```cmake ..```
+* ```make```
+
+To reproduce the results, run the script 'run_experiments.sh' in the build folder.
+For each experiment, one text file in the folder 'result' will be created.
 
 
-
-# How to cite
+## How to cite
 
 If you are using *abo*, please cite the following paper:
 
@@ -23,7 +29,7 @@ You can use the following bibtex code:
 }
 ```
 
-# References
+## References
 
 **[Soeken2016]** 
 Soeken, M., Große, D., Chandrasekharan, A., Drechsler, R., 2016. BDD minimization for approximate computing, in: Asia and South Pacific Design Automation Conference. Macau, China. https://doi.org/10.1109/ASPDAC.2016.7428057
