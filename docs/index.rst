@@ -35,3 +35,36 @@ Indices and tables
 
 * :ref:`genindex`
 * :ref:`search`
+
+Functionality
+=============
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Approximation Operators
+
+   operators
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Error Metrics
+
+   metrics
+   
+.. toctree::
+   :maxdepth: 2
+   :caption: Utility Functions
+
+   util
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Parsing
+
+   parsing
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Example BDDs
+
+   example_bdds
