@@ -2,8 +2,7 @@ find_package(Doxygen REQUIRED)
 find_package(Sphinx REQUIRED)
 
 # Find all the public headers for dependencies
-get_target_property(DOC_HEADERS_DIR approximation_operators INTERFACE_INCLUDE_DIRECTORIES)
-file(GLOB_RECURSE DOC_PUBLIC_HEADERS ${DOC_HEADERS_DIR}/*.hpp)
+file(GLOB_RECURSE DOC_PUBLIC_HEADERS ${PROJECT_SOURCE_DIR}/src/*.hpp)
 
 set(DOXYGEN_INPUT_DIR ${PROJECT_SOURCE_DIR}/src)
 set(DOXYGEN_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/doxygen)
