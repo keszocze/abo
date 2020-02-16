@@ -3,6 +3,9 @@
 
 #include <cudd/cplusplus/cuddObj.hh>
 
+/**
+ * @brief Namespace containing all approximation operators provided by abo
+ */
 namespace abo::operators {
 
     /**
