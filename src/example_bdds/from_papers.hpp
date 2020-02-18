@@ -21,7 +21,7 @@ namespace abo::example_bdds {
  *
  *
  * @param mgr The manager used for creating the BDD
- * @return Vectr of BDDs representing the function in Example 1 of the aforementioned paper
+ * @return Vector of BDDs representing the function in Example 1 of the aforementioned paper
  * @warning The method uses the first four bdd variables within the manager to create the function. The caller has to
  * make sure that this makes sense in hist context.
  */
@@ -40,7 +40,7 @@ namespace abo::example_bdds {
  *
  *
  * @param mgr The manager used for creating the BDD
- * @return Vectr of BDDs representing the function in Example 3 of the abovementioned paper
+ * @return Vectr of BDDs representing the function in Example 3 of the aforementioned paper
  * @warning The method uses the first two bdd variables within the manager to create the function. The caller has to
  * make sure that this makes sense in hist context.
  */
