@@ -47,8 +47,8 @@ namespace abo::util {
                            const std::vector<std::string> &function_names = std::vector<std::string>(),
                            const std::vector<std::string> &variable_names = std::vector<std::string>(),
                            const bool enforce_function_order = true,
-                           const std::optional<bool> left_terminal = std::optional<bool>{},
-                           DotPresentationConfig conf = DotPresentationConfig{});
+                           const std::optional<bool> left_terminal = std::optional<bool>(),
+                           DotPresentationConfig conf = DotPresentationConfig());
 
     /**
      * @brief Dump the given BDD forest as text that can be given to dot. The graph created by this function
@@ -70,8 +70,8 @@ namespace abo::util {
                            std::ostream &output,
                            const std::vector<std::string> &function_names = std::vector<std::string>(),
                            const std::vector<std::string> &variable_names = std::vector<std::string>(),
-                           const std::optional<bool> left_terminal = std::optional<bool>{},
-                           DotPresentationConfig conf = DotPresentationConfig{});
+                           const std::optional<bool> left_terminal = std::optional<bool>(),
+                           DotPresentationConfig conf = DotPresentationConfig());
 
     /**
      * @brief Dump the given BDD forest to a file that can be given to dot. The graph created by this function
@@ -95,8 +95,8 @@ namespace abo::util {
                                    const std::vector<std::string> &function_names = std::vector<std::string>(),
                                    const std::vector<std::string> &variable_names = std::vector<std::string>(),
                                    const bool enforce_function_order = true,
-                                   const std::optional<bool> left_terminal = std::optional<bool>{},
-                                   DotPresentationConfig conf = DotPresentationConfig{});
+                                   const std::optional<bool> left_terminal = std::optional<bool>(),
+                                   DotPresentationConfig conf = DotPresentationConfig());
 
 
     /**
@@ -119,8 +119,8 @@ namespace abo::util {
                                    std::string filename,
                                    const std::vector<std::string> &function_names = std::vector<std::string>(),
                                    const std::vector<std::string> &variable_names = std::vector<std::string>(),
-                                   const std::optional<bool> left_terminal = std::optional<bool>{},
-                                   DotPresentationConfig conf = DotPresentationConfig{});
+                                   const std::optional<bool> left_terminal = std::optional<bool>(),
+                                   DotPresentationConfig conf = DotPresentationConfig());
 }
 
 #endif // DUMP_DOT_H

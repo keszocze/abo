@@ -55,13 +55,13 @@ namespace abo::util {
     void dump_dot(
             const Cudd &mgr,
             const std::vector<BDD>& bdd,
-            const std::vector <std::string> &innames={},
-            const std::vector <std::string> &outnames={});
+            const std::vector <std::string> &innames=std::vector <std::string>(),
+            const std::vector <std::string> &outnames=std::vector <std::string>());
 
     void dump_dot(
             const Cudd &mgr,
             const BDD& bdd,
-            const std::vector<std::string>& inames={},
+            const std::vector<std::string>& inames=std::vector <std::string>(),
             const std::string& funname=std::string());
 
 
