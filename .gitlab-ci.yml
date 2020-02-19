@@ -25,7 +25,7 @@ variables:
         - mkdir -p build/bw_output
         - cd build
         - cmake -DCMAKE_CXX_COMPILER=$CXX ..
-        - /opt/sonar-build-wrapper/build-wrapper-linux-x86-64 --out-dir bw_output make -j 4 all
+        - /opt/sonar-build-wrapper/build-wrapper-linux-x86-64 --out-dir bw_output make -j 1 all
 
 compile_with_gcc:
     variables:
