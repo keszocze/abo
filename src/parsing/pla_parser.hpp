@@ -29,6 +29,7 @@ namespace abo::parser {
 
         virtual ~pla_parser() = default;
 
+    private:
         void on_number_of_inputs(std::size_t number_of_inputs) const override;
 
         void on_number_of_outputs(std::size_t number_of_outputs) const override;

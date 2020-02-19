@@ -40,6 +40,8 @@ namespace abo::parser {
 
         virtual ~aig_parser() = default;
 
+    private:
+
         virtual void on_header( std::size_t m, std::size_t i, std::size_t l, std::size_t o, std::size_t a ) const override;
 
         virtual void on_input( unsigned index, unsigned lit ) const override;
@@ -62,8 +64,6 @@ namespace abo::parser {
         virtual void on_fairness( unsigned index, unsigned lit ) const override;
 
         virtual void on_justice( unsigned index, const std::vector<unsigned>& lits ) const override;
-
-    private:
 
         const BDD & find_literal( unsigned literal ) const;
 
