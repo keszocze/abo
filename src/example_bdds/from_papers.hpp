@@ -2,8 +2,7 @@
 // Created by keszocze on 15.10.18.
 //
 
-#ifndef ABO_FROM_PAPERS_HPP
-#define ABO_FROM_PAPERS_HPP
+#pragma once
 
 #include <vector>
 #include <cudd/cplusplus/cuddObj.hh>
@@ -46,4 +45,3 @@ namespace abo::example_bdds {
  */
     std::vector<BDD> example3(Cudd &mgr);
 }
-#endif //ABO_FROM_PAPERS_HPP

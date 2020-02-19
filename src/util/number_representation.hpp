@@ -1,5 +1,4 @@
-#ifndef NUMBER_REPRESENTATION_HPP
-#define NUMBER_REPRESENTATION_HPP
+#pragma once
 
 namespace abo::util {
 
@@ -11,5 +10,3 @@ namespace abo::util {
     };
 
 }
-
-#endif // NUMBER_REPRESENTATION_HPP

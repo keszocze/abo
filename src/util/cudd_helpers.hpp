@@ -2,8 +2,7 @@
 // Created by keszocze on 27.09.18.
 //
 
-#ifndef ABO_CUDD_HELPERS_HPP
-#define ABO_CUDD_HELPERS_HPP
+#pragma once
 
 #include <vector>
 #include <string>
@@ -193,5 +192,3 @@ namespace abo::util {
     std::vector<BDD> bdd_divide(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &g, unsigned int extra_bits);
 
 }
-#endif //ABO_CUDD_HELPERS_HPP
-

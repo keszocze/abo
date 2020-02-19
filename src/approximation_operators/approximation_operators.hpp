@@ -1,5 +1,4 @@
-#ifndef ABO_APPROXIMATION_OPERATORS_HPP
-#define ABO_APPROXIMATION_OPERATORS_HPP
+#pragma once
 
 #include <cudd/cplusplus/cuddObj.hh>
 
@@ -54,6 +53,3 @@ namespace abo::operators {
     BDD round_best(const Cudd &mgr, const BDD &bdd, unsigned int level_start, unsigned int level_end);
 
 }
-
-#endif //ABO_APPROXIMATION_OPERATORS_HPP
-

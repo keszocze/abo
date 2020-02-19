@@ -1,5 +1,4 @@
-#ifndef DUMP_DOT_H
-#define DUMP_DOT_H
+#pragma once
 
 #include <cudd/cplusplus/cuddObj.hh>
 
@@ -122,5 +121,3 @@ namespace abo::util {
                                    const std::optional<bool> left_terminal = std::optional<bool>(),
                                    DotPresentationConfig conf = DotPresentationConfig());
 }
-
-#endif // DUMP_DOT_H
