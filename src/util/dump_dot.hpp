@@ -103,7 +103,7 @@ namespace abo::util {
      * @brief Dump the given BDD forest to a file that can be given to dot. The graph created by this function
      * is more readable than the Cudd variant as no inverted edges are used. The corresponding variable is used as a nodes text
      * @param mgr The BDD object manager
-     * @param bdds The function to print to the dot file
+     * @param bdd The function to print to the dot file
      * @param filename The name of the file to output the result to. Must be writable
      * @param function_names The names of the functions. Will be default populated to f_i for the i'th function
      * if an empty vector is given. Must always either be exactly the same length as bdds or empty

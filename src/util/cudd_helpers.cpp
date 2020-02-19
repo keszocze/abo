@@ -121,7 +121,7 @@ namespace abo::util {
             return result;
         }
 
-    unsigned int const_add_value(const ADD &add) {
+    unsigned int const_ADD_value(const ADD &add) {
         DdNode *node = add.getNode();
         if (Cudd_IsConstant(node)) {
             return static_cast<unsigned int>(Cudd_V(node));

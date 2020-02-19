@@ -23,21 +23,26 @@ namespace abo::util {
     unsigned int terminal_level(const std::vector<std::vector<BDD>>& bdds);
 
     /**
-     *
-     * @param adder
-     * @param input1
-     * @param input2
-     * @param bits
+     * @brief Evaluates the sum of a and b for an adder given as a BDD forest
+     * @param adder BDD forest representing an adder
+     * @param a The first summand
+     * @param b The second summand
+     * @param bits bit width of the adder
+     * @return The value of a + b
+     */
+    long eval_adder(const std::vector<BDD> &adder, long a, long b, int bits);
+
+    /**
+     * @TODO describe what this does
+     * @param bdd The BDD for which the minters are counted
      * @return
      */
-    long eval_adder(const std::vector<BDD> &adder, long input1, long input2, int bits);
-
     std::map<DdNode*, double> count_minterms(const BDD &bdd);
 
     std::vector<int> random_satisfying_input(const BDD &bdd, const std::map<DdNode*, double> &minterm_count, int max_level);
 
     // return the value of the given add node, it must be a constant
-    unsigned int const_add_value(const ADD &add);
+    unsigned int const_ADD_value(const ADD &add);
 
     // returns a list of values (first) and how often they are reached (second)
     std::vector<std::pair<double, unsigned long> > add_terminal_values(const ADD &add);
