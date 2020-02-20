@@ -33,7 +33,7 @@ compile_with_clang:
     script: 
         - mkdir build
         - cd build
-        - cmake -DCMAKE_CC_COMPILER=clang++
+        - cmake -DCMAKE_CXX_COMPILER=clang++
         - make -j 4 all
 
 # cpp check is put in a separate script file as we want to perform stuff that
