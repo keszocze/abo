@@ -4,7 +4,11 @@ project(abo)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+
 option(BUILD_TESTS "Build tests" ON)
+
+option(BUILD_DOCUMENTATION "Build documentation" ON)
 
 if(UNIX)
     # show quite some warnings (but remove some intentionally)
@@ -18,10 +22,17 @@ if(UNIX)
     endforeach()
 endif()
 
+include(BuildLorina)
+include(BuildCatch2)
+include(BuildBenchmark)
+include(BuildCudd)
 
-add_subdirectory(lib)
 add_subdirectory(src)
 add_subdirectory(benchmark)
+
+if (BUILD_DOCUMENTATION)
+    add_subdirectory(docs)
+endif()
 
 #IF (BUILD_TESTS)
     add_subdirectory(tests)

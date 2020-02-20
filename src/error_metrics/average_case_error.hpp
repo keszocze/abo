@@ -1,5 +1,4 @@
-#ifndef AVERAGE_CASE_ERROR_H
-#define AVERAGE_CASE_ERROR_H
+#pragma once
 
 #include <vector>
 #include <cudd/cplusplus/cuddObj.hh>
@@ -80,5 +79,3 @@ namespace abo::error_metrics {
                                                                     const NumberRepresentation num_rep = NumberRepresentation::BaseTwo);
 
 }
-
-#endif // AVERAGE_CASE_ERROR_H

@@ -2,8 +2,7 @@
 // Created by keszocze on 15.10.18.
 //
 
-#ifndef ABO_WORST_CASE_ERROR_HPP
-#define ABO_WORST_CASE_ERROR_HPP
+#pragma once
 
 #include <vector>
 #include <cudd/cplusplus/cuddObj.hh>
@@ -85,6 +84,3 @@ namespace abo::error_metrics {
                                                                   const NumberRepresentation num_rep = NumberRepresentation::BaseTwo);
 
 }
-
-#endif //ABO_WORST_CASE_ERROR_HPP
-

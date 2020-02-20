@@ -2,12 +2,12 @@
 // Created by keszocze on 27.09.18.
 //
 
-#ifndef ABO_STRING_HELPERS_HPP
-#define ABO_STRING_HELPERS_HPP
+#pragma once
 
 #include <vector>
 #include <string>
 #include <iterator>
+#include <sstream>
 
 
 namespace abo::util {
@@ -47,6 +47,3 @@ namespace abo::util {
     }
 
 }
-
-
-#endif //ABO_STRING_HELPERS_HPP

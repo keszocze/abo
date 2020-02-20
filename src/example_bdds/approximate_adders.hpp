@@ -1,5 +1,4 @@
-#ifndef APPROXIMATE_ADDERS_HPP
-#define APPROXIMATE_ADDERS_HPP
+#pragma once
 
 #include <vector>
 #include <cudd/cplusplus/cuddObj.hh>
@@ -24,5 +23,3 @@ namespace abo::example_bdds {
     std::vector<BDD> regular_adder(const Cudd &mgr, unsigned int num_bits);
 
 }
-
-#endif // APPROXIMATE_ADDERS_HPP
