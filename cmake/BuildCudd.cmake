@@ -8,6 +8,8 @@ ExternalProject_Add(project_cudd
     CMAKE_ARGS
         -DCUDD_BUILD_TESTS:BOOL=FALSE
         -DCMAKE_CXX_COMPILER:PATH=${CMAKE_CXX_COMPILER}
+        -DCMAKE_C_FLAGS="-Wno-implicit-fallthrough"
+        -DCMAKE_CXX_FLAGS="-Wno-implicit-fallthrough"
 )
 
 add_library(cudd UNKNOWN IMPORTED)
