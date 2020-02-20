@@ -11,11 +11,19 @@
 
 namespace abo::parser {
 
+    /**
+     * @brief Class for parsing AIG files to BDD forests
+     * The actual parsing is done by lorina, this class only converts the result to BDDs.
+     * The usage can be for example as follows:
+     *
+     * abo::parser::aig_parser parser(mgr);
+     * lorina::read_aiger(filename, parser);
+     * std::vector<BDD> function = parser.get_outputs();
+     */
     class aig_parser : public lorina::aiger_reader {
     private:
         const Cudd &mgr;
 
-        // TODO: muss das noch entfernt werden?
         mutable std::size_t num_variables = 0;
         mutable std::size_t num_literals = 0;
         mutable std::size_t num_inputs = 0;
@@ -29,12 +37,19 @@ namespace abo::parser {
 
     public:
 
+        //! Returns the parsed function from the input file
         const std::vector<BDD> get_outputs() const;
 
+        //! Returns the names of the input variables
         const std::vector<std::string> & get_input_names() const { return input_names; }
 
+        //! Returns the names of the individual function bits
         const std::vector<std::string> & get_output_names() const { return output_names; }
 
+        /**
+         * @brief aig_parser Constructor for the AIG parser
+         * @param mgr The Cudd object manager to create the BDDs in
+         */
         explicit aig_parser( Cudd &mgr ) :
                         mgr(mgr) {}
 

@@ -71,6 +71,7 @@ namespace abo::util {
 
     /**
      * @brief Retrives high-child of a BDD v
+     * @param mgr The Cudd object manager
      * @param v
      * @return low(v)
      */
@@ -78,6 +79,7 @@ namespace abo::util {
 
     /**
      * @brief Retrives low-child of a BDD v
+     * @param mgr The Cudd object manager
      * @param v
      * @return low(v)
      */
@@ -100,6 +102,7 @@ namespace abo::util {
      * The supplied BDDs are supposed to compute values represented in Two's Copmlement. The BDD returned by this function
      * computes the difference between the outputs of these BDDs, again represented in Two's Complement.
      *
+     * @param mgr The Cudd object manager
      * @param minuend Minuend in Two's Complement
      * @param subtrahend  Subtrahend in Two's Complement
      * @return BDD computing the difference of the outputs of the two supplied BDDs
@@ -112,6 +115,7 @@ namespace abo::util {
      * The supplied BDDs are supposed to compute values represented in Two's Copmlement. The BDD returned by this function
      * computes the difference between the outputs of these BDDs. It will always return an unsigned number, not a number in Two's complement.
      *
+     * @param mgr The Cudd object manager
      * @param f Function in Two's Complement
      * @param g Funtion in Two's Complement
      * @param num_rep The number representation for f and g
@@ -123,6 +127,7 @@ namespace abo::util {
 
     /**
      * @brief Creates the BDD representing the sum of two functions
+     * @param mgr The Cudd object manager
      * @param f First summand
      * @param g Second summand
      * @return BDD representing f+g
@@ -131,6 +136,7 @@ namespace abo::util {
 
     /**
      * @brief Creates BDD representing abs(f)
+     * @param mgr The Cudd object manager
      * @param f Function in Two's Complement
      * @return BDD representing abs(f)
      */
@@ -142,6 +148,7 @@ namespace abo::util {
      * The shifted result has the same number of bits as the input, bits that are shifted above or below
      * the original function bit range will be discarded
      *
+     * @param mgr The Cudd object manager
      * @param f Function to shift
      * @param bits_to_shift Number of bits to shift. Can be both positive or negative
      * @return Shifted BDD
@@ -150,6 +157,7 @@ namespace abo::util {
 
     /**
      * @brief Multiplies a bdd function with a constant
+     * @param mgr The Cudd object manager
      * @param f Function that is to be multiplied. The function is interpreted as returning an unsigned integer
      * @param factor Constant multiplication factor
      * @param num_extra_bits Additional bits used to make sure that the result can be stored (must be less than sizeof(unsigned long) * 8)
@@ -159,6 +167,7 @@ namespace abo::util {
 
     /**
      * @brief Checks if an input x exists such that int(f1(x)) >= int(f2(x))
+     * @param mgr The Cudd object manager
      * @param f1 Function to compare in base two (interpreted as returning an unsigned integer)
      * @param f2 Function to compare in base two (interpreted as returning an unsigned integer)
      * @return {ge, e}
@@ -170,6 +179,7 @@ namespace abo::util {
 
     /**
      * @brief Creates a BDD representing f >= g
+     * @param mgr The Cudd object manager
      * @param f Function to compare in base two (interpreted as returning an unsigned integer)
      * @param g Function to compare in base two (interpreted as returning an unsigned integer)
      * @return BDD representing f >= g
@@ -178,12 +188,15 @@ namespace abo::util {
 
     /**
      * @brief Computes a function g such that int(g(x)) = max(1, int(f(x)) for an unsigned function f
-     * @return Function g as vecotr of BDDS of same length as f
+     * @param mgr The Cudd object manager
+     * @param f The function to use. Is interpreted as unsigned integers
+     * @return Function g as vector of BDDS of same length as f
      */
     std::vector<BDD> bdd_max_one(const Cudd &mgr, const std::vector<BDD> &f);
 
     /**
      * @brief divide Computes a function h such that int(h(x)) = int(f(x)) / int(g(x))
+     * @param mgr The Cudd object manager
      * @param f int(f(x)) = 0 must not be possible, f is interpreted as an unsigned integer
      * @param g is interpreted as an unsigned integer
      * @param extra_bits

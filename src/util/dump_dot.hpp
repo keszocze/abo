@@ -7,20 +7,25 @@
 
 namespace abo::util {
 
-
+    //! Configuration struct for the appearance of the generated dot files
     struct DotPresentationConfig {
         //! The shape of an inner BDD node (i.e. the ones for the variables)
         std::string node_shape = "circle";
+        //! The size of the inner BDD nodes
         float node_width = 0.35f;
 
         //! The shape of a terminal node (i.e. the ones for true or false)
         std::string terminal_shape = "square";
+        //! The size of the terminal nodes (true and false)
         float terminal_width = 0.35f;
 
         //! The shape of the nodes for function names
         std::string function_name_shape = "none";
+        //! The width of the nodes showing the individual function names (like f_0)
         float function_name_width = 0.2f;
+        //! The desired distance between two BDD nodes of the same level
         float node_seperation = 0.2f;
+        //! The desired minimum distance between two nodes in adjacent variable levels
         float rank_seperation = 0.25f;
     };
 

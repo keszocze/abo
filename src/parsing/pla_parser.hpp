@@ -9,6 +9,14 @@
 
 namespace abo::parser {
 
+    /**
+     * @brief Class for parsing PLA files to BDD forests
+     * The actual parsing is done by lorina, this class only converts the result to BDDs.
+     * The usage can be for example as follows:
+     *
+     * abo::parser::pla_parser parser(mgr, output_function, argument_names, output_names);
+     * lorina::read_pla(filename, parser);
+     */
     class pla_parser : public lorina::pla_reader {
     private:
 
@@ -21,6 +29,13 @@ namespace abo::parser {
 
     public:
 
+        /**
+         * @brief pla_parser
+         * @param mgr The Cudd object manager to create the BDDs in
+         * @param out The vector to save the resulting function in
+         * @param innames The vector to save the functions input names in
+         * @param outnames The vector to save the function output bit names in
+         */
         pla_parser( Cudd &mgr, std::vector<BDD> &out,
                     std::vector<std::string> &innames,
                     std::vector<std::string> &outnames) :
