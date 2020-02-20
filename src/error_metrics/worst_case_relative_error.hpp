@@ -1,5 +1,4 @@
-#ifndef WORST_CASE_RELATIVE_ERROR_H
-#define WORST_CASE_RELATIVE_ERROR_H
+#pragma once
 
 #include <vector>
 #include <cudd/cplusplus/cuddObj.hh>
@@ -94,5 +93,3 @@ namespace abo::error_metrics {
                                                                                          const NumberRepresentation num_rep = NumberRepresentation::BaseTwo);
 
 }
-
-#endif // WORST_CASE_RELATIVE_ERROR_H

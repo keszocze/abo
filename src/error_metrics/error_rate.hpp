@@ -2,8 +2,7 @@
 // Created by keszocze on 10.10.18.
 //
 
-#ifndef ABO_ERROR_RATE_HPP
-#define ABO_ERROR_RATE_HPP
+#pragma once
 
 #include <vector>
 #include <cudd/cplusplus/cuddObj.hh>
@@ -61,5 +60,3 @@ namespace abo::error_metrics {
      */
     double error_rate_efficient_sampling(const Cudd &mgr, const std::vector<BDD>& f, const std::vector<BDD>& f_hat, long samples = 10000);
 }
-
-#endif //ABO_ERROR_RATE_HPP

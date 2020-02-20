@@ -27,7 +27,7 @@ The binaries will be created in the ``build`` folder.
 Library
 =======
 
-* [1] Mathias Soeken, Daniel Große, Arun Chandreasekharan, Rolf Drechsler: *BDD Minimization for Apprxoimate Computing*, ASP-DAC
+* [1] Mathias Soeken, Daniel Große, Arun Chandreasekharan, Rolf Drechsler: *BDD Minimization for Approximate Computing*, ASP-DAC
 
 
 Indices and tables
@@ -35,3 +35,36 @@ Indices and tables
 
 * :ref:`genindex`
 * :ref:`search`
+
+Functionality
+=============
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Approximation Operators
+
+   operators
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Error Metrics
+
+   metrics
+   
+.. toctree::
+   :maxdepth: 2
+   :caption: Utility Functions
+
+   util
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Parsing
+
+   parsing
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Example BDDs
+
+   example_bdds

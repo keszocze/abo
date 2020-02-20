@@ -1,5 +1,4 @@
-#ifndef DUMP_DOT_H
-#define DUMP_DOT_H
+#pragma once
 
 #include <cudd/cplusplus/cuddObj.hh>
 
@@ -47,8 +46,8 @@ namespace abo::util {
                            const std::vector<std::string> &function_names = std::vector<std::string>(),
                            const std::vector<std::string> &variable_names = std::vector<std::string>(),
                            const bool enforce_function_order = true,
-                           const std::optional<bool> left_terminal = std::optional<bool>{},
-                           DotPresentationConfig conf = DotPresentationConfig{});
+                           const std::optional<bool> left_terminal = std::optional<bool>(),
+                           DotPresentationConfig conf = DotPresentationConfig());
 
     /**
      * @brief Dump the given BDD forest as text that can be given to dot. The graph created by this function
@@ -70,8 +69,8 @@ namespace abo::util {
                            std::ostream &output,
                            const std::vector<std::string> &function_names = std::vector<std::string>(),
                            const std::vector<std::string> &variable_names = std::vector<std::string>(),
-                           const std::optional<bool> left_terminal = std::optional<bool>{},
-                           DotPresentationConfig conf = DotPresentationConfig{});
+                           const std::optional<bool> left_terminal = std::optional<bool>(),
+                           DotPresentationConfig conf = DotPresentationConfig());
 
     /**
      * @brief Dump the given BDD forest to a file that can be given to dot. The graph created by this function
@@ -95,15 +94,15 @@ namespace abo::util {
                                    const std::vector<std::string> &function_names = std::vector<std::string>(),
                                    const std::vector<std::string> &variable_names = std::vector<std::string>(),
                                    const bool enforce_function_order = true,
-                                   const std::optional<bool> left_terminal = std::optional<bool>{},
-                                   DotPresentationConfig conf = DotPresentationConfig{});
+                                   const std::optional<bool> left_terminal = std::optional<bool>(),
+                                   DotPresentationConfig conf = DotPresentationConfig());
 
 
     /**
      * @brief Dump the given BDD forest to a file that can be given to dot. The graph created by this function
      * is more readable than the Cudd variant as no inverted edges are used. The corresponding variable is used as a nodes text
      * @param mgr The BDD object manager
-     * @param bdds The function to print to the dot file
+     * @param bdd The function to print to the dot file
      * @param filename The name of the file to output the result to. Must be writable
      * @param function_names The names of the functions. Will be default populated to f_i for the i'th function
      * if an empty vector is given. Must always either be exactly the same length as bdds or empty
@@ -119,8 +118,6 @@ namespace abo::util {
                                    std::string filename,
                                    const std::vector<std::string> &function_names = std::vector<std::string>(),
                                    const std::vector<std::string> &variable_names = std::vector<std::string>(),
-                                   const std::optional<bool> left_terminal = std::optional<bool>{},
-                                   DotPresentationConfig conf = DotPresentationConfig{});
+                                   const std::optional<bool> left_terminal = std::optional<bool>(),
+                                   DotPresentationConfig conf = DotPresentationConfig());
 }
-
-#endif // DUMP_DOT_H

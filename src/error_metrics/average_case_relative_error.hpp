@@ -1,5 +1,4 @@
-#ifndef AVERAGE_CASE_RELATIVE_ERROR_HPP
-#define AVERAGE_CASE_RELATIVE_ERROR_HPP
+#pragma once
 
 #include <vector>
 #include <cudd/cplusplus/cuddObj.hh>
@@ -60,5 +59,3 @@ namespace abo::error_metrics {
                                                                                       unsigned int num_extra_bits = 16,
                                                                                       const NumberRepresentation num_rep = NumberRepresentation::BaseTwo);
 }
-
-#endif // AVERAGE_CASE_RELATIVE_ERROR_HPP

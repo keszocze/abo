@@ -12,7 +12,7 @@ namespace abo::error_metrics {
             bit_error_sum += (f[i] ^ f_hat[i]).Add();
         }
 
-        return abo::util::const_add_value(bit_error_sum.FindMax());
+        return abo::util::const_ADD_value(bit_error_sum.FindMax());
     }
 
     unsigned int worst_case_bit_flip_error_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat) {
