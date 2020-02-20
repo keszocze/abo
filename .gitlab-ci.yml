@@ -20,6 +20,7 @@ compile_with_gcc:
         paths:
             - build/bw_output
             - build/tests
+            - build/src
         expire_in: 30 minutes
     script:
         - mkdir -p build/bw_output
