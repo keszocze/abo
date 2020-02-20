@@ -2,8 +2,7 @@
 // Created by keszocze on 21.09.18.
 //
 
-#ifndef ABO_AIG_PARSER_HPP
-#define ABO_AIG_PARSER_HPP
+#pragma once
 
 #include <lorina/aiger.hpp>
 #include <cudd/cplusplus/cuddObj.hh>
@@ -71,5 +70,3 @@ namespace abo::parser {
     };
 
 }
-
-#endif //ABO_AIG_PARSER_HPP

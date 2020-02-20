@@ -2,8 +2,7 @@
 // Created by keszocze on 21.09.18.
 //
 
-#ifndef ABO_PLA_PARSER_HPP
-#define ABO_PLA_PARSER_HPP
+#pragma once
 
 #include <lorina/pla.hpp>
 #include <cudd/cplusplus/cuddObj.hh>
@@ -55,4 +54,3 @@ namespace abo::parser {
     };
 
 }
-#endif //ABO_PLA_PARSER_HPP

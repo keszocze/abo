@@ -8,6 +8,8 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 option(BUILD_TESTS "Build tests" ON)
 
+option(BUILD_DOCUMENTATION "Build documentation" ON)
+
 if(UNIX)
     # show quite some warnings (but remove some intentionally)
     include(CheckCXXCompilerFlag)
@@ -29,6 +31,10 @@ include(BuildPagmo2)
 add_subdirectory(src)
 add_subdirectory(benchmark)
 add_subdirectory(experiments)
+
+if (BUILD_DOCUMENTATION)
+    add_subdirectory(docs)
+endif()
 
 #IF (BUILD_TESTS)
     add_subdirectory(tests)
