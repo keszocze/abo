@@ -14,7 +14,7 @@ variables:
 
 
 compile_with_gcc:
-    extends: .try_compiling
+    extends: .ciconf
     stage: compile
     artifacts:
         paths:
@@ -28,7 +28,7 @@ compile_with_gcc:
         - /opt/sonar-build-wrapper/build-wrapper-linux-x86-64 --out-dir bw_output make -j 4 all
 
 compile_with_clang:
-    extends: .try_compiling
+    extends: .ciconf
     stage: compile
     script: 
         - mkdir build
