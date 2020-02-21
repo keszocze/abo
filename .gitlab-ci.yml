@@ -62,4 +62,4 @@ run_tests:
 
     script:
         - cd build/tests
-        - find . '*_test' -exec {} \;
+        - "for filename in *_test; do echo \"Running Test: $filename\"; ./$filename; done"

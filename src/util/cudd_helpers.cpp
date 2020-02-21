@@ -85,6 +85,50 @@ namespace abo::util {
         return result;
     }
 
+    static double count_solutions_rec(DdNode* node, std::map<DdNode*, double> &solutions_map, int terminal_level) {
+        auto it = solutions_map.find(node);
+        if (it != solutions_map.end()) {
+            return it->second;
+        }
+
+        if (Cudd_IsConstant(node)) {
+            double value = Cudd_V(node);
+            if (Cudd_IsComplement(node)) {
+                value = value == 0.0 ? 1.0 : 0.0;
+            }
+            solutions_map[node] = value;
+            return value;
+        }
+
+        DdNode *N = Cudd_Regular(node);
+
+        DdNode *Nv = Cudd_T(N);
+        DdNode *Nnv = Cudd_E(N);
+
+        Nv = Cudd_NotCond(Nv, Cudd_IsComplement(node));
+        Nnv = Cudd_NotCond(Nnv, Cudd_IsComplement(node));
+
+        double high_result = count_solutions_rec(Nv, solutions_map, terminal_level);
+        double low_result = count_solutions_rec(Nnv, solutions_map, terminal_level);
+
+        unsigned long high_level = Cudd_IsConstant(Nv) ? terminal_level : Cudd_NodeReadIndex(Nv);
+        unsigned long low_level = Cudd_IsConstant(Nnv) ? terminal_level : Cudd_NodeReadIndex(Nnv);
+        unsigned long own_level = Cudd_NodeReadIndex(node);
+
+        double solutions = high_result * std::pow(2.0, own_level - high_level - 1) +
+                low_result * std::pow(2.0, own_level - low_level - 1);
+
+        solutions_map[node] = solutions;
+        return solutions;
+    }
+
+    std::map<DdNode*, double> count_solutions(const BDD &bdd) {
+        std::map<DdNode*, double> result;
+
+        count_solutions_rec(bdd.getNode(), result, terminal_level({{bdd}}));
+        return result;
+    }
+
     std::vector<int> random_satisfying_input(const BDD &bdd, const std::map<DdNode*, double> &minterm_count, int max_level) {
             std::vector<int> result;
 

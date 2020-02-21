@@ -83,7 +83,7 @@ namespace abo::parser {
         }
 
         // literal is not known yet, they should be created in order
-        assert(false);
+        throw new std::invalid_argument("AIG parser: literal should have been declared before");
     }
 
     // unsupported operations
