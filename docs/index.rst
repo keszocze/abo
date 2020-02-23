@@ -92,3 +92,9 @@ Functionality
    :caption: Example BDDs
 
    example_bdds
+   
+.. toctree::
+   :maxdepth: 2
+   :caption: Bucket Based BDD Minimization
+
+   minimization
