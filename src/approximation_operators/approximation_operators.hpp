@@ -44,7 +44,7 @@ namespace abo::operators {
      * @param level_end The lowest BDD level (always the level of the terminals in the original paper)
      * @return The rounded BDD
      */
-    BDD round_up(const Cudd &mgr, const BDD &bdd, unsigned int level);
+    BDD round_up(const Cudd &mgr, const BDD &bdd, unsigned int level_start, unsigned int level_end);
 
     /**
      * @brief Implements the round-down operation from Soeken2016
@@ -54,6 +54,6 @@ namespace abo::operators {
      * @param level_end The lowest BDD level (always the level of the terminals in the original paper)
      * @return The rounded BDD
      */
-    BDD round_down(const Cudd &mgr, const BDD &bdd, unsigned int level);
+    BDD round_down(const Cudd &mgr, const BDD &bdd, unsigned int level_start, unsigned int level_end);
 
 }
