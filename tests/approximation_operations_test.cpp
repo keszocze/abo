@@ -24,23 +24,22 @@ TEST_CASE("Example 3 from ASP-DAC 2016 paper") {
     Cudd mgr(2);
 
     std::vector<BDD> fun = abo::example_bdds::example1a(mgr);
-    std::vector<BDD> rounded_up_fun = abo::example_bdds::example1c(mgr);
+    std::vector<BDD> expected_rounded_down = abo::example_bdds::example1b(mgr);
+    std::vector<BDD> expected_rounded_up = abo::example_bdds::example1c(mgr);
+    std::vector<BDD> expected_rounded = abo::example_bdds::example1d(mgr);
 
-    std::vector<BDD> self_rounded;
 
+    std::vector<BDD> self_rounded_up, self_rounded_down, self_rounded;
 
-    // rounding up?
-//    for (const BDD &f: fun) {
-//        self_rounded.push_back(abo::operators::subset_heavy_child(mgr,f,2,3));
-//    }
-
-    for (const BDD &f: fun) {
-        self_rounded.push_back(abo::operators::subset_light_child(mgr,f,2,3));
+    for (const BDD &b : fun) {
+        self_rounded_down.push_back(abo::operators::round_down(mgr, b, 2, 4));
+        self_rounded_up.push_back(abo::operators::round_up(mgr, b, 2, 4));
+        self_rounded.push_back(abo::operators::round(mgr, b, 2));
     }
 
-    abo::util::dump_dot(mgr,self_rounded,{"x_1", "x_2", "x_3", "x_4"},{"f0", "f1", "f2"});
+    CHECK(expected_rounded_down == self_rounded_down);
 
+    CHECK(expected_rounded_up == self_rounded_up);
 
-
-
+    CHECK(expected_rounded == self_rounded);
 }
