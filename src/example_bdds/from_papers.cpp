@@ -27,7 +27,7 @@ namespace abo::example_bdds {
 
 
         BDD cube11 = !x1 * x3 * !x4;
-        BDD cube12 = !x1 * !x2 * x4;
+        BDD cube12 = !x1 * !x3 * x4;
         BDD cube13 = x1 * !x2 * x3 * !x4;
         BDD cube14 = x1 * !x2 * !x3 * x4;
         BDD cube15 = x1 * x2 * x3 * x4;
