@@ -32,9 +32,10 @@ namespace abo::util {
     long eval_adder(const std::vector<BDD> &adder, long a, long b, int bits);
 
     /**
-     * @TODO describe what this does
+     * @brief count_minterms Counts the number of minterms for each node in the given BDD in percent (between 0 and 1).
+     * This counts how many percent of inputs that lead to a given node as an intermediate result also lead to 1.
      * @param bdd The BDD for which the minters are counted
-     * @return
+     * @return A map containing every node in the bdd and its minterm count
      */
     std::map<DdNode*, double> count_minterms(const BDD &bdd);
 
