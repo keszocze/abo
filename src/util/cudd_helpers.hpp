@@ -38,6 +38,13 @@ namespace abo::util {
      */
     std::map<DdNode*, double> count_minterms(const BDD &bdd);
 
+    /**
+     * @brief count_solutions For each node reachable from the given root, count the number of solutions
+     * @param bdd The root node to search from
+     * @return A map containing the number of solutions for each reachable node
+     */
+    std::map<DdNode*, double> count_solutions(const BDD &bdd);
+
     std::vector<int> random_satisfying_input(const BDD &bdd, const std::map<DdNode*, double> &minterm_count, int max_level);
 
     // return the value of the given add node, it must be a constant

@@ -1,14 +1,10 @@
 #include <benchmark/benchmark.h>
 #include <cudd/cplusplus/cuddObj.hh>
 
-#include "aig_parser.hpp"
 #include "approximation_operators.hpp"
+#include "benchmark_util.hpp"
 
-enum TestFile {
-    C17 = 0, C432 = 1, C499 = 2, C880 = 3,
-    C1355 = 4, C1908 = 5, C2670 = 6, C3540 = 7,
-    C5315 = 8, C6288 = 9, C7552 = 10
-};
+using namespace abo::benchmark;
 
 enum RoundingOperation {
     SUPERSET_HEAVY,
@@ -24,8 +20,8 @@ enum RoundingOperation {
 // input: test file, rounding operation, rounding level
 static void benchmark_operators(benchmark::State& state) {
 
-    const std::vector<std::string> files = {"c17.aig", "c432.aig", "c499.aig", "c880.aig", "c1355.aig", "c1908.aig",
-                                            "c2670.aig", "c3540.aig", "c5315.aig", "c6288.aig", "c7552.aig"};
+    const ISCAS85File file_id = static_cast<ISCAS85File>(state.range(0));
+    const std::string file = iscas_85_filename_by_id(file_id);
 
     std::string rounding_text;
     switch (state.range(1)) {
@@ -38,15 +34,11 @@ static void benchmark_operators(benchmark::State& state) {
     case COFACTOR_POSITIVE: rounding_text = "cof+"; break;
     case COFACTOR_NEGATIVE: rounding_text = "cof-"; break;
     }
-    state.SetLabel(files[state.range(0)] + "(" + rounding_text + "->" + std::to_string(state.range(2)+1) + ")");
+    state.SetLabel(file + "(" + rounding_text + "->" + std::to_string(state.range(2)+1) + ")");
     for (auto _ : state) {
         state.PauseTiming();
-        Cudd mgr(64); // the exact number does not matter, it will be expanded if necessary
-
-        abo::parser::aig_parser parser(mgr);
-        lorina::read_aiger("iscas85/" + files[state.range(0)], parser);
-
-        std::vector<BDD> original = parser.get_outputs();
+        Cudd mgr(64);
+        std::vector<BDD> original = load_iscas_85_file(mgr, file_id);
 
         std::vector<BDD> rounded;
         rounded.reserve(original.size());
@@ -85,7 +77,7 @@ static void benchmark_operators(benchmark::State& state) {
 BENCHMARK(benchmark_operators)->Unit(benchmark::kMillisecond)->Apply([](auto *b) {
     for (auto op : {SUPERSET_HEAVY, SUBSET_LIGHT, SUPERSET_LIGHT, SUBSET_HEAVY, ROUND_FULL, ROUND_BEST, COFACTOR_POSITIVE, COFACTOR_NEGATIVE}) {
         for (int i = 1;i<41;i++) {
-            b = b->Args({C432, op, i});
+            b = b->Args({static_cast<int>(ISCAS85File::C432), op, i});
         }
     }
 });
