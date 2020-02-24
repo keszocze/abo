@@ -23,6 +23,10 @@ On Linux and Mac run the following instructions in the main ABO folder::
 
 The binaries will be created in the ``build`` folder.
 
+The following packages are needed (assuming a Ubuntu based Linux distribution)
+
+* `libtbb2` and `libtbb-dev` 
+
 How to cite
 ===========
 
