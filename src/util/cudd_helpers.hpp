@@ -46,30 +46,77 @@ namespace abo::util {
      */
     std::map<DdNode*, double> count_solutions(const BDD &bdd);
 
+    /**
+     * @brief random_satisfying_input Computes a random variable assignment that satisfies the function given as a bdd
+     * @param bdd The function that has to be satisfied by the assignment
+     * @param minterm_count The minterm count for each node of the bdd, this must be computed by count_minterms called on the bdd
+     * @param max_level The maximum variable level that should be present in the variable assignment
+     * @return A random variable assignment satisfying bdd. The vector consists of zeros and ones, integers are only used for better compatibility with cudd functions
+     */
     std::vector<int> random_satisfying_input(const BDD &bdd, const std::map<DdNode*, double> &minterm_count, int max_level);
 
-    // return the value of the given add node, it must be a constant
+    //! Returns the value of the given ADD node if it is a constant node and zero otherwise
     unsigned int const_ADD_value(const ADD &add);
 
-    // returns a list of values (first) and how often they are reached (second)
+    /**
+     * @brief add_terminal_values Finds all terminal values present in the given ADD and how often each one is reached
+     * @param add The function to compute the terminal values of
+     * @return A list of terminal values and their frequencies. The first value of the pair is the terminal node value (unique in the list),
+     * the second value is how often it is reached in the ADD
+     */
     std::vector<std::pair<double, unsigned long> > add_terminal_values(const ADD &add);
 
-    // assumes that the function represents an unsigned integer
+    /**
+     * @brief bdd_forest_to_add Computes the ADD equivalent of a function represented by a BDD forest
+     * @param mgr The cudd node manager to create the ADD in
+     * @param bdds The function to convert to an ADD
+     * @param num_rep The number format in which the bdds represent the function
+     * @return The given function as an ADD
+     */
     ADD bdd_forest_to_add(const Cudd &mgr, const std::vector<BDD> &bdds,
                           const NumberRepresentation num_rep = NumberRepresentation::BaseTwo);
 
+    /**
+     * @brief xor_difference_add Computes the bit-wise XOR between the two given functions and converts the result to an ADD
+     * The conversion creates unsigned integer values
+     * @param mgr The cudd node manager to create the ADD in
+     * @param f The first function to compute the difference of
+     * @param f_hat The second function. Must have the same length as f
+     * @return The XOR difference as an ADD
+     */
     ADD xor_difference_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat);
 
-
+    /**
+     * @brief absolute_difference_add Computes the absolute difference between to functions represented as BDDs and returns the result as an ADD
+     * @param mgr The cudd node manager to create the ADD in
+     * @param f The first function to compute the difference of
+     * @param f_hat The second function. Must have the same length as f
+     * @param num_rep The number representation used for the interpretation of the functions f and f_hat
+     * @return A function computing the absolute difference between f and f_hat for each input represented by an ADD
+     */
     ADD absolute_difference_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &f_hat,
                                 const NumberRepresentation num_rep);
 
+    /**
+     * @brief dump_dot A helper function for calling the dump dot method of cudd for a BDD forest
+     * @param mgr The cudd node manager to use
+     * @param bdd The function to dump as a dot file string
+     * @param innames The names of the input variables to show in the dot file. May be left empty
+     * @param outnames The names for each bit of the function to show in the dot file. May be left empty
+     */
     void dump_dot(
             const Cudd &mgr,
             const std::vector<BDD>& bdd,
             const std::vector <std::string> &innames=std::vector <std::string>(),
             const std::vector <std::string> &outnames=std::vector <std::string>());
 
+    /**
+     * @brief dump_dot A helper function for calling the dump dot method of cudd for a single BDD
+     * @param mgr The cudd node manager to use
+     * @param bdd The function to dump as a dot file string
+     * @param inames The names of the input variables to show in the dot file. May be left empty
+     * @param funname The name of the function to show in the dot file output
+     */
     void dump_dot(
             const Cudd &mgr,
             const BDD& bdd,

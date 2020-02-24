@@ -2,10 +2,11 @@
 
 namespace abo::util {
 
+    //! This enum represents the number format that BDD forests should be interpreted as
     enum class NumberRepresentation: bool {
-        // for unsigned integers
+        //! used for unsigned integers, the first bit in the vector is the lowest significant one
         BaseTwo,
-        // for signed integers in twos complement
+        //! used for signed integers in twos complement, the first bit in the vector is the lowest significant one
         TwosComplement
     };
 
