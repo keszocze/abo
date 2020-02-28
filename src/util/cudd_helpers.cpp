@@ -115,8 +115,8 @@ namespace abo::util {
         unsigned long low_level = Cudd_IsConstant(Nnv) ? terminal_level : Cudd_NodeReadIndex(Nnv);
         unsigned long own_level = Cudd_NodeReadIndex(node);
 
-        double solutions = high_result * std::pow(2.0, own_level - high_level - 1) +
-                low_result * std::pow(2.0, own_level - low_level - 1);
+        double solutions = high_result * std::pow(2.0, high_level - own_level - 1) +
+                low_result * std::pow(2.0, low_level - own_level - 1);
 
         solutions_map[node] = solutions;
         return solutions;
