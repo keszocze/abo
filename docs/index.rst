@@ -25,7 +25,21 @@ The binaries will be created in the ``build`` folder.
 
 The following packages are needed (assuming a Ubuntu based Linux distribution)
 
-* `libtbb2` and `libtbb-dev` 
+* `cmake`
+* `libboost-serialization-dev`
+* `libtbb-dev`
+
+If the documentation is being built, the following additional packages are also necessary
+
+* `doxygen`
+* `graphviz`
+* `python3`
+* `python3-pip`
+* `sphinx` (installed with pip3)
+* `sphinx_rtd_theme` (installed with pip3)
+
+Building the documentation can be turned off by setting the cmake variable BUILD_DOCUMENTATION to OFF.
+If it is being built, the resulting files are located in the build folder in docs/sphinx.
 
 How to cite
 ===========

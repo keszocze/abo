@@ -1,6 +1,23 @@
 # abo Another BDD Optimization
 
-TODO das muss noch angepasst werden! + Verweis auf die
+## Installation
+The following packages are needed (assuming a Ubuntu based Linux distribution)
+
+* `cmake`
+* `libboost-serialization-dev`
+* `libtbb-dev`
+
+If the documentation is being built, the following additional packages are also necessary
+
+* `doxygen`
+* `graphviz`
+* `python3`
+* `python3-pip`
+* `sphinx` (installed with pip3)
+* `sphinx_rtd_theme` (installed with pip3)
+
+Building the documentation can be turned off by setting the cmake variable BUILD_DOCUMENTATION to OFF.
+If it is being built, the resulting files are located in the build folder in docs/sphinx.
 
 ## How to reproduce the results
 Build the code using cmake
@@ -10,7 +27,6 @@ Build the code using cmake
 
 To reproduce the results, run the script 'run_experiments.sh' in the build folder.
 For each experiment, one text file in the folder 'result' will be created.
-
 
 ## How to cite
 
