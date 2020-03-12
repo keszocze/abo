@@ -14,11 +14,12 @@ jobs:
     
     steps:
     - uses: actions/checkout@v1
+    - name: install-dependencies
+      run: sudo apt install libboost-serialization-dev libtbb-dev
     - name: build
       run: |
-        sudo apt install libboost-serialization-dev libtbb-dev
         mkdir build
         cd build
         cmake -DBUILD_DOCUMENTATION=OFF ..
-        make -j $(nproc)  
+        make -j $(nproc)
       
