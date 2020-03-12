@@ -1,3 +1,4 @@
+[![Build Status](https://img.shields.io/github/workflow/status/keszocze/abo/C and C++ CI)](https://github.com/keszocze/abo/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
 # abo Another BDD Optimization
