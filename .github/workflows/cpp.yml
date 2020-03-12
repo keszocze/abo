@@ -19,6 +19,6 @@ jobs:
         sudo apt install libboost-serialization-dev libtbb-dev
         mkdir build
         cd build
-        cmake ..
+        cmake -DBUILD_DOCUMENTATION=OFF ..
         make -j $(nproc)  
       
