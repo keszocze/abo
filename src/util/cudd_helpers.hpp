@@ -190,12 +190,13 @@ namespace abo::util {
     std::vector<BDD> bdd_add(const Cudd &mgr, const std::vector<BDD> &f, const std::vector<BDD> &g);
 
     /**
-     * @brief Creates BDD representing abs(f)
+     * @brief Creates BDD representing abs(f). For unsigned numbers, the original function will be returned
      * @param mgr The Cudd object manager
      * @param f Function in Two's Complement
+     * @param num_rep The number representation for f
      * @return BDD representing abs(f)
      */
-    std::vector<BDD> abs(const Cudd& mgr, const std::vector<BDD>& f);
+    std::vector<BDD> abs(const Cudd& mgr, const std::vector<BDD>& f, const NumberRepresentation num_rep);
 
     /**
      * @brief Shifts a function f by a number of bits left or right

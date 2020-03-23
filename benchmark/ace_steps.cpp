@@ -36,7 +36,7 @@ static void benchmark_ace_steps(benchmark::State& state) {
             rounded.push_back(mgr.bddZero());
 
             std::vector<BDD> difference = abo::util::bdd_subtract(mgr, original, rounded);
-            std::vector<BDD> absdiff = abo::util::abs(mgr,difference);
+            std::vector<BDD> absdiff = abo::util::abs(mgr, difference, abo::util::NumberRepresentation::TwosComplement);
 
             if (!difference_only) {
                 abo::error_metrics::average_value(absdiff);
