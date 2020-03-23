@@ -278,7 +278,7 @@ namespace abo::util {
             result += it->Add();
         }
 
-        result -= bdds.back().Add() * signBitPower;
+        result -= bdds_.back().Add() * signBitPower;
 
         return result;
     }
