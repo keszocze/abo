@@ -278,7 +278,7 @@ namespace abo::util {
             result += it->Add();
         }
 
-        result -= bdds.back().Add() * signBitPower;
+        result -= bdds_.back().Add() * signBitPower;
 
         return result;
     }
@@ -437,11 +437,16 @@ namespace abo::util {
         const std::vector<BDD> &g__ = smaller ? f_ : g_;
 
         std::vector<BDD> difference = abo::util::bdd_subtract(mgr, f__, g__);
-        return abo::util::abs(mgr,difference);
+        return abo::util::abs(mgr, difference, NumberRepresentation::TwosComplement);
     }
 
 
-    std::vector<BDD> abs(const Cudd &mgr, const std::vector<BDD> &f) {
+    std::vector<BDD> abs(const Cudd &mgr, const std::vector<BDD> &f, const NumberRepresentation num_rep) {
+
+        // for unsigned numbers, nothing has to be done
+        if (num_rep == NumberRepresentation::BaseTwo) {
+            return f;
+        }
 
         // create mask consisting of the sign bit only
         BDD sign_bit = f.back();
