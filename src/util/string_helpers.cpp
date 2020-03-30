@@ -1,7 +1,3 @@
-//
-// Created by keszocze on 27.09.18.
-//
-
 #include "string_helpers.hpp"
 
 #include <string.h>

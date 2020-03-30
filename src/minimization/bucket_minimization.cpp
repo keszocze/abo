@@ -55,7 +55,7 @@ std::vector<Bucket> bucket_greedy_minimize(Cudd& mgr, const std::vector<BDD>& fu
     std::size_t num_metrics = metrics.size();
     if (num_metrics == 0)
     {
-        throw new std::invalid_argument("At least one metric must be specified");
+        throw std::invalid_argument("At least one metric must be specified");
     }
 
     std::vector<std::size_t> bucket_grid_size;
@@ -348,7 +348,7 @@ metric_function(ErrorMetric metric)
                 abo::error_metrics::worst_case_bit_flip_error(mgr, orig, approx));
         };
     }
-    throw new std::logic_error("switch does not handle all cases");
+    throw std::logic_error("switch does not handle all cases");
 }
 
 std::string operator_to_string(Operator op)
