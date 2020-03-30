@@ -39,3 +39,13 @@ endif()
 #IF (BUILD_TESTS)
     add_subdirectory(tests)
 #endif(BUILD_TESTS)
+
+file(GLOB_RECURSE ALL_SOURCE_FILES src/*.hpp src/*.cpp benchmark/*.hpp
+	benchmark/*.cpp experiments/*.hpp experiments/*.cpp)
+
+add_custom_target(clangformat
+#        COMMAND echo ${ALL_SOURCE_FILES}
+        COMMAND clang-format -style=file -i ${ALL_SOURCE_FILES}
+        )
+
+
