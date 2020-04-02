@@ -44,7 +44,7 @@ double average_bit_flip_error_add(const Cudd& mgr, const std::vector<BDD>& f,
         bit_count_sum += static_cast<unsigned long>(__builtin_popcountll(value)) * path_count;
         total_path_count += path_count;
     }
-    return bit_count_sum / double(total_path_count);
+    return bit_count_sum / static_cast<double>(total_path_count);
 }
 
 } // namespace abo::error_metrics

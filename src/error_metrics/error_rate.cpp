@@ -53,7 +53,7 @@ double error_rate_sampling(const Cudd& mgr, const std::vector<BDD>& f,
             }
         }
     }
-    return double(error_samples) / samples;
+    return static_cast<double>(error_samples) / samples;
 }
 
 double error_rate_efficient_sampling(const Cudd& mgr, const std::vector<BDD>& f,
@@ -117,7 +117,7 @@ double error_rate_efficient_sampling(const Cudd& mgr, const std::vector<BDD>& f,
                 good_samples++;
             }
         }
-        actual_rate += activations[i].second * double(good_samples) / double(index_samples);
+        actual_rate += activations[i].second * static_cast<double>(good_samples) / static_cast<double>(index_samples);
     }
 
     return std::min(1.0, actual_rate);
@@ -138,7 +138,7 @@ double error_rate_add(const Cudd& mgr, const std::vector<BDD>& f, const std::vec
         }
         total_path_count += path_count;
     }
-    return non_zero_path_count / double(total_path_count);
+    return non_zero_path_count / static_cast<double>(total_path_count);
 }
 
 double error_rate(const Cudd& mgr, const BDD& f, const BDD& f_hat)
