@@ -104,7 +104,7 @@ std::vector<BDD> almost_correct_adder_2(Cudd& mgr, unsigned int num_bits,
         {
             carry_outs.push_back(carry_generate(a, b, mgr.bddZero()));
         }
-        else if (((i + 1) % (num_bits / num_partitions) == 0) &&
+        else if ((((i + 1) % (num_bits / num_partitions)) == 0) &&
                  (i + 1) != static_cast<int>(num_bits))
         {
             BDD temp_carry = mgr.bddZero();
@@ -170,7 +170,7 @@ std::vector<BDD> gracefully_degrading_adder(Cudd& mgr, unsigned int num_bits,
         {
             carry_outs.push_back(carry_generate(a, b, mgr.bddZero()));
         }
-        else if (((i + 1) % (num_bits / num_partitions) == 0) &&
+        else if ((((i + 1) % (num_bits / num_partitions)) == 0) &&
                  (i + 1) != static_cast<int>(num_bits))
         {
             BDD temp_carry = mgr.bddZero();

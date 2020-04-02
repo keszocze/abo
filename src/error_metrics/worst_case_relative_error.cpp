@@ -53,7 +53,7 @@ double worst_case_relative_error_search(const Cudd& mgr, const std::vector<BDD>&
         if (!ge.first)
         {
             max = factor;
-            min = factor == 1.0 ? 0 : factor / 2.0;
+            min = factor == 1.0 ? 0 : (factor / 2.0);
             break;
         }
     }
