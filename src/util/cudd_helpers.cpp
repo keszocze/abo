@@ -6,7 +6,7 @@
 #include "string_helpers.hpp"
 
 #include <algorithm>
-#include <assert.h>
+#include <cassert>
 #include <boost/multiprecision/cpp_int.hpp>
 #include <cmath>
 #include <cudd/cudd/cudd.h>
