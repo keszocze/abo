@@ -35,9 +35,9 @@ average_relative_value(const Cudd& mgr, const std::vector<BDD>& f, const std::ve
 }
 
 std::pair<boost::multiprecision::cpp_dec_float_100, boost::multiprecision::cpp_dec_float_100>
-average_relative_error_bounds(const Cudd& mgr, const std::vector<BDD>& f,
-                              const std::vector<BDD>& f_hat,
-                              const util::NumberRepresentation num_rep)
+    acre_bounds(const Cudd& mgr, const std::vector<BDD>& f,
+              const std::vector<BDD>& f_hat,
+              const util::NumberRepresentation num_rep)
 {
 
     std::vector<BDD> absolute_difference =
@@ -46,8 +46,8 @@ average_relative_error_bounds(const Cudd& mgr, const std::vector<BDD>& f,
 }
 
 boost::multiprecision::cpp_dec_float_100
-average_relative_error_add(const Cudd& mgr, const std::vector<BDD>& f,
-                           const std::vector<BDD>& f_hat, const NumberRepresentation num_rep)
+    acre_add(const Cudd& mgr, const std::vector<BDD>& f,
+            const std::vector<BDD>& f_hat, const NumberRepresentation num_rep)
 {
 
     ADD diff = abo::util::absolute_difference_add(mgr, f, f_hat, num_rep);
@@ -69,9 +69,9 @@ average_relative_error_add(const Cudd& mgr, const std::vector<BDD>& f,
 }
 
 boost::multiprecision::cpp_dec_float_100
-average_relative_error_symbolic_division(const Cudd& mgr, const std::vector<BDD>& f,
-                                         const std::vector<BDD>& f_hat, unsigned int num_extra_bits,
-                                         const NumberRepresentation num_rep)
+    acre_symbolic_division(const Cudd& mgr, const std::vector<BDD>& f,
+                         const std::vector<BDD>& f_hat, unsigned int num_extra_bits,
+                         const NumberRepresentation num_rep)
 {
 
     std::vector<BDD> absolute_difference =

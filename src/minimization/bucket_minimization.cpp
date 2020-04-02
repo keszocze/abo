@@ -325,12 +325,12 @@ metric_function(ErrorMetric metric)
     case ErrorMetric::AVERAGE_CASE_RELATIVE:
         return [](Cudd& mgr, const std::vector<BDD>& orig, const std::vector<BDD>& approx) {
             return static_cast<double>(
-                abo::error_metrics::average_relative_error_add(mgr, orig, approx));
+                abo::error_metrics::acre_add(mgr, orig, approx));
         };
     case ErrorMetric::AVERAGE_CASE_RELATIVE_ADD:
         return [](Cudd& mgr, const std::vector<BDD>& orig, const std::vector<BDD>& approx) {
             return static_cast<double>(
-                abo::error_metrics::average_relative_error_add(mgr, orig, approx));
+                abo::error_metrics::acre_add(mgr, orig, approx));
         };
     case ErrorMetric::MEAN_SQUARED:
         return [](Cudd& mgr, const std::vector<BDD>& orig, const std::vector<BDD>& approx) {

@@ -60,9 +60,9 @@ double compute_error_metric(const Cudd& mgr, const std::vector<BDD>& original,
             abo::error_metrics::approximate_worst_case_error(mgr, original, approx, 5));
     case ErrorMetric::AVERAGE_RELATIVE_ADD:
         return static_cast<double>(
-            abo::error_metrics::average_relative_error_add(mgr, approx, original));
+            abo::error_metrics::acre_add(mgr, approx, original));
     case ErrorMetric::AVERAGE_RELATIVE_APPROX:
-        auto bounds = abo::error_metrics::average_relative_error_bounds(mgr, approx, original);
+        auto bounds = abo::error_metrics::acre_bounds(mgr, approx, original);
         return static_cast<double>((bounds.first + bounds.second) / 2.0);
     }
 
