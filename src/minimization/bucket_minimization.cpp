@@ -204,7 +204,7 @@ BDD apply_operator(const Cudd& mgr, BDD& b, Operator op, unsigned int level_star
     case Operator::SUPERSET_LIGHT:
         return abo::operators::superset_light_child(mgr, b, level_start, level_end);
     case Operator::ROUND_BEST: return abo::operators::round_best(mgr, b, level_start, level_end);
-    case Operator::ROUND: return abo::operators::round(mgr, b, level_start);
+    case Operator::ROUND: return abo::operators::round_bdd(mgr, b, level_start);
     }
     return b;
 }

@@ -70,7 +70,7 @@ BDD subset_heavy_child(const Cudd& mgr, const BDD& bdd, unsigned int level_start
  * @param level The level at which to start the rounding
  * @return The rounded BDD
  */
-BDD round(const Cudd& mgr, const BDD& bdd, unsigned int level);
+BDD round_bdd(const Cudd& mgr, const BDD& bdd, unsigned int level);
 
 /**
  * @brief New operation introduced for testing purposes. Like for example subset_light_child, it

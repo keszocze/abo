@@ -50,7 +50,7 @@ BDD subset_heavy_child(const Cudd& mgr, const BDD& bdd, const unsigned int level
     return round_any(mgr, bdd, level_start, level_end, true, true);
 }
 
-BDD round(const Cudd& mgr, const BDD& bdd, const unsigned int level)
+BDD round_bdd(const Cudd& mgr, const BDD& bdd, const unsigned int level)
 {
     std::map<DdNode*, DdNode*> round_map;
     DdNode* node = round_rec(mgr.getManager(), bdd.getNode(), level, abo::util::count_minterms(bdd),
