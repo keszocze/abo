@@ -11,7 +11,7 @@ double worst_case_relative_error_add(const Cudd& mgr, const std::vector<BDD>& f,
 
     ADD diff = abo::util::absolute_difference_add(mgr, f, f_hat, num_rep);
     ADD respective_diff = diff.Divide(
-        abo::util::bdd_forest_to_add(mgr, abo::util::abs(mgr, f, num_rep)).Maximum(mgr.addOne()));
+        abo::util::bdd_forest_to_add(mgr, abo::util::bdd_abs(mgr, f, num_rep)).Maximum(mgr.addOne()));
     std::vector<std::pair<double, unsigned long>> terminal_values =
         abo::util::add_terminal_values(respective_diff);
 
@@ -28,7 +28,7 @@ double worst_case_relative_error_search(const Cudd& mgr, const std::vector<BDD>&
                                         double precision, const NumberRepresentation num_rep)
 {
 
-    std::vector<BDD> f_ = abo::util::bdd_max_one(mgr, abo::util::abs(mgr, f, num_rep));
+    std::vector<BDD> f_ = abo::util::bdd_max_one(mgr, abo::util::bdd_abs(mgr, f, num_rep));
 
     std::vector<BDD> absolute_difference =
         abo::util::bdd_absolute_difference(mgr, f, f_hat, num_rep);
@@ -86,7 +86,7 @@ boost::multiprecision::cpp_dec_float_100 worst_case_relative_error_symbolic_divi
     std::vector<BDD> absolute_difference =
         abo::util::bdd_absolute_difference(mgr, f, f_hat, num_rep);
 
-    std::vector<BDD> no_zero = abo::util::bdd_max_one(mgr, abo::util::abs(mgr, f, num_rep));
+    std::vector<BDD> no_zero = abo::util::bdd_max_one(mgr, abo::util::bdd_abs(mgr, f, num_rep));
     std::vector<BDD> divided =
         abo::util::bdd_divide(mgr, absolute_difference, no_zero, num_extra_bits);
     auto max = get_max_value(mgr, divided);
@@ -135,7 +135,7 @@ worst_case_relative_error_bounds(const Cudd& mgr, const std::vector<BDD>& f,
         abo::util::bdd_absolute_difference(mgr, f, f_hat, num_rep);
 
     return maximum_relative_value_bounds(
-        mgr, absolute_difference, abo::util::bdd_max_one(mgr, abo::util::abs(mgr, f, num_rep)));
+        mgr, absolute_difference, abo::util::bdd_max_one(mgr, abo::util::bdd_abs(mgr, f, num_rep)));
 }
 
 } // namespace abo::error_metrics

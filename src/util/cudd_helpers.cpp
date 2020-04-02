@@ -504,10 +504,10 @@ std::vector<BDD> bdd_absolute_difference(const Cudd& mgr, const std::vector<BDD>
     const std::vector<BDD>& g__ = smaller ? f_ : g_;
 
     std::vector<BDD> difference = abo::util::bdd_subtract(mgr, f__, g__);
-    return abo::util::abs(mgr, difference, NumberRepresentation::TwosComplement);
+    return abo::util::bdd_abs(mgr, difference, NumberRepresentation::TwosComplement);
 }
 
-std::vector<BDD> abs(const Cudd& mgr, const std::vector<BDD>& f, const NumberRepresentation num_rep)
+std::vector<BDD> bdd_abs(const Cudd& mgr, const std::vector<BDD>& f, const NumberRepresentation num_rep)
 {
 
     // for unsigned numbers, nothing has to be done

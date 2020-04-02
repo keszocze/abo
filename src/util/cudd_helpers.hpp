@@ -204,8 +204,8 @@ std::vector<BDD> bdd_add(const Cudd& mgr, const std::vector<BDD>& f, const std::
  * @param num_rep The number representation for f
  * @return BDD representing abs(f)
  */
-std::vector<BDD> abs(const Cudd& mgr, const std::vector<BDD>& f,
-                     const NumberRepresentation num_rep);
+std::vector<BDD> bdd_abs(const Cudd& mgr, const std::vector<BDD>& f,
+                        const NumberRepresentation num_rep);
 
 /**
  * @brief Shifts a function f by a number of bits left or right
