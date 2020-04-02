@@ -41,7 +41,7 @@ double compute_error_metric(const Cudd& mgr, const std::vector<BDD>& original,
     case ErrorMetric::WORST_CASE:
         return static_cast<double>(abo::error_metrics::worst_case_error(mgr, original, approx));
     case ErrorMetric::WORST_CASE_RELATIVE_APPROX: {
-        auto bounds = abo::error_metrics::worst_case_relative_error_bounds(mgr, original, approx);
+        auto bounds = abo::error_metrics::wcre_bounds(mgr, original, approx);
         return static_cast<double>((bounds.first + bounds.second) / 2.0);
     }
     case ErrorMetric::AVERAGE_CASE:

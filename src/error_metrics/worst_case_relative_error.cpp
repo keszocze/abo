@@ -6,9 +6,9 @@ using abo::util::NumberRepresentation;
 
 namespace abo::error_metrics {
 
-double worst_case_relative_error_add(const Cudd& mgr, const std::vector<BDD>& f,
-                                     const std::vector<BDD>& f_hat,
-                                     const util::NumberRepresentation num_rep)
+double wcre_add(const Cudd& mgr, const std::vector<BDD>& f,
+                 const std::vector<BDD>& f_hat,
+                 const util::NumberRepresentation num_rep)
 {
 
     ADD diff = abo::util::absolute_difference_add(mgr, f, f_hat, num_rep);
@@ -25,9 +25,9 @@ double worst_case_relative_error_add(const Cudd& mgr, const std::vector<BDD>& f,
     return largest;
 }
 
-double worst_case_relative_error_search(const Cudd& mgr, const std::vector<BDD>& f,
-                                        const std::vector<BDD>& f_hat, unsigned int num_extra_bits,
-                                        double precision, const NumberRepresentation num_rep)
+double wcre_search(const Cudd& mgr, const std::vector<BDD>& f,
+                    const std::vector<BDD>& f_hat, unsigned int num_extra_bits,
+                    double precision, const NumberRepresentation num_rep)
 {
 
     std::vector<BDD> f_ = abo::util::bdd_max_one(mgr, abo::util::bdd_abs(mgr, f, num_rep));
@@ -78,7 +78,7 @@ double worst_case_relative_error_search(const Cudd& mgr, const std::vector<BDD>&
     return (min + max) / 2.0;
 }
 
-boost::multiprecision::cpp_dec_float_100 worst_case_relative_error_symbolic_division(
+boost::multiprecision::cpp_dec_float_100 wcre_symbolic_division(
     const Cudd& mgr, const std::vector<BDD>& f, const std::vector<BDD>& f_hat,
     unsigned int num_extra_bits, const NumberRepresentation num_rep)
 {
@@ -96,7 +96,7 @@ boost::multiprecision::cpp_dec_float_100 worst_case_relative_error_symbolic_divi
 }
 
 std::pair<boost::multiprecision::cpp_dec_float_100, boost::multiprecision::cpp_dec_float_100>
-maximum_relative_value_bounds(const Cudd& mgr, const std::vector<BDD>& f, const std::vector<BDD>& g)
+    maximum_relative_value_bounds(const Cudd& mgr, const std::vector<BDD>& f, const std::vector<BDD>& g)
 {
 
     BDD zero_so_far = mgr.bddOne();
@@ -126,9 +126,10 @@ maximum_relative_value_bounds(const Cudd& mgr, const std::vector<BDD>& f, const 
 }
 
 std::pair<boost::multiprecision::cpp_dec_float_100, boost::multiprecision::cpp_dec_float_100>
-worst_case_relative_error_bounds(const Cudd& mgr, const std::vector<BDD>& f,
-                                 const std::vector<BDD>& f_hat,
-                                 const util::NumberRepresentation num_rep)
+    wcre_bounds(const Cudd& mgr,
+                const std::vector<BDD>& f,
+                const std::vector<BDD>& f_hat,
+                const util::NumberRepresentation num_rep)
 {
 
     std::vector<BDD> absolute_difference =

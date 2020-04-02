@@ -316,7 +316,7 @@ metric_function(ErrorMetric metric)
     case ErrorMetric::WORST_CASE_RELATIVE:
         return [](Cudd& mgr, const std::vector<BDD>& orig, const std::vector<BDD>& approx) {
             return static_cast<double>(
-                abo::error_metrics::worst_case_relative_error_add(mgr, orig, approx));
+                abo::error_metrics::wcre_add(mgr, orig, approx));
         };
     case ErrorMetric::AVERAGE_CASE:
         return [](Cudd& mgr, const std::vector<BDD>& orig, const std::vector<BDD>& approx) {

@@ -19,10 +19,9 @@ namespace abo::error_metrics {
  * @param num_rep The number representation for f and f_hat
  * @return the maximum relative difference of the inputs
  */
-double
-worst_case_relative_error_add(const Cudd& mgr, const std::vector<BDD>& f,
-                              const std::vector<BDD>& f_hat,
-                              const abo::util::NumberRepresentation num_rep = abo::util::NumberRepresentation::BaseTwo);
+double wcre_add(const Cudd& mgr, const std::vector<BDD>& f,
+              const std::vector<BDD>& f_hat,
+              const abo::util::NumberRepresentation num_rep = abo::util::NumberRepresentation::BaseTwo);
 
 /**
  * @brief Computes bounds on the maximum relative value of f in relation to g
@@ -54,9 +53,9 @@ maximum_relative_value_bounds(const Cudd& mgr, const std::vector<BDD>& f,
  * @return {min, max}, the lower and upper bound on the maximum relative error
  */
 std::pair<boost::multiprecision::cpp_dec_float_100, boost::multiprecision::cpp_dec_float_100>
-worst_case_relative_error_bounds(
-    const Cudd& mgr, const std::vector<BDD>& f, const std::vector<BDD>& f_hat,
-    const abo::util::NumberRepresentation num_rep = abo::util::NumberRepresentation::BaseTwo);
+    wcre_bounds(
+        const Cudd& mgr, const std::vector<BDD>& f, const std::vector<BDD>& f_hat,
+        const abo::util::NumberRepresentation num_rep = abo::util::NumberRepresentation::BaseTwo);
 
 /**
  * @brief Computes the maximum relative difference between f and f_hat for any input
@@ -75,7 +74,7 @@ worst_case_relative_error_bounds(
  * @param num_rep The number representation for f and f_hat
  * @return the maximum relative difference of the inputs
  */
-double worst_case_relative_error_search(
+double wcre_search(
     const Cudd& mgr, const std::vector<BDD>& f, const std::vector<BDD>& f_hat,
     unsigned int num_extra_bits = 16, double precision = 0.0001,
     const abo::util::NumberRepresentation num_rep = abo::util::NumberRepresentation::BaseTwo);
@@ -95,7 +94,7 @@ double worst_case_relative_error_search(
  * @param num_rep The number representation for f and f_hat
  * @return the maximum relative difference of the inputs
  */
-boost::multiprecision::cpp_dec_float_100 worst_case_relative_error_symbolic_division(
+boost::multiprecision::cpp_dec_float_100 wcre_symbolic_division(
     const Cudd& mgr, const std::vector<BDD>& f, const std::vector<BDD>& f_hat,
     unsigned int num_extra_bits = 16,
     const abo::util::NumberRepresentation num_rep = abo::util::NumberRepresentation::BaseTwo);
