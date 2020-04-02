@@ -13,8 +13,6 @@
 
 namespace abo::error_metrics {
 
-using abo::util::NumberRepresentation;
-
 /**
  * @brief Computes the maximal value of a function represented by a vector of BDDs
  *
@@ -36,7 +34,7 @@ boost::multiprecision::uint256_t get_max_value(const Cudd& mgr, const std::vecto
  */
 boost::multiprecision::uint256_t
 worst_case_error(const Cudd& mgr, const std::vector<BDD>& f, const std::vector<BDD>& f_hat,
-                 const NumberRepresentation num_rep = NumberRepresentation::BaseTwo);
+                 const abo::util::NumberRepresentation num_rep = abo::util::NumberRepresentation::BaseTwo);
 
 /**
  * @brief Computes the maximum absolute difference between the f and f_hat for any input
@@ -51,7 +49,7 @@ worst_case_error(const Cudd& mgr, const std::vector<BDD>& f, const std::vector<B
  */
 double worst_case_error_percent(const Cudd& mgr, const std::vector<BDD>& f,
                                 const std::vector<BDD>& f_hat,
-                                const NumberRepresentation num_rep = NumberRepresentation::BaseTwo);
+                                const abo::util::NumberRepresentation num_rep = abo::util::NumberRepresentation::BaseTwo);
 
 /**
  * @brief Computes the maximum absolute difference between the f and f_hat for any input
@@ -65,7 +63,7 @@ double worst_case_error_percent(const Cudd& mgr, const std::vector<BDD>& f,
  */
 boost::multiprecision::uint256_t
 worst_case_error_add(const Cudd& mgr, const std::vector<BDD>& f, const std::vector<BDD>& f_hat,
-                     const NumberRepresentation num_rep = NumberRepresentation::BaseTwo);
+                     const abo::util::NumberRepresentation num_rep = abo::util::NumberRepresentation::BaseTwo);
 
 /**
  * @brief approximate_worst_case_error
@@ -85,6 +83,6 @@ worst_case_error_add(const Cudd& mgr, const std::vector<BDD>& f, const std::vect
 boost::multiprecision::uint256_t
 approximate_worst_case_error(const Cudd& mgr, const std::vector<BDD>& f,
                              const std::vector<BDD>& f_hat, int n,
-                             const NumberRepresentation num_rep = NumberRepresentation::BaseTwo);
+                             const abo::util::NumberRepresentation num_rep = abo::util::NumberRepresentation::BaseTwo);
 
 } // namespace abo::error_metrics

@@ -6,6 +6,8 @@
 
 #include <cudd_helpers.hpp>
 
+using abo::util::NumberRepresentation;
+
 namespace abo::error_metrics {
 
 boost::multiprecision::uint256_t get_max_value(const Cudd& mgr, const std::vector<BDD>& fun)

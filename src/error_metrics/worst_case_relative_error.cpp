@@ -2,6 +2,8 @@
 #include "cudd_helpers.hpp"
 #include "worst_case_error.hpp"
 
+using abo::util::NumberRepresentation;
+
 namespace abo::error_metrics {
 
 double worst_case_relative_error_add(const Cudd& mgr, const std::vector<BDD>& f,

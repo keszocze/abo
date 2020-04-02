@@ -3,6 +3,8 @@
 #include <boost/multiprecision/cpp_int.hpp>
 #include <cudd_helpers.hpp>
 
+using abo::util::NumberRepresentation;
+
 namespace abo::error_metrics {
 
 boost::multiprecision::cpp_dec_float_100 average_value(const std::vector<BDD>& f)

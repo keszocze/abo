@@ -3,6 +3,8 @@
 #include "cudd_helpers.hpp"
 #include <boost/multiprecision/cpp_int.hpp>
 
+using abo::util::NumberRepresentation;
+
 namespace abo::error_metrics {
 std::pair<boost::multiprecision::cpp_dec_float_100, boost::multiprecision::cpp_dec_float_100>
 average_relative_value(const Cudd& mgr, const std::vector<BDD>& f, const std::vector<BDD>& g)

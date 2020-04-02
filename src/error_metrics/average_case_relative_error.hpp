@@ -8,8 +8,6 @@
 
 namespace abo::error_metrics {
 
-using abo::util::NumberRepresentation;
-
 /**
  * @brief Computes bounds on the average relative difference between f and f_hat
  * It is defined as the average of |f(x) - f_hat(x)| / max(1, |f(x)|) for all inputs x
@@ -26,7 +24,7 @@ using abo::util::NumberRepresentation;
 std::pair<boost::multiprecision::cpp_dec_float_100, boost::multiprecision::cpp_dec_float_100>
 average_relative_error_bounds(const Cudd& mgr, const std::vector<BDD>& f,
                               const std::vector<BDD>& f_hat,
-                              const NumberRepresentation num_rep = NumberRepresentation::BaseTwo);
+                              const abo::util::NumberRepresentation num_rep = abo::util::NumberRepresentation::BaseTwo);
 
 /**
  * @brief Computes the average relative difference between f and f_hat
@@ -42,7 +40,7 @@ average_relative_error_bounds(const Cudd& mgr, const std::vector<BDD>& f,
 boost::multiprecision::cpp_dec_float_100
 average_relative_error_add(const Cudd& mgr, const std::vector<BDD>& f,
                            const std::vector<BDD>& f_hat,
-                           const NumberRepresentation num_rep = NumberRepresentation::BaseTwo);
+                           const abo::util::NumberRepresentation num_rep = abo::util::NumberRepresentation::BaseTwo);
 
 /**
  * @brief Computes the average relative difference between f and f_hat
@@ -62,5 +60,5 @@ average_relative_error_add(const Cudd& mgr, const std::vector<BDD>& f,
 boost::multiprecision::cpp_dec_float_100 average_relative_error_symbolic_division(
     const Cudd& mgr, const std::vector<BDD>& f, const std::vector<BDD>& f_hat,
     unsigned int num_extra_bits = 16,
-    const NumberRepresentation num_rep = NumberRepresentation::BaseTwo);
+    const abo::util::NumberRepresentation num_rep = abo::util::NumberRepresentation::BaseTwo);
 } // namespace abo::error_metrics

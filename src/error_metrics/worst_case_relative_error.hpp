@@ -8,8 +8,6 @@
 
 namespace abo::error_metrics {
 
-using abo::util::NumberRepresentation;
-
 /**
  * @brief Computes the maximum relative difference between f and f_hat for any input
  * It is defined as the maximum of |f(x) - f_hat(x)| / max(1, |f(x)|) over all inputs x
@@ -24,7 +22,7 @@ using abo::util::NumberRepresentation;
 double
 worst_case_relative_error_add(const Cudd& mgr, const std::vector<BDD>& f,
                               const std::vector<BDD>& f_hat,
-                              const NumberRepresentation num_rep = NumberRepresentation::BaseTwo);
+                              const abo::util::NumberRepresentation num_rep = abo::util::NumberRepresentation::BaseTwo);
 
 /**
  * @brief Computes bounds on the maximum relative value of f in relation to g
@@ -58,7 +56,7 @@ maximum_relative_value_bounds(const Cudd& mgr, const std::vector<BDD>& f,
 std::pair<boost::multiprecision::cpp_dec_float_100, boost::multiprecision::cpp_dec_float_100>
 worst_case_relative_error_bounds(
     const Cudd& mgr, const std::vector<BDD>& f, const std::vector<BDD>& f_hat,
-    const NumberRepresentation num_rep = NumberRepresentation::BaseTwo);
+    const abo::util::NumberRepresentation num_rep = abo::util::NumberRepresentation::BaseTwo);
 
 /**
  * @brief Computes the maximum relative difference between f and f_hat for any input
@@ -80,7 +78,7 @@ worst_case_relative_error_bounds(
 double worst_case_relative_error_search(
     const Cudd& mgr, const std::vector<BDD>& f, const std::vector<BDD>& f_hat,
     unsigned int num_extra_bits = 16, double precision = 0.0001,
-    const NumberRepresentation num_rep = NumberRepresentation::BaseTwo);
+    const abo::util::NumberRepresentation num_rep = abo::util::NumberRepresentation::BaseTwo);
 
 /**
  * @brief Computes the maximum relative difference between f and f_hat for any input
@@ -100,6 +98,6 @@ double worst_case_relative_error_search(
 boost::multiprecision::cpp_dec_float_100 worst_case_relative_error_symbolic_division(
     const Cudd& mgr, const std::vector<BDD>& f, const std::vector<BDD>& f_hat,
     unsigned int num_extra_bits = 16,
-    const NumberRepresentation num_rep = NumberRepresentation::BaseTwo);
+    const abo::util::NumberRepresentation num_rep = abo::util::NumberRepresentation::BaseTwo);
 
 } // namespace abo::error_metrics
