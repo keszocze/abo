@@ -6,7 +6,8 @@
 
 namespace abo::error_metrics {
 
-double average_bit_flip_error(const std::vector<BDD>& f, const std::vector<BDD>& f_hat)
+double average_bit_flip_error(const std::vector<BDD>& f,
+                              const std::vector<BDD>& f_hat)
 {
     assert(f.size() == f_hat.size());
 
@@ -30,7 +31,8 @@ double average_bit_flip_error(const std::vector<BDD>& f, const std::vector<BDD>&
     return result / std::pow(2.0, max_support_size);
 }
 
-double average_bit_flip_error_add(const Cudd& mgr, const std::vector<BDD>& f,
+double average_bit_flip_error_add(const Cudd& mgr,
+                                  const std::vector<BDD>& f,
                                   const std::vector<BDD>& f_hat)
 {
     ADD diff = abo::util::xor_difference_add(mgr, f, f_hat);

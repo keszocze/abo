@@ -13,7 +13,8 @@ namespace abo::error_metrics {
  * @param f_hat The approximated function. must have the same number of bits as f
  * @return the average bit flip error ranging between 0 and f.size()
  */
-double average_bit_flip_error(const std::vector<BDD>& f, const std::vector<BDD>& f_hat);
+double average_bit_flip_error(const std::vector<BDD>& f,
+                              const std::vector<BDD>& f_hat);
 
 /**
  * @brief Compute the average bit flip error between the functions f and f_hat
@@ -24,7 +25,8 @@ double average_bit_flip_error(const std::vector<BDD>& f, const std::vector<BDD>&
  * @param f_hat The approximated function. must have the same number of bits as f
  * @return the average bit flip error ranging between 0 and f.size()
  */
-double average_bit_flip_error_add(const Cudd& mgr, const std::vector<BDD>& f,
+double average_bit_flip_error_add(const Cudd& mgr,
+                                  const std::vector<BDD>& f,
                                   const std::vector<BDD>& f_hat);
 
 } // namespace abo::error_metrics

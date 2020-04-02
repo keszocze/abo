@@ -18,7 +18,8 @@ namespace abo::operators {
  * level_start when approximating only one level)
  * @return The approximated BDD
  */
-BDD subset_light_child(const Cudd& mgr, const BDD& bdd, unsigned int level_start,
+BDD subset_light_child(const Cudd& mgr, const BDD& bdd,
+                       unsigned int level_start,
                        unsigned int level_end);
 
 /**
@@ -32,7 +33,8 @@ BDD subset_light_child(const Cudd& mgr, const BDD& bdd, unsigned int level_start
  * level_start when approximating only one level)
  * @return The approximated BDD
  */
-BDD superset_heavy_child(const Cudd& mgr, const BDD& bdd, unsigned int level_start,
+BDD superset_heavy_child(const Cudd& mgr, const BDD& bdd,
+                         unsigned int level_start,
                          unsigned int level_end);
 
 /**
@@ -46,7 +48,8 @@ BDD superset_heavy_child(const Cudd& mgr, const BDD& bdd, unsigned int level_sta
  * level_start when approximating only one level)
  * @return The approximated BDD
  */
-BDD superset_light_child(const Cudd& mgr, const BDD& bdd, unsigned int level_start,
+BDD superset_light_child(const Cudd& mgr, const BDD& bdd,
+                         unsigned int level_start,
                          unsigned int level_end);
 
 /**
@@ -60,7 +63,8 @@ BDD superset_light_child(const Cudd& mgr, const BDD& bdd, unsigned int level_sta
  * level_start when approximating only one level)
  * @return The approximated BDD
  */
-BDD subset_heavy_child(const Cudd& mgr, const BDD& bdd, unsigned int level_start,
+BDD subset_heavy_child(const Cudd& mgr, const BDD& bdd,
+                       unsigned int level_start,
                        unsigned int level_end);
 
 /**
@@ -83,7 +87,8 @@ BDD round_bdd(const Cudd& mgr, const BDD& bdd, unsigned int level);
  * level_start when approximating only one level)
  * @return The approximated BDD
  */
-BDD round_best(const Cudd& mgr, const BDD& bdd, unsigned int level_start, unsigned int level_end);
+BDD round_best(const Cudd& mgr, const BDD& bdd,
+               unsigned int level_start, unsigned int level_end);
 
 /**
  * @brief Implements the round-up approximation operation from Soeken2016
@@ -93,7 +98,8 @@ BDD round_best(const Cudd& mgr, const BDD& bdd, unsigned int level_start, unsign
  * @param level_end The lowest BDD level (always the level of the terminals in the original paper)
  * @return The rounded BDD
  */
-BDD round_up(const Cudd& mgr, const BDD& bdd, unsigned int level_start, unsigned int level_end);
+BDD round_up(const Cudd& mgr, const BDD& bdd,
+             unsigned int level_start, unsigned int level_end);
 
 /**
  * @brief Implements the round-down operation from Soeken2016
@@ -103,6 +109,7 @@ BDD round_up(const Cudd& mgr, const BDD& bdd, unsigned int level_start, unsigned
  * @param level_end The lowest BDD level (always the level of the terminals in the original paper)
  * @return The rounded BDD
  */
-BDD round_down(const Cudd& mgr, const BDD& bdd, unsigned int level_start, unsigned int level_end);
+BDD round_down(const Cudd& mgr, const BDD& bdd,
+               unsigned int level_start, unsigned int level_end);
 
 } // namespace abo::operators

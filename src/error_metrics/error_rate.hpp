@@ -20,8 +20,13 @@ namespace abo::error_metrics {
  * @param f_hat The approximated function. Must have the same number of bits as f
  * @return The computed error rate in the interval [0, 1]
  */
-double error_rate(const Cudd& mgr, const std::vector<BDD>& f, const std::vector<BDD>& f_hat);
-double error_rate(const Cudd& mgr, const BDD& f, const BDD& f_hat);
+double error_rate(const Cudd& mgr,
+                  const std::vector<BDD>& f,
+                  const std::vector<BDD>& f_hat);
+
+double error_rate(const Cudd& mgr,
+                  const BDD& f,
+                  const BDD& f_hat);
 
 /**
  * @brief Computes the error rate, i.e. the number of inputs for which f_hat differs from f
@@ -33,7 +38,9 @@ double error_rate(const Cudd& mgr, const BDD& f, const BDD& f_hat);
  * @param f_hat The approximated function. Must have the same number of bits as f
  * @return The computed error rate in the interval [0, 1]
  */
-double error_rate_add(const Cudd& mgr, const std::vector<BDD>& f, const std::vector<BDD>& f_hat);
+double error_rate_add(const Cudd& mgr,
+                      const std::vector<BDD>& f,
+                      const std::vector<BDD>& f_hat);
 
 /**
  * @brief Approximates the error rate, i.e. the number of inputs for which f_hat differs from f
@@ -45,8 +52,10 @@ double error_rate_add(const Cudd& mgr, const std::vector<BDD>& f, const std::vec
  * @param samples The number of samples to use
  * @return The approximated error rate in the interval [0, 1]
  */
-double error_rate_sampling(const Cudd& mgr, const std::vector<BDD>& f,
-                           const std::vector<BDD>& f_hat, long samples = 10000);
+double error_rate_sampling(const Cudd& mgr,
+                           const std::vector<BDD>& f,
+                           const std::vector<BDD>& f_hat,
+                           long samples = 10000);
 
 /**
  * @brief Approximates the error rate, i.e. the number of inputs for which f_hat differs from f
@@ -59,6 +68,8 @@ double error_rate_sampling(const Cudd& mgr, const std::vector<BDD>& f,
  * @param samples The number of samples to use
  * @return The approximated error rate in the interval [0, 1]
  */
-double error_rate_efficient_sampling(const Cudd& mgr, const std::vector<BDD>& f,
-                                     const std::vector<BDD>& f_hat, long samples = 10000);
+double error_rate_efficient_sampling(const Cudd& mgr,
+                                     const std::vector<BDD>& f,
+                                     const std::vector<BDD>& f_hat,
+                                     long samples = 10000);
 } // namespace abo::error_metrics

@@ -8,43 +8,53 @@
 
 namespace abo::operators {
 
-static DdNode* remove_children_rec(DdManager* dd, DdNode* node, unsigned int level_start,
+static DdNode* remove_children_rec(DdManager* dd, DdNode* node,
+                                   unsigned int level_start,
                                    unsigned int level_end,
                                    const std::map<DdNode*, double>& minterm_count,
-                                   std::map<DdNode*, DdNode*>& round_map, bool remove_heavy,
+                                   std::map<DdNode*, DdNode*>& round_map,
+                                   bool remove_heavy,
                                    bool subset);
 
-static DdNode* round_rec(DdManager* dd, DdNode* node, unsigned int level_start,
+static DdNode* round_rec(DdManager* dd, DdNode* node,
+                         unsigned int level_start,
                          const std::map<DdNode*, double>& minterm_count,
                          std::map<DdNode*, DdNode*>& round_map);
 
-static DdNode* round_best_rec(DdManager* dd, DdNode* node, unsigned int level_start,
+static DdNode* round_best_rec(DdManager* dd, DdNode* node,
+                              unsigned int level_start,
                               unsigned int level_end,
                               const std::map<DdNode*, double>& minterm_count,
                               std::map<DdNode*, DdNode*>& round_map);
 
-static BDD round_any(const Cudd& mgr, const BDD& bdd, const unsigned int level_start,
-                     const unsigned int level_end, bool remove_heavy, bool subset);
+static BDD round_any(const Cudd& mgr, const BDD& bdd,
+                     const unsigned int level_start,
+                     const unsigned int level_end,
+                     bool remove_heavy, bool subset);
 
-BDD subset_light_child(const Cudd& mgr, const BDD& bdd, const unsigned int level_start,
+BDD subset_light_child(const Cudd& mgr, const BDD& bdd,
+                       const unsigned int level_start,
                        const unsigned int level_end)
 {
     return round_any(mgr, bdd, level_start, level_end, false, true);
 }
 
-BDD superset_heavy_child(const Cudd& mgr, const BDD& bdd, const unsigned int level_start,
+BDD superset_heavy_child(const Cudd& mgr, const BDD& bdd,
+                         const unsigned int level_start,
                          const unsigned int level_end)
 {
     return round_any(mgr, bdd, level_start, level_end, true, false);
 }
 
-BDD superset_light_child(const Cudd& mgr, const BDD& bdd, const unsigned int level_start,
+BDD superset_light_child(const Cudd& mgr, const BDD& bdd,
+                         const unsigned int level_start,
                          const unsigned int level_end)
 {
     return round_any(mgr, bdd, level_start, level_end, false, false);
 }
 
-BDD subset_heavy_child(const Cudd& mgr, const BDD& bdd, const unsigned int level_start,
+BDD subset_heavy_child(const Cudd& mgr, const BDD& bdd,
+                       const unsigned int level_start,
                        const unsigned int level_end)
 {
     return round_any(mgr, bdd, level_start, level_end, true, true);
@@ -53,12 +63,13 @@ BDD subset_heavy_child(const Cudd& mgr, const BDD& bdd, const unsigned int level
 BDD round_bdd(const Cudd& mgr, const BDD& bdd, const unsigned int level)
 {
     std::map<DdNode*, DdNode*> round_map;
-    DdNode* node = round_rec(mgr.getManager(), bdd.getNode(), level, abo::util::count_minterms(bdd),
-                             round_map);
+    DdNode* node = round_rec(mgr.getManager(), bdd.getNode(), level,
+                             abo::util::count_minterms(bdd), round_map);
     return BDD(mgr, node);
 }
 
-BDD round_best(const Cudd& mgr, const BDD& bdd, unsigned int level_start, unsigned int level_end)
+BDD round_best(const Cudd& mgr, const BDD& bdd,
+               unsigned int level_start, unsigned int level_end)
 {
     std::map<DdNode*, DdNode*> round_map;
     DdNode* node = round_best_rec(mgr.getManager(), bdd.getNode(), level_start, level_end,
@@ -66,7 +77,8 @@ BDD round_best(const Cudd& mgr, const BDD& bdd, unsigned int level_start, unsign
     return BDD(mgr, node);
 }
 
-BDD round_up(const Cudd& mgr, const BDD& bdd, unsigned int level_start, unsigned int level_end)
+BDD round_up(const Cudd& mgr, const BDD& bdd,
+             unsigned int level_start, unsigned int level_end)
 {
     std::map<DdNode*, DdNode*> round_map;
     DdNode* node = remove_children_rec(mgr.getManager(), bdd.getNode(), level_start, level_end,
@@ -74,7 +86,8 @@ BDD round_up(const Cudd& mgr, const BDD& bdd, unsigned int level_start, unsigned
     return BDD(mgr, node);
 }
 
-BDD round_down(const Cudd& mgr, const BDD& bdd, unsigned int level_start, unsigned int level_end)
+BDD round_down(const Cudd& mgr, const BDD& bdd,
+               unsigned int level_start, unsigned int level_end)
 {
     std::map<DdNode*, DdNode*> round_map;
     DdNode* node = remove_children_rec(mgr.getManager(), bdd.getNode(), level_start, level_end,
@@ -83,9 +96,11 @@ BDD round_down(const Cudd& mgr, const BDD& bdd, unsigned int level_start, unsign
 }
 
 static DdNode* remove_children_rec(DdManager* const dd, DdNode* const node,
-                                   const unsigned int level_start, const unsigned int level_end,
+                                   const unsigned int level_start,
+                                   const unsigned int level_end,
                                    const std::map<DdNode*, double>& minterm_count,
-                                   std::map<DdNode*, DdNode*>& round_map, const bool remove_heavy,
+                                   std::map<DdNode*, DdNode*>& round_map,
+                                   const bool remove_heavy,
                                    const bool subset)
 {
 
@@ -168,7 +183,8 @@ static DdNode* remove_children_rec(DdManager* const dd, DdNode* const node,
     return neW;
 }
 
-static DdNode* round_rec(DdManager* const dd, DdNode* const node, const unsigned int level_start,
+static DdNode* round_rec(DdManager* const dd, DdNode* const node,
+                         const unsigned int level_start,
                          const std::map<DdNode*, double>& minterm_count,
                          std::map<DdNode*, DdNode*>& round_map)
 {
@@ -232,7 +248,8 @@ static DdNode* round_rec(DdManager* const dd, DdNode* const node, const unsigned
 }
 
 static DdNode* round_best_rec(DdManager* const dd, DdNode* const node,
-                              const unsigned int level_start, const unsigned int level_end,
+                              const unsigned int level_start,
+                              const unsigned int level_end,
                               const std::map<DdNode*, double>& minterm_count,
                               std::map<DdNode*, DdNode*>& round_map)
 {
@@ -335,8 +352,10 @@ static DdNode* round_best_rec(DdManager* const dd, DdNode* const node,
     return neW;
 }
 
-static BDD round_any(const Cudd& mgr, const BDD& bdd, const unsigned int level_start,
-                     const unsigned int level_end, bool remove_heavy, bool subset)
+static BDD round_any(const Cudd& mgr, const BDD& bdd,
+                     const unsigned int level_start,
+                     const unsigned int level_end,
+                     bool remove_heavy, bool subset)
 {
     std::map<DdNode*, DdNode*> round_map;
     DdNode* node =
