@@ -205,6 +205,7 @@ BDD apply_operator(const Cudd& mgr, BDD& b, Operator op, unsigned int level_star
         return abo::operators::superset_light_child(mgr, b, level_start, level_end);
     case Operator::ROUND_BEST: return abo::operators::round_best(mgr, b, level_start, level_end);
     case Operator::ROUND: return abo::operators::round_bdd(mgr, b, level_start);
+    default: return b;
     }
     return b;
 }
@@ -292,6 +293,7 @@ std::string metric_to_string(ErrorMetric metric)
     case ErrorMetric::ERROR_RATE: return "error rate";
     case ErrorMetric::AVERAGE_BIT_FLIP: return "average bit flip";
     case ErrorMetric::WORST_CASE_BIT_FLIP: return "worst case bit flip";
+    default: return "";
     }
     return "";
 }
@@ -347,6 +349,7 @@ metric_function(ErrorMetric metric)
             return static_cast<double>(
                 abo::error_metrics::worst_case_bit_flip_error(mgr, orig, approx));
         };
+    default: throw std::logic_error("switch does not handle all cases");
     }
     throw std::logic_error("switch does not handle all cases");
 }
@@ -363,6 +366,7 @@ std::string operator_to_string(Operator op)
     case Operator::SUBSET_HEAVY: return "subset heavy";
     case Operator::POSITIVE_COFACTOR: return "cof+";
     case Operator::NEGATIVE_COFACTOR: return "cof-";
+    default: return "";
     }
     return "";
 }
