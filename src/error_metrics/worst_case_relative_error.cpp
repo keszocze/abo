@@ -42,8 +42,7 @@ double worst_case_relative_error_search(const Cudd& mgr, const std::vector<BDD>&
 
     double min;
     double max;
-    double factor = 1;
-    for (int i = 0;; i++)
+    for (float factor = 1.0f;;factor *= 2.0f)
     {
         std::vector<BDD> multiplied = abo::util::bdd_multiply_constant(mgr, f_, factor);
         auto ge = abo::util::exists_greater_equals(mgr, absolute_difference, multiplied);
@@ -57,9 +56,8 @@ double worst_case_relative_error_search(const Cudd& mgr, const std::vector<BDD>&
             min = factor == 1.0 ? 0 : factor / 2.0;
             break;
         }
-        factor *= 2;
     }
-    for (int i = 0; max - min > precision; i++)
+    while (max - min > precision)
     {
         double middle = (min + max) / 2.0;
         std::vector<BDD> multiplied = abo::util::bdd_multiply_constant(mgr, f_, middle);
