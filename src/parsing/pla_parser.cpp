@@ -38,7 +38,8 @@ void pla_parser::on_number_of_terms(std::size_t number_of_terms) const
                            // supposedly generates no code
 }
 
-bool pla_parser::on_keyword(const std::string& keyword, const std::string& value) const
+bool pla_parser::on_keyword(const std::string& keyword,
+                            const std::string& value) const
 {
     if (keyword == "ilb")
     {

@@ -4,7 +4,8 @@
 
 namespace abo::error_metrics {
 
-unsigned int worst_case_bit_flip_error(const Cudd& mgr, const std::vector<BDD>& f,
+unsigned int worst_case_bit_flip_error(const Cudd& mgr,
+                                       const std::vector<BDD>& f,
                                        const std::vector<BDD>& f_hat)
 {
     assert(f.size() == f_hat.size());
@@ -18,7 +19,8 @@ unsigned int worst_case_bit_flip_error(const Cudd& mgr, const std::vector<BDD>& 
     return abo::util::const_ADD_value(bit_error_sum.FindMax());
 }
 
-unsigned int worst_case_bit_flip_error_add(const Cudd& mgr, const std::vector<BDD>& f,
+unsigned int worst_case_bit_flip_error_add(const Cudd& mgr,
+                                           const std::vector<BDD>& f,
                                            const std::vector<BDD>& f_hat)
 {
     ADD diff = abo::util::xor_difference_add(mgr, f, f_hat);
@@ -27,7 +29,8 @@ unsigned int worst_case_bit_flip_error_add(const Cudd& mgr, const std::vector<BD
     unsigned int max_flip_error = 0;
     for (auto v : terminal_values)
     {
-        unsigned int bit_flips = static_cast<unsigned int>(__builtin_popcountll(v.first));
+        int bitcount = __builtin_popcountll(v.first);
+        unsigned int bit_flips = static_cast<unsigned int>(bitcount);
         max_flip_error = std::max(bit_flips, max_flip_error);
     }
     return max_flip_error;

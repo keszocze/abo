@@ -21,7 +21,8 @@ namespace abo::error_metrics {
  * @param mgr
  * @param fun The function given by a vector of BDDs
  */
-boost::multiprecision::uint256_t get_max_value(const Cudd& mgr, const std::vector<BDD>& fun);
+boost::multiprecision::uint256_t get_max_value(const Cudd& mgr,
+                                               const std::vector<BDD>& fun);
 
 /**
  * @brief Computes the maximum absolute difference between the f and f_hat for any input
@@ -33,8 +34,11 @@ boost::multiprecision::uint256_t get_max_value(const Cudd& mgr, const std::vecto
  * @return The maximum absolute difference
  */
 boost::multiprecision::uint256_t
-worst_case_error(const Cudd& mgr, const std::vector<BDD>& f, const std::vector<BDD>& f_hat,
-                 const abo::util::NumberRepresentation num_rep = abo::util::NumberRepresentation::BaseTwo);
+worst_case_error(const Cudd& mgr,
+                 const std::vector<BDD>& f,
+                 const std::vector<BDD>& f_hat,
+                 const abo::util::NumberRepresentation num_rep
+                    = abo::util::NumberRepresentation::BaseTwo);
 
 /**
  * @brief Computes the maximum absolute difference between the f and f_hat for any input
@@ -49,7 +53,8 @@ worst_case_error(const Cudd& mgr, const std::vector<BDD>& f, const std::vector<B
  */
 double worst_case_error_percent(const Cudd& mgr, const std::vector<BDD>& f,
                                 const std::vector<BDD>& f_hat,
-                                const abo::util::NumberRepresentation num_rep = abo::util::NumberRepresentation::BaseTwo);
+                                const abo::util::NumberRepresentation num_rep
+                                    = abo::util::NumberRepresentation::BaseTwo);
 
 /**
  * @brief Computes the maximum absolute difference between the f and f_hat for any input
@@ -62,8 +67,11 @@ double worst_case_error_percent(const Cudd& mgr, const std::vector<BDD>& f,
  * @return The maximum absolute difference
  */
 boost::multiprecision::uint256_t
-worst_case_error_add(const Cudd& mgr, const std::vector<BDD>& f, const std::vector<BDD>& f_hat,
-                     const abo::util::NumberRepresentation num_rep = abo::util::NumberRepresentation::BaseTwo);
+worst_case_error_add(const Cudd& mgr,
+                     const std::vector<BDD>& f,
+                     const std::vector<BDD>& f_hat,
+                     const abo::util::NumberRepresentation num_rep
+                        = abo::util::NumberRepresentation::BaseTwo);
 
 /**
  * @brief approximate_worst_case_error
@@ -83,6 +91,7 @@ worst_case_error_add(const Cudd& mgr, const std::vector<BDD>& f, const std::vect
 boost::multiprecision::uint256_t
 approximate_worst_case_error(const Cudd& mgr, const std::vector<BDD>& f,
                              const std::vector<BDD>& f_hat, int n,
-                             const abo::util::NumberRepresentation num_rep = abo::util::NumberRepresentation::BaseTwo);
+                             const abo::util::NumberRepresentation num_rep
+                                = abo::util::NumberRepresentation::BaseTwo);
 
 } // namespace abo::error_metrics

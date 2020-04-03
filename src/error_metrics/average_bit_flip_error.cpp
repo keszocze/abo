@@ -43,7 +43,8 @@ double average_bit_flip_error_add(const Cudd& mgr,
     for (auto [value, path_count] : terminal_values)
     {
         // counts the number of set bits in value
-        bit_count_sum += static_cast<unsigned long>(__builtin_popcountll(value)) * path_count;
+        int bitcount = __builtin_popcountll(value);
+        bit_count_sum += static_cast<unsigned long>(bitcount) * path_count;
         total_path_count += path_count;
     }
     return bit_count_sum / static_cast<double>(total_path_count);

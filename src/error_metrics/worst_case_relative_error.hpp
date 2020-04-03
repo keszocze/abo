@@ -21,7 +21,8 @@ namespace abo::error_metrics {
  */
 double wcre_add(const Cudd& mgr, const std::vector<BDD>& f,
               const std::vector<BDD>& f_hat,
-              const abo::util::NumberRepresentation num_rep = abo::util::NumberRepresentation::BaseTwo);
+              const abo::util::NumberRepresentation num_rep
+                = abo::util::NumberRepresentation::BaseTwo);
 
 /**
  * @brief Computes bounds on the maximum relative value of f in relation to g
@@ -35,7 +36,8 @@ double wcre_add(const Cudd& mgr, const std::vector<BDD>& f,
  * unsigned integer)
  * @return {min, max}, the lower and upper bound on the maximum relative value
  */
-std::pair<boost::multiprecision::cpp_dec_float_100, boost::multiprecision::cpp_dec_float_100>
+std::pair<boost::multiprecision::cpp_dec_float_100,
+            boost::multiprecision::cpp_dec_float_100>
 maximum_relative_value_bounds(const Cudd& mgr, const std::vector<BDD>& f,
                               const std::vector<BDD>& g);
 
@@ -52,10 +54,14 @@ maximum_relative_value_bounds(const Cudd& mgr, const std::vector<BDD>& f,
  * @param num_rep The number representation for f and f_hat
  * @return {min, max}, the lower and upper bound on the maximum relative error
  */
-std::pair<boost::multiprecision::cpp_dec_float_100, boost::multiprecision::cpp_dec_float_100>
+std::pair<boost::multiprecision::cpp_dec_float_100,
+            boost::multiprecision::cpp_dec_float_100>
     wcre_bounds(
-        const Cudd& mgr, const std::vector<BDD>& f, const std::vector<BDD>& f_hat,
-        const abo::util::NumberRepresentation num_rep = abo::util::NumberRepresentation::BaseTwo);
+        const Cudd& mgr,
+        const std::vector<BDD>& f,
+        const std::vector<BDD>& f_hat,
+        const abo::util::NumberRepresentation num_rep
+            = abo::util::NumberRepresentation::BaseTwo);
 
 /**
  * @brief Computes the maximum relative difference between f and f_hat for any input
@@ -75,9 +81,12 @@ std::pair<boost::multiprecision::cpp_dec_float_100, boost::multiprecision::cpp_d
  * @return the maximum relative difference of the inputs
  */
 double wcre_search(
-    const Cudd& mgr, const std::vector<BDD>& f, const std::vector<BDD>& f_hat,
-    unsigned int num_extra_bits = 16, double precision = 0.0001,
-    const abo::util::NumberRepresentation num_rep = abo::util::NumberRepresentation::BaseTwo);
+        const Cudd& mgr, const std::vector<BDD>& f,
+        const std::vector<BDD>& f_hat,
+        unsigned int num_extra_bits = 16,
+        double precision = 0.0001,
+        const abo::util::NumberRepresentation num_rep
+            = abo::util::NumberRepresentation::BaseTwo);
 
 /**
  * @brief Computes the maximum relative difference between f and f_hat for any input
@@ -95,8 +104,10 @@ double wcre_search(
  * @return the maximum relative difference of the inputs
  */
 boost::multiprecision::cpp_dec_float_100 wcre_symbolic_division(
-    const Cudd& mgr, const std::vector<BDD>& f, const std::vector<BDD>& f_hat,
-    unsigned int num_extra_bits = 16,
-    const abo::util::NumberRepresentation num_rep = abo::util::NumberRepresentation::BaseTwo);
+        const Cudd& mgr, const std::vector<BDD>& f,
+        const std::vector<BDD>& f_hat,
+        unsigned int num_extra_bits = 16,
+        const abo::util::NumberRepresentation num_rep
+            = abo::util::NumberRepresentation::BaseTwo);
 
 } // namespace abo::error_metrics

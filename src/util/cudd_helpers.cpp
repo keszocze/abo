@@ -26,7 +26,8 @@ unsigned int terminal_level(const std::vector<std::vector<BDD>>& bdds)
         for (const BDD& b : f)
         {
             std::vector<unsigned int> support = b.SupportIndices();
-            auto max_support_index = std::max_element(support.begin(), support.end());
+            auto max_support_index = std::max_element(support.begin(),
+                                                      support.end());
             max_index = std::max(max_index,
                                  (max_support_index == support.end() ? 0 : *max_support_index) + 1);
         }
@@ -34,7 +35,8 @@ unsigned int terminal_level(const std::vector<std::vector<BDD>>& bdds)
     return max_index;
 }
 
-long eval_adder(const std::vector<BDD>& adder, long input1, long input2, int bits)
+long eval_adder(const std::vector<BDD>& adder,
+                long input1, long input2, int bits)
 {
     std::vector<int> bdd_inputs;
     for (int i = 0; i < bits; i++)
@@ -55,7 +57,8 @@ long eval_adder(const std::vector<BDD>& adder, long input1, long input2, int bit
     return result;
 }
 
-static double count_minterms_rec(DdNode* node, std::map<DdNode*, double>& minterms_map)
+static double count_minterms_rec(DdNode* node,
+                                 std::map<DdNode*, double>& minterms_map)
 {
     auto it = minterms_map.find(node);
     if (it != minterms_map.end())
@@ -98,7 +101,8 @@ std::map<DdNode*, double> count_minterms(const BDD& bdd)
     return result;
 }
 
-static double count_solutions_rec(DdNode* node, std::map<DdNode*, double>& solutions_map,
+static double count_solutions_rec(DdNode* node,
+                                  std::map<DdNode*, double>& solutions_map,
                                   int terminal_level)
 {
     auto it = solutions_map.find(node);
@@ -204,7 +208,8 @@ unsigned int const_ADD_value(const ADD& add)
     return 0;
 }
 
-static std::map<DdNode*, unsigned long> count_paths(DdNode* node, unsigned int terminal_level)
+static std::map<DdNode*, unsigned long> count_paths(DdNode* node,
+                                                    unsigned int terminal_level)
 {
     if (Cudd_IsConstant(node))
     {
@@ -228,33 +233,36 @@ static std::map<DdNode*, unsigned long> count_paths(DdNode* node, unsigned int t
             DdNode* current = nodes.top();
             nodes.pop();
 
-            if (!Cudd_IsConstant(current))
+            if (Cudd_IsConstant(current)) {
+                continue;
+            }
+
+            DdNode* then_node = Cudd_Regular(Cudd_T(current));
+            DdNode* else_node = Cudd_Regular(Cudd_E(current));
+
+            unsigned long current_count = node_to_count[current];
+
+            unsigned long then_level =
+                Cudd_IsConstant(then_node) ? terminal_level : Cudd_NodeReadIndex(then_node);
+            // the map will automatically use 0 if the node is not yet present
+            int then_shift_bits = then_level - level - 1;
+            node_to_count[then_node] += current_count << then_shift_bits;
+            if (visited.find(then_node) == visited.end())
             {
-                DdNode* then_node = Cudd_Regular(Cudd_T(current));
-                DdNode* else_node = Cudd_Regular(Cudd_E(current));
+                levels.resize(std::max(levels.size(), then_level + 1));
+                levels[then_level].push(then_node);
+                visited.insert(then_node);
+            }
 
-                unsigned long current_count = node_to_count[current];
-
-                unsigned long then_level =
-                    Cudd_IsConstant(then_node) ? terminal_level : Cudd_NodeReadIndex(then_node);
-                // the map will automatically use 0 if the node is not yet present
-                node_to_count[then_node] += current_count << (then_level - level - 1);
-                if (visited.find(then_node) == visited.end())
-                {
-                    levels.resize(std::max(levels.size(), then_level + 1));
-                    levels[then_level].push(then_node);
-                    visited.insert(then_node);
-                }
-
-                unsigned long else_level =
-                    Cudd_IsConstant(else_node) ? terminal_level : Cudd_NodeReadIndex(else_node);
-                node_to_count[else_node] += current_count << (else_level - level - 1);
-                if (visited.find(else_node) == visited.end())
-                {
-                    levels.resize(std::max(levels.size(), else_level + 1));
-                    levels[else_level].push(else_node);
-                    visited.insert(else_node);
-                }
+            unsigned long else_level =
+                Cudd_IsConstant(else_node) ? terminal_level : Cudd_NodeReadIndex(else_node);
+            int else_shift_bits = else_level - level - 1;
+            node_to_count[else_node] += current_count << else_shift_bits;
+            if (visited.find(else_node) == visited.end())
+            {
+                levels.resize(std::max(levels.size(), else_level + 1));
+                levels[else_level].push(else_node);
+                visited.insert(else_node);
             }
         }
     }
@@ -333,7 +341,9 @@ ADD bdd_forest_to_add(const Cudd& mgr, const std::vector<BDD>& bdds,
     return result;
 }
 
-ADD xor_difference_add(const Cudd& mgr, const std::vector<BDD>& f, const std::vector<BDD>& f_hat)
+ADD xor_difference_add(const Cudd& mgr,
+                       const std::vector<BDD>& f,
+                       const std::vector<BDD>& f_hat)
 {
     std::vector<BDD> diff;
     for (unsigned int i = 0; i < f.size(); i++)
@@ -344,7 +354,8 @@ ADD xor_difference_add(const Cudd& mgr, const std::vector<BDD>& f, const std::ve
     return bdd_forest_to_add(mgr, diff, NumberRepresentation::BaseTwo);
 }
 
-static DdNode* add_absolute_difference_apply(DdManager* dd, DdNode** f, DdNode** g)
+static DdNode* add_absolute_difference_apply(DdManager* dd,
+                                             DdNode** f, DdNode** g)
 {
     // basically copied from cuddAddApply.c (the operator is modified of course)
     DdNode* F = *f;
@@ -363,17 +374,23 @@ static DdNode* add_absolute_difference_apply(DdManager* dd, DdNode** f, DdNode**
     return nullptr;
 }
 
-ADD absolute_difference_add(const Cudd& mgr, const std::vector<BDD>& f,
-                            const std::vector<BDD>& f_hat, const NumberRepresentation num_rep)
+ADD absolute_difference_add(const Cudd& mgr,
+                            const std::vector<BDD>& f,
+                            const std::vector<BDD>& f_hat,
+                            const NumberRepresentation num_rep)
 {
     ADD a = bdd_forest_to_add(mgr, f, num_rep);
     ADD b = bdd_forest_to_add(mgr, f_hat, num_rep);
     DdNode* result_node =
-        Cudd_addApply(mgr.getManager(), add_absolute_difference_apply, a.getNode(), b.getNode());
+        Cudd_addApply(mgr.getManager(), add_absolute_difference_apply,
+                      a.getNode(), b.getNode());
+
     return ADD(mgr, result_node);
 }
 
-void dump_dot(const Cudd& mgr, const std::vector<BDD>& bdd, const std::vector<std::string>& innames,
+void dump_dot(const Cudd& mgr,
+              const std::vector<BDD>& bdd,
+              const std::vector<std::string>& innames,
               const std::vector<std::string>& outnames)
 {
 
@@ -391,7 +408,8 @@ void dump_dot(const Cudd& mgr, const std::vector<BDD>& bdd, const std::vector<st
     del_arr(outs, outnames.size());
 }
 
-void dump_dot(const Cudd& mgr, const BDD& bdd, const std::vector<std::string>& inames,
+void dump_dot(const Cudd& mgr, const BDD& bdd,
+              const std::vector<std::string>& inames,
               const std::string& funname)
 {
     std::vector<BDD> bddv{bdd};
@@ -473,7 +491,8 @@ std::vector<BDD> bdd_subtract(const Cudd& mgr, const std::vector<BDD>& minuend,
     return diff;
 }
 
-std::vector<BDD> bdd_absolute_difference(const Cudd& mgr, const std::vector<BDD>& f,
+std::vector<BDD> bdd_absolute_difference(const Cudd& mgr,
+                                         const std::vector<BDD>& f,
                                          const std::vector<BDD>& g,
                                          const NumberRepresentation num_rep)
 {
@@ -504,10 +523,13 @@ std::vector<BDD> bdd_absolute_difference(const Cudd& mgr, const std::vector<BDD>
     const std::vector<BDD>& g__ = smaller ? f_ : g_;
 
     std::vector<BDD> difference = abo::util::bdd_subtract(mgr, f__, g__);
-    return abo::util::bdd_abs(mgr, difference, NumberRepresentation::TwosComplement);
+    return abo::util::bdd_abs(mgr, difference,
+                              NumberRepresentation::TwosComplement);
 }
 
-std::vector<BDD> bdd_abs(const Cudd& mgr, const std::vector<BDD>& f, const NumberRepresentation num_rep)
+std::vector<BDD> bdd_abs(const Cudd& mgr,
+                         const std::vector<BDD>& f,
+                         const NumberRepresentation num_rep)
 {
 
     // for unsigned numbers, nothing has to be done
@@ -532,7 +554,9 @@ std::vector<BDD> bdd_abs(const Cudd& mgr, const std::vector<BDD>& f, const Numbe
     return abs;
 }
 
-std::vector<BDD> bdd_shift(const Cudd& mgr, const std::vector<BDD>& f, int bits_to_shift)
+std::vector<BDD> bdd_shift(const Cudd& mgr,
+                           const std::vector<BDD>& f,
+                           int bits_to_shift)
 {
     std::vector<BDD> result;
     result.reserve(f.size());
@@ -552,7 +576,9 @@ std::vector<BDD> bdd_shift(const Cudd& mgr, const std::vector<BDD>& f, int bits_
     return result;
 }
 
-std::vector<BDD> bdd_add(const Cudd& mgr, const std::vector<BDD>& f, const std::vector<BDD>& g)
+std::vector<BDD> bdd_add(const Cudd& mgr,
+                         const std::vector<BDD>& f,
+                         const std::vector<BDD>& g)
 {
     std::vector<BDD> sum;
     sum.reserve(f.size());
@@ -569,11 +595,14 @@ std::vector<BDD> bdd_add(const Cudd& mgr, const std::vector<BDD>& f, const std::
     return sum;
 }
 
-std::vector<BDD> bdd_multiply_constant(const Cudd& mgr, const std::vector<BDD>& f, double factor,
+std::vector<BDD> bdd_multiply_constant(const Cudd& mgr,
+                                       const std::vector<BDD>& f,
+                                       double factor,
                                        const unsigned int num_extra_bits)
 {
 
-    std::vector<BDD> result(f.size() + size_t(std::ceil(std::log2(factor))) + 2, mgr.bddZero());
+    std::size_t extra_bits = size_t(std::ceil(std::log2(factor))) + 2;
+    std::vector<BDD> result(f.size() + extra_bits, mgr.bddZero());
 
     std::vector<BDD> fc = f;
     while (result.size() > fc.size())
@@ -581,12 +610,13 @@ std::vector<BDD> bdd_multiply_constant(const Cudd& mgr, const std::vector<BDD>& 
         fc.push_back(mgr.bddZero());
     }
 
-    assert(factor <=
-           static_cast<double>(std::numeric_limits<boost::multiprecision::uint256_t>::max()));
+    using boost::multiprecision::uint256_t;
 
-    boost::multiprecision::uint256_t great_factor =
-        static_cast<boost::multiprecision::uint256_t>(factor);
-    boost::multiprecision::uint256_t one = 1;
+    assert(factor <= static_cast<double>(std::numeric_limits<uint256_t>::max()));
+
+    uint256_t great_factor =
+        static_cast<uint256_t>(factor);
+    uint256_t one = 1;
     for (int i = 0; i < 256; i++)
     {
         if (great_factor & (one << i))
@@ -600,15 +630,17 @@ std::vector<BDD> bdd_multiply_constant(const Cudd& mgr, const std::vector<BDD>& 
     {
         if (lesser_factor & (1UL << i))
         {
-            result =
-                bdd_add(mgr, result, bdd_shift(mgr, fc, -static_cast<int>(num_extra_bits - i)));
+            int shift_bits = -static_cast<int>(num_extra_bits - i);
+            result = bdd_add(mgr, result, bdd_shift(mgr, fc, shift_bits));
         }
     }
 
     return result;
 }
 
-void equalize_vector_size(const Cudd& mgr, std::vector<BDD>& f1, std::vector<BDD>& f2)
+void equalize_vector_size(const Cudd& mgr,
+                          std::vector<BDD>& f1,
+                          std::vector<BDD>& f2)
 {
     while (f1.size() < f2.size())
     {
@@ -620,7 +652,8 @@ void equalize_vector_size(const Cudd& mgr, std::vector<BDD>& f1, std::vector<BDD
     }
 }
 
-std::pair<bool, bool> exists_greater_equals(const Cudd& mgr, const std::vector<BDD>& f1,
+std::pair<bool, bool> exists_greater_equals(const Cudd& mgr,
+                                            const std::vector<BDD>& f1,
                                             const std::vector<BDD>& f2)
 {
     std::vector<BDD> f1_ = f1;
@@ -664,7 +697,9 @@ std::vector<BDD> bdd_max_one(const Cudd& mgr, const std::vector<BDD>& f)
     return result;
 }
 
-BDD greater_equals(const Cudd& mgr, const std::vector<BDD>& f, const std::vector<BDD>& g)
+BDD greater_equals(const Cudd& mgr,
+                   const std::vector<BDD>& f,
+                   const std::vector<BDD>& g)
 {
     std::vector<BDD> f_ = f;
     std::vector<BDD> g_ = g;
@@ -686,7 +721,9 @@ BDD greater_equals(const Cudd& mgr, const std::vector<BDD>& f, const std::vector
     return result;
 }
 
-std::vector<BDD> bdd_divide(const Cudd& mgr, const std::vector<BDD>& f, const std::vector<BDD>& g,
+std::vector<BDD> bdd_divide(const Cudd& mgr,
+                            const std::vector<BDD>& f,
+                            const std::vector<BDD>& g,
                             unsigned int extra_bits)
 {
 

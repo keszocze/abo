@@ -64,29 +64,37 @@ public:
     virtual ~aig_parser() = default;
 
 private:
-    virtual void on_header(std::size_t m, std::size_t i, std::size_t l, std::size_t o,
+    virtual void on_header(std::size_t m, std::size_t i,
+                           std::size_t l, std::size_t o,
                            std::size_t a) const override;
 
     virtual void on_input(unsigned index, unsigned lit) const override;
 
-    virtual void on_output(unsigned index, unsigned lit) const override;
+    virtual void on_output(unsigned index,
+                           unsigned lit) const override;
 
-    virtual void on_and(unsigned index, unsigned left_lit, unsigned right_lit) const override;
+    virtual void on_and(unsigned index, unsigned left_lit,
+                        unsigned right_lit) const override;
 
-    virtual void on_input_name(unsigned index, const std::string& name) const override;
+    virtual void on_input_name(unsigned index,
+                               const std::string& name) const override;
 
-    virtual void on_output_name(unsigned index, const std::string& name) const override;
+    virtual void on_output_name(unsigned index,
+                                const std::string& name) const override;
 
     // unsupported operations
-    virtual void on_latch(unsigned index, unsigned next, latch_init_value reset) const override;
+    virtual void on_latch(unsigned index, unsigned next,
+                          latch_init_value reset) const override;
 
     virtual void on_bad_state(unsigned index, unsigned lit) const override;
 
     virtual void on_constraint(unsigned index, unsigned lit) const override;
 
-    virtual void on_fairness(unsigned index, unsigned lit) const override;
+    virtual void on_fairness(unsigned index,
+                             unsigned lit) const override;
 
-    virtual void on_justice(unsigned index, const std::vector<unsigned>& lits) const override;
+    virtual void on_justice(unsigned index,
+                            const std::vector<unsigned>& lits) const override;
 
     const BDD& find_literal(unsigned literal) const;
 };

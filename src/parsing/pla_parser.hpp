@@ -35,7 +35,8 @@ public:
      * @param innames The vector to save the functions input names in
      * @param outnames The vector to save the function output bit names in
      */
-    pla_parser(Cudd& mgr, std::vector<BDD>& out, std::vector<std::string>& innames,
+    pla_parser(Cudd& mgr, std::vector<BDD>& out,
+               std::vector<std::string>& innames,
                std::vector<std::string>& outnames)
         : mgr(mgr)
         , output_bdds(out)
@@ -53,7 +54,8 @@ private:
 
     void on_number_of_terms(std::size_t number_of_terms) const override;
 
-    bool on_keyword(const std::string& keyword, const std::string& value) const override;
+    bool on_keyword(const std::string& keyword,
+                    const std::string& value) const override;
 
     /**
      * @brief Method called on cube lines of a pla file.
@@ -68,7 +70,8 @@ private:
      * @note This method performs no range checks whatsoever. This means that syntactically
      * incorrect pla files will result in undefined behavior or crashes.
      */
-    void on_term(const std::string& term, const std::string& out) const override;
+    void on_term(const std::string& term,
+                 const std::string& out) const override;
 };
 
 } // namespace abo::parser

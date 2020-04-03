@@ -91,7 +91,8 @@ cpp_dec_float_100
     std::vector<BDD> f_absolute = abo::util::bdd_abs(mgr, f, num_rep);
     std::vector<BDD> no_zero = abo::util::bdd_max_one(mgr, f_absolute);
     std::vector<BDD> divided =
-        abo::util::bdd_divide(mgr, absolute_difference, no_zero, num_extra_bits);
+        abo::util::bdd_divide(mgr, absolute_difference,
+                              no_zero, num_extra_bits);
 
     return average_value(divided) / std::pow(2.0, num_extra_bits);
 }

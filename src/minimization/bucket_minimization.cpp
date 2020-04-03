@@ -34,8 +34,9 @@ std::size_t reduce_multi_dim_index(const std::vector<std::size_t>& index,
     return result;
 }
 
-std::vector<std::size_t> create_multi_dim_index(std::size_t index,
-                                                const std::vector<std::size_t>& bounds)
+std::vector<std::size_t>
+create_multi_dim_index(std::size_t index,
+                        const std::vector<std::size_t>& bounds)
 {
     std::vector<std::size_t> result(bounds.size());
     for (std::size_t i = bounds.size() - 1; i < bounds.size(); i--)
@@ -46,10 +47,12 @@ std::vector<std::size_t> create_multi_dim_index(std::size_t index,
     return result;
 }
 
-std::vector<Bucket> bucket_greedy_minimize(Cudd& mgr, const std::vector<BDD>& function,
-                                           const std::vector<MetricDimension>& metrics,
-                                           const std::vector<OperatorFunction>& operators,
-                                           const bool populate_all_buckets)
+std::vector<Bucket>
+bucket_greedy_minimize(Cudd& mgr,
+                       const std::vector<BDD>& function,
+                       const std::vector<MetricDimension>& metrics,
+                       const std::vector<OperatorFunction>& operators,
+                       const bool populate_all_buckets)
 {
 
     std::size_t num_metrics = metrics.size();
@@ -64,10 +67,15 @@ std::vector<Bucket> bucket_greedy_minimize(Cudd& mgr, const std::vector<BDD>& fu
         bucket_grid_size.push_back(metric.grid_size);
     }
 
-    std::size_t total_buckets = std::accumulate(bucket_grid_size.begin(), bucket_grid_size.end(),
-                                                1UL, std::multiplies<std::size_t>());
+    std::size_t total_buckets = std::accumulate(bucket_grid_size.begin(),
+                                                bucket_grid_size.end(),
+                                                1UL,
+                                                std::multiplies<std::size_t>());
+
+    std::size_t node_count = static_cast<std::size_t>(mgr.nodeCount(function));
     std::vector<Bucket> buckets(total_buckets,
-                                {function, static_cast<std::size_t>(mgr.nodeCount(function)),
+                                {function,
+                                 node_count,
                                  std::vector<double>(metrics.size(), 0),
                                  std::vector<bool>(operators.size(), true)});
 
@@ -193,8 +201,10 @@ BDD apply_operator(const Cudd& mgr, BDD& b, Operator op, unsigned int level_star
 {
     switch (op)
     {
-    case Operator::POSITIVE_COFACTOR: return b.Cofactor(mgr.bddVar(static_cast<int>(level_start)));
-    case Operator::NEGATIVE_COFACTOR: return b.Cofactor(!mgr.bddVar(static_cast<int>(level_start)));
+    case Operator::POSITIVE_COFACTOR:
+        return b.Cofactor(mgr.bddVar(static_cast<int>(level_start)));
+    case Operator::NEGATIVE_COFACTOR:
+        return b.Cofactor(!mgr.bddVar(static_cast<int>(level_start)));
     case Operator::SUBSET_LIGHT:
         return abo::operators::subset_light_child(mgr, b, level_start, level_end);
     case Operator::SUPERSET_HEAVY:
@@ -203,8 +213,10 @@ BDD apply_operator(const Cudd& mgr, BDD& b, Operator op, unsigned int level_star
         return abo::operators::subset_heavy_child(mgr, b, level_start, level_end);
     case Operator::SUPERSET_LIGHT:
         return abo::operators::superset_light_child(mgr, b, level_start, level_end);
-    case Operator::ROUND_BEST: return abo::operators::round_best(mgr, b, level_start, level_end);
-    case Operator::ROUND: return abo::operators::round_bdd(mgr, b, level_start);
+    case Operator::ROUND_BEST:
+        return abo::operators::round_best(mgr, b, level_start, level_end);
+    case Operator::ROUND:
+        return abo::operators::round_bdd(mgr, b, level_start);
     default: return b;
     }
     return b;
@@ -219,8 +231,9 @@ void apply_operator(const Cudd& mgr, std::vector<BDD>& function, Operator op,
     }
 }
 
-std::vector<OperatorFunction> generate_single_bdd_operators(const std::vector<BDD>& function,
-                                                            std::vector<Operator> operators)
+std::vector<OperatorFunction>
+generate_single_bdd_operators(const std::vector<BDD>& function,
+                                std::vector<Operator> operators)
 {
     std::vector<OperatorFunction> result;
     unsigned int top_level = abo::util::terminal_level({function});
@@ -239,8 +252,9 @@ std::vector<OperatorFunction> generate_single_bdd_operators(const std::vector<BD
     return result;
 }
 
-std::vector<OperatorFunction> generate_multi_bdd_operators(const std::vector<BDD>& function,
-                                                           std::vector<Operator> operators)
+std::vector<OperatorFunction>
+generate_multi_bdd_operators(const std::vector<BDD>& function,
+                                std::vector<Operator> operators)
 {
     std::vector<OperatorFunction> result;
     unsigned int top_level = abo::util::terminal_level({function});
@@ -259,9 +273,10 @@ std::vector<OperatorFunction> generate_multi_bdd_operators(const std::vector<BDD
     return result;
 }
 
-std::vector<OperatorFunction> generate_random_operators(const std::vector<BDD>& function,
-                                                        std::vector<Operator> operators,
-                                                        std::size_t count)
+std::vector<OperatorFunction>
+generate_random_operators(const std::vector<BDD>& function,
+                            std::vector<Operator> operators,
+                            std::size_t count)
 {
     std::vector<OperatorFunction> result;
     unsigned int top_level = abo::util::terminal_level({function});

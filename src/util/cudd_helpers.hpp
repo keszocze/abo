@@ -81,7 +81,8 @@ std::vector<std::pair<double, unsigned long>> add_terminal_values(const ADD& add
  * @return The given function as an ADD
  */
 ADD bdd_forest_to_add(const Cudd& mgr, const std::vector<BDD>& bdds,
-                      const NumberRepresentation num_rep = NumberRepresentation::BaseTwo);
+                      const NumberRepresentation num_rep
+                        = NumberRepresentation::BaseTwo);
 
 /**
  * @brief xor_difference_add Computes the bit-wise XOR between the two given functions and converts
@@ -91,7 +92,8 @@ ADD bdd_forest_to_add(const Cudd& mgr, const std::vector<BDD>& bdds,
  * @param f_hat The second function. Must have the same length as f
  * @return The XOR difference as an ADD
  */
-ADD xor_difference_add(const Cudd& mgr, const std::vector<BDD>& f, const std::vector<BDD>& f_hat);
+ADD xor_difference_add(const Cudd& mgr, const std::vector<BDD>& f,
+                       const std::vector<BDD>& f_hat);
 
 /**
  * @brief absolute_difference_add Computes the absolute difference between to functions represented
@@ -104,7 +106,8 @@ ADD xor_difference_add(const Cudd& mgr, const std::vector<BDD>& f, const std::ve
  * represented by an ADD
  */
 ADD absolute_difference_add(const Cudd& mgr, const std::vector<BDD>& f,
-                            const std::vector<BDD>& f_hat, const NumberRepresentation num_rep);
+                            const std::vector<BDD>& f_hat,
+                            const NumberRepresentation num_rep);
 
 /**
  * @brief dump_dot A helper function for calling the dump dot method of cudd for a BDD forest
@@ -183,7 +186,8 @@ std::vector<BDD> bdd_subtract(const Cudd& mgr, const std::vector<BDD>& minuend,
  * @param num_rep The number representation for f and g
  * @return BDD computing the absolute difference of the outputs of the two supplied BDDs
  */
-std::vector<BDD> bdd_absolute_difference(const Cudd& mgr, const std::vector<BDD>& f,
+std::vector<BDD> bdd_absolute_difference(const Cudd& mgr,
+                                         const std::vector<BDD>& f,
                                          const std::vector<BDD>& g,
                                          const NumberRepresentation num_rep);
 
@@ -194,7 +198,9 @@ std::vector<BDD> bdd_absolute_difference(const Cudd& mgr, const std::vector<BDD>
  * @param g Second summand
  * @return BDD representing f+g
  */
-std::vector<BDD> bdd_add(const Cudd& mgr, const std::vector<BDD>& f, const std::vector<BDD>& g);
+std::vector<BDD> bdd_add(const Cudd& mgr,
+                         const std::vector<BDD>& f,
+                         const std::vector<BDD>& g);
 
 /**
  * @brief Creates BDD representing abs(f). For unsigned numbers, the original function will be
@@ -218,7 +224,9 @@ std::vector<BDD> bdd_abs(const Cudd& mgr, const std::vector<BDD>& f,
  * @param bits_to_shift Number of bits to shift. Can be both positive or negative
  * @return Shifted BDD
  */
-std::vector<BDD> bdd_shift(const Cudd& mgr, const std::vector<BDD>& f, int bits_to_shift);
+std::vector<BDD> bdd_shift(const Cudd& mgr,
+                           const std::vector<BDD>& f,
+                           int bits_to_shift);
 
 /**
  * @brief Multiplies a bdd function with a constant
@@ -230,7 +238,9 @@ std::vector<BDD> bdd_shift(const Cudd& mgr, const std::vector<BDD>& f, int bits_
  * less than sizeof(unsigned long) * 8)
  * @return BDD representing the function "factor*f" (extended by up to num_extra_bits)
  */
-std::vector<BDD> bdd_multiply_constant(const Cudd& mgr, const std::vector<BDD>& f, double factor,
+std::vector<BDD> bdd_multiply_constant(const Cudd& mgr,
+                                       const std::vector<BDD>& f,
+                                       double factor,
                                        const unsigned int num_extra_bits = 16);
 
 /**
@@ -243,7 +253,8 @@ std::vector<BDD> bdd_multiply_constant(const Cudd& mgr, const std::vector<BDD>& 
  * e is true iff there exists an x such that int(f1(x)) = int(f2(x)), but no x exists with
  * int(f1(x)) > int(f2(x))
  */
-std::pair<bool, bool> exists_greater_equals(const Cudd& mgr, const std::vector<BDD>& f1,
+std::pair<bool, bool> exists_greater_equals(const Cudd& mgr,
+                                            const std::vector<BDD>& f1,
                                             const std::vector<BDD>& f2);
 
 /**
@@ -253,7 +264,9 @@ std::pair<bool, bool> exists_greater_equals(const Cudd& mgr, const std::vector<B
  * @param g Function to compare in base two (interpreted as returning an unsigned integer)
  * @return BDD representing f >= g
  */
-BDD greater_equals(const Cudd& mgr, const std::vector<BDD>& f, const std::vector<BDD>& g);
+BDD greater_equals(const Cudd& mgr,
+                   const std::vector<BDD>& f,
+                   const std::vector<BDD>& g);
 
 /**
  * @brief Computes a function g such that int(g(x)) = max(1, int(f(x)) for an unsigned function f
@@ -271,7 +284,9 @@ std::vector<BDD> bdd_max_one(const Cudd& mgr, const std::vector<BDD>& f);
  * @param extra_bits
  * @return
  */
-std::vector<BDD> bdd_divide(const Cudd& mgr, const std::vector<BDD>& f, const std::vector<BDD>& g,
+std::vector<BDD> bdd_divide(const Cudd& mgr,
+                            const std::vector<BDD>& f,
+                            const std::vector<BDD>& g,
                             unsigned int extra_bits);
 
 } // namespace abo::util

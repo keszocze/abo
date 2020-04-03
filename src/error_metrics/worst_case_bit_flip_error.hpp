@@ -13,7 +13,8 @@ namespace abo::error_metrics {
  * @param f_hat The approximated function. Must have the same number of bits as f
  * @return the worst case bit flip error
  */
-unsigned int worst_case_bit_flip_error(const Cudd& mgr, const std::vector<BDD>& f,
+unsigned int worst_case_bit_flip_error(const Cudd& mgr,
+                                       const std::vector<BDD>& f,
                                        const std::vector<BDD>& f_hat);
 
 /**
@@ -24,7 +25,8 @@ unsigned int worst_case_bit_flip_error(const Cudd& mgr, const std::vector<BDD>& 
  * @param f_hat The approximated function. Must have the same number of bits as f
  * @return the worst case bit flip error
  */
-unsigned int worst_case_bit_flip_error_add(const Cudd& mgr, const std::vector<BDD>& f,
+unsigned int worst_case_bit_flip_error_add(const Cudd& mgr,
+                                           const std::vector<BDD>& f,
                                            const std::vector<BDD>& f_hat);
 
 } // namespace abo::error_metrics

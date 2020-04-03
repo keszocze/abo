@@ -8,7 +8,8 @@
 
 namespace abo::parser {
 
-void aig_parser::on_header(std::size_t m, std::size_t i, std::size_t, std::size_t o,
+void aig_parser::on_header(std::size_t m, std::size_t i,
+                           std::size_t, std::size_t o,
                            std::size_t a) const
 {
     num_variables = m;
@@ -41,7 +42,8 @@ void aig_parser::on_output(unsigned index, unsigned lit) const
     output_indices[index] = lit;
 }
 
-void aig_parser::on_and(unsigned index, unsigned left_lit, unsigned right_lit) const
+void aig_parser::on_and(unsigned index, unsigned left_lit,
+                        unsigned right_lit) const
 {
     assert(index * 2 <= num_literals);
     assert(left_lit < num_literals && right_lit < num_literals);

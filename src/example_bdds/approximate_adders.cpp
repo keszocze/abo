@@ -31,11 +31,13 @@ std::vector<BDD> almost_correct_adder_1(Cudd& mgr, unsigned int num_bits,
     {
         if (i == 0)
         {
-            carry_outs.push_back(carry_generate(input1[i], input2[i], mgr.bddZero()));
+            BDD carry = carry_generate(input1[i], input2[i], mgr.bddZero());
+            carry_outs.push_back(carry);
         }
         else
         {
-            carry_outs.push_back(carry_generate(input1[i], input2[i], carry_outs.back()));
+            BDD carry = carry_generate(input1[i], input2[i], carry_outs.back());
+            carry_outs.push_back(carry);
         }
     }
 
@@ -112,7 +114,8 @@ std::vector<BDD> almost_correct_adder_2(Cudd& mgr, unsigned int num_bits,
             {
                 if (i - j >= 0)
                 {
-                    temp_carry = carry_generate(input1[i - j], input2[i - j], temp_carry);
+                    temp_carry = carry_generate(input1[i - j], input2[i - j],
+                                                temp_carry);
                 }
             }
             carry_outs.push_back(temp_carry);
@@ -178,7 +181,8 @@ std::vector<BDD> gracefully_degrading_adder(Cudd& mgr, unsigned int num_bits,
             {
                 if (i - j >= 0)
                 {
-                    temp_carry = carry_generate(input1[i - j], input2[i - j], temp_carry);
+                    temp_carry = carry_generate(input1[i - j], input2[i - j],
+                                                temp_carry);
                 }
             }
             carry_outs.push_back(temp_carry);
@@ -211,9 +215,10 @@ std::vector<BDD> gracefully_degrading_adder(Cudd& mgr, unsigned int num_bits,
     return sum;
 }
 
-std::vector<BDD> generic_accuracy_reconfigurable_adder(Cudd& mgr, unsigned int num_bits,
-                                                       unsigned int resultant_bits,
-                                                       unsigned int previous_bits)
+std::vector<BDD>
+generic_accuracy_reconfigurable_adder(Cudd& mgr, unsigned int num_bits,
+                                       unsigned int resultant_bits,
+                                       unsigned int previous_bits)
 {
 
     std::vector<BDD> input1;
@@ -234,11 +239,13 @@ std::vector<BDD> generic_accuracy_reconfigurable_adder(Cudd& mgr, unsigned int n
     {
         if (i == 0)
         {
-            carry_outs.push_back(carry_generate(input1[i], input2[i], mgr.bddZero()));
+            BDD carry = carry_generate(input1[i], input2[i], mgr.bddZero());
+            carry_outs.push_back(carry);
         }
         else
         {
-            carry_outs.push_back(carry_generate(input1[i], input2[i], carry_outs.back()));
+            BDD carry = carry_generate(input1[i], input2[i], carry_outs.back());
+            carry_outs.push_back(carry);
         }
     }
 
@@ -254,13 +261,15 @@ std::vector<BDD> generic_accuracy_reconfigurable_adder(Cudd& mgr, unsigned int n
             temp_carry = mgr.bddZero();
             for (int j = previous_bits - 1; j >= 0; j--)
             {
-                temp_carry = carry_generate(input1[i - j], input2[i - j], temp_carry);
+                temp_carry = carry_generate(input1[i - j], input2[i - j],
+                                            temp_carry);
             }
             carry_outs.push_back(temp_carry);
         }
         else
         {
-            carry_outs.push_back(carry_generate(input1[i], input2[i], carry_outs.back()));
+            BDD carry = carry_generate(input1[i], input2[i], carry_outs.back());
+            carry_outs.push_back(carry);
         }
         count++;
     }
