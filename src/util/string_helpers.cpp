@@ -1,6 +1,6 @@
 #include "string_helpers.hpp"
 
-#include <string.h>
+#include <cstring>
 
 namespace abo::util {
 

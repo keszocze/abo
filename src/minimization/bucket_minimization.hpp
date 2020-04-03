@@ -36,7 +36,8 @@ std::string operator_to_string(Operator op);
  * variable levels between level_start and level_end
  * @return The approximated BDD
  */
-BDD apply_operator(const Cudd& mgr, BDD& b, Operator op, unsigned int level_start,
+BDD apply_operator(const Cudd& mgr, BDD& b, Operator op,
+                   unsigned int level_start,
                    unsigned int level_end);
 
 /**
@@ -50,8 +51,9 @@ BDD apply_operator(const Cudd& mgr, BDD& b, Operator op, unsigned int level_star
  * @param operators The set approximation operators to use
  * @return The list of approximation operator functions
  */
-std::vector<OperatorFunction> generate_single_bdd_operators(const std::vector<BDD>& function,
-                                                            std::vector<Operator> operators);
+std::vector<OperatorFunction>
+generate_single_bdd_operators(const std::vector<BDD>& function,
+                                std::vector<Operator> operators);
 
 /**
  * @brief generate_multi_bdd_operators Generate a set of operator application functions.
@@ -63,8 +65,9 @@ std::vector<OperatorFunction> generate_single_bdd_operators(const std::vector<BD
  * @param operators The set approximation operators to use
  * @return The list of approximation operator functions
  */
-std::vector<OperatorFunction> generate_multi_bdd_operators(const std::vector<BDD>& function,
-                                                           std::vector<Operator> operators);
+std::vector<OperatorFunction>
+generate_multi_bdd_operators(const std::vector<BDD>& function,
+                                std::vector<Operator> operators);
 
 /**
  * @brief generate_random_operators Generates a set of approximation operator functions of size
@@ -79,9 +82,10 @@ std::vector<OperatorFunction> generate_multi_bdd_operators(const std::vector<BDD
  * @param count The number of copies of the function to return in the result
  * @return The list of created approximation operator functions
  */
-std::vector<OperatorFunction> generate_random_operators(const std::vector<BDD>& function,
-                                                        std::vector<Operator> operators,
-                                                        std::size_t count);
+std::vector<OperatorFunction>
+generate_random_operators(const std::vector<BDD>& function,
+                            std::vector<Operator> operators,
+                            std::size_t count);
 
 enum class ErrorMetric
 {
@@ -97,7 +101,9 @@ enum class ErrorMetric
     WORST_CASE_BIT_FLIP,
 };
 
-typedef std::function<double(Cudd&, const std::vector<BDD>&, const std::vector<BDD>&)>
+typedef std::function<double(Cudd&,
+                             const std::vector<BDD>&,
+                             const std::vector<BDD>&)>
     MetricFunction;
 
 //! Returns a human readable string version of the enum value passed as argument
@@ -152,10 +158,11 @@ struct Bucket
  * @return A list of buckets created by the procedure. They represent a pareto front of the
  * minimization task
  */
-std::vector<Bucket> bucket_greedy_minimize(Cudd& mgr, const std::vector<BDD>& function,
-                                           const std::vector<MetricDimension>& metrics,
-                                           const std::vector<OperatorFunction>& operators,
-                                           const bool populate_all_buckets);
+std::vector<Bucket>
+bucket_greedy_minimize(Cudd& mgr, const std::vector<BDD>& function,
+                       const std::vector<MetricDimension>& metrics,
+                       const std::vector<OperatorFunction>& operators,
+                       const bool populate_all_buckets);
 
 } // namespace abo::minimization
 

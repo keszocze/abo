@@ -7,7 +7,9 @@
 
 namespace abo::error_metrics {
 
-double error_rate(const Cudd& mgr, const std::vector<BDD>& f, const std::vector<BDD>& f_hat)
+double error_rate(const Cudd& mgr,
+                  const std::vector<BDD>& f,
+                  const std::vector<BDD>& f_hat)
 {
 
     BDD miter_bdd = mgr.bddZero();
@@ -22,11 +24,14 @@ double error_rate(const Cudd& mgr, const std::vector<BDD>& f, const std::vector<
     DdManager* dd = mgr.getManager();
 
     unsigned int num_variables = abo::util::terminal_level({f, f_hat}) - 1;
-    return Cudd_CountMinterm(dd, miter_bdd.getNode(), num_variables) / std::pow(2.0, num_variables);
+    double minterms = Cudd_CountMinterm(dd, miter_bdd.getNode(), num_variables);
+    return minterms / std::pow(2.0, num_variables);
 }
 
-double error_rate_sampling(const Cudd& mgr, const std::vector<BDD>& f,
-                           const std::vector<BDD>& f_hat, long samples)
+double error_rate_sampling(const Cudd& mgr,
+                           const std::vector<BDD>& f,
+                           const std::vector<BDD>& f_hat,
+                           long samples)
 {
     assert(f.size() == f_hat.size());
     std::vector<BDD> difference;
@@ -43,7 +48,9 @@ double error_rate_sampling(const Cudd& mgr, const std::vector<BDD>& f,
     std::vector<int> inputs(terminal_level, 0);
     for (int i = 0; i < samples; i++)
     {
-        std::generate(inputs.begin(), inputs.end(), []() { return rand() % 2; });
+        std::generate(inputs.begin(), inputs.end(), []() {
+            return rand() % 2;
+        });
         for (const BDD& b : difference)
         {
             if (b.Eval(inputs.data()).IsOne())
@@ -53,11 +60,13 @@ double error_rate_sampling(const Cudd& mgr, const std::vector<BDD>& f,
             }
         }
     }
-    return double(error_samples) / samples;
+    return static_cast<double>(error_samples) / samples;
 }
 
-double error_rate_efficient_sampling(const Cudd& mgr, const std::vector<BDD>& f,
-                                     const std::vector<BDD>& f_hat, long samples)
+double error_rate_efficient_sampling(const Cudd& mgr,
+                                     const std::vector<BDD>& f,
+                                     const std::vector<BDD>& f_hat,
+                                     long samples)
 {
     assert(f.size() == f_hat.size());
     std::vector<BDD> difference;
@@ -75,14 +84,17 @@ double error_rate_efficient_sampling(const Cudd& mgr, const std::vector<BDD>& f,
     activations.reserve(difference.size());
     for (unsigned int i = 0; i < difference.size(); i++)
     {
-        double percentage =
-            Cudd_CountMinterm(mgr.getManager(), difference[i].getNode(), terminal_level - 1) /
-            std::pow(2.0, terminal_level - 1);
+        double percentage = Cudd_CountMinterm(mgr.getManager(),
+                                              difference[i].getNode(),
+                                              terminal_level - 1);
+
+        percentage /= std::pow(2.0, terminal_level - 1);
         activations.push_back({i, percentage});
         maximum_rate += percentage;
     }
     std::sort(activations.begin(), activations.end(),
-              [](const std::pair<int, double>& a, const std::pair<int, double>& b) {
+              [](const std::pair<int, double>& a,
+                    const std::pair<int, double>& b) {
                   return a.second > b.second;
               });
 
@@ -90,7 +102,8 @@ double error_rate_efficient_sampling(const Cudd& mgr, const std::vector<BDD>& f,
     for (unsigned int i = 1; i < difference.size(); i++)
     {
         long index_samples =
-            samples * activations[i].second / (maximum_rate - activations[0].second);
+            samples * activations[i].second /
+                (maximum_rate - activations[0].second);
         if (index_samples == 0)
         {
             continue;
@@ -101,12 +114,14 @@ double error_rate_efficient_sampling(const Cudd& mgr, const std::vector<BDD>& f,
         long good_samples = 0;
         for (int b = 0; b < index_samples; b++)
         {
+            BDD diff = difference[activations[i].first];
             std::vector<int> input = abo::util::random_satisfying_input(
-                difference[activations[i].first], minterm_count, terminal_level);
+                diff, minterm_count, terminal_level);
             bool found = false;
             for (unsigned int j = 0; j < i; j++)
             {
-                if (difference[activations[j].first].Eval(input.data()).IsOne())
+                BDD value = difference[activations[j].first].Eval(input.data());
+                if (value.IsOne())
                 {
                     found = true;
                     break;
@@ -117,13 +132,17 @@ double error_rate_efficient_sampling(const Cudd& mgr, const std::vector<BDD>& f,
                 good_samples++;
             }
         }
-        actual_rate += activations[i].second * double(good_samples) / double(index_samples);
+        double good_fraction = static_cast<double>(good_samples)
+                / static_cast<double>(index_samples);
+        actual_rate += activations[i].second * good_fraction;
     }
 
     return std::min(1.0, actual_rate);
 }
 
-double error_rate_add(const Cudd& mgr, const std::vector<BDD>& f, const std::vector<BDD>& f_hat)
+double error_rate_add(const Cudd& mgr,
+                      const std::vector<BDD>& f,
+                      const std::vector<BDD>& f_hat)
 {
     ADD diff = abo::util::xor_difference_add(mgr, f, f_hat);
     std::vector<std::pair<double, unsigned long>> terminal_values =
@@ -138,10 +157,12 @@ double error_rate_add(const Cudd& mgr, const std::vector<BDD>& f, const std::vec
         }
         total_path_count += path_count;
     }
-    return non_zero_path_count / double(total_path_count);
+    return non_zero_path_count / static_cast<double>(total_path_count);
 }
 
-double error_rate(const Cudd& mgr, const BDD& f, const BDD& f_hat)
+double error_rate(const Cudd& mgr,
+                  const BDD& f,
+                  const BDD& f_hat)
 {
     std::vector<BDD> fv{f};
     std::vector<BDD> fv_hat{f_hat};

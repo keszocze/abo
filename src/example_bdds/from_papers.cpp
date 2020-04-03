@@ -8,6 +8,8 @@
 
 namespace abo::example_bdds {
 
+constexpr bool USE_VARIABLE_NAMES = false;
+
 std::vector<BDD> example1a(Cudd& mgr)
 {
     BDD x1 = mgr.bddVar(0);
@@ -15,10 +17,12 @@ std::vector<BDD> example1a(Cudd& mgr)
     BDD x3 = mgr.bddVar(2);
     BDD x4 = mgr.bddVar(3);
 
-    //        mgr.pushVariableName("x_1");
-    //        mgr.pushVariableName("x_2");
-    //        mgr.pushVariableName("x_3");
-    //        mgr.pushVariableName("x_4");
+    if (USE_VARIABLE_NAMES) {
+        mgr.pushVariableName("x_1");
+        mgr.pushVariableName("x_2");
+        mgr.pushVariableName("x_3");
+        mgr.pushVariableName("x_4");
+    }
 
     BDD cube01 = !x1 * x2;
     BDD cube02 = x1 * !x2;
@@ -49,10 +53,12 @@ std::vector<BDD> example1b(Cudd& mgr)
     BDD x3 = mgr.bddVar(2);
     BDD x4 = mgr.bddVar(3);
 
-    //        mgr.pushVariableName("x_1");
-    //        mgr.pushVariableName("x_2");
-    //        mgr.pushVariableName("x_3");
-    //        mgr.pushVariableName("x_4");
+    if (USE_VARIABLE_NAMES) {
+        mgr.pushVariableName("x_1");
+        mgr.pushVariableName("x_2");
+        mgr.pushVariableName("x_3");
+        mgr.pushVariableName("x_4");
+    }
 
     BDD cube01 = !x1 * x2;
     BDD cube02 = x1 * !x2;
@@ -79,10 +85,12 @@ std::vector<BDD> example1c(Cudd& mgr)
     BDD x3 = mgr.bddVar(2);
     BDD x4 = mgr.bddVar(3);
 
-    //        mgr.pushVariableName("x_1");
-    //        mgr.pushVariableName("x_2");
-    //        mgr.pushVariableName("x_3");
-    //        mgr.pushVariableName("x_4");
+    if (USE_VARIABLE_NAMES) {
+        mgr.pushVariableName("x_1");
+        mgr.pushVariableName("x_2");
+        mgr.pushVariableName("x_3");
+        mgr.pushVariableName("x_4");
+    }
 
     BDD f0 = (x1 * !x2) | (!x1 * x2);
     BDD f1 = mgr.bddOne();
@@ -98,10 +106,12 @@ std::vector<BDD> example1d(Cudd& mgr)
     BDD x3 = mgr.bddVar(2);
     BDD x4 = mgr.bddVar(3);
 
-    //        mgr.pushVariableName("x_1");
-    //        mgr.pushVariableName("x_2");
-    //        mgr.pushVariableName("x_3");
-    //        mgr.pushVariableName("x_4");
+    if (USE_VARIABLE_NAMES) {
+        mgr.pushVariableName("x_1");
+        mgr.pushVariableName("x_2");
+        mgr.pushVariableName("x_3");
+        mgr.pushVariableName("x_4");
+    }
 
     BDD f0 = (x1 * !x2) | (!x1 * x2);
     BDD f1 = mgr.bddZero();
@@ -116,8 +126,10 @@ std::vector<BDD> example3(Cudd& mgr)
     BDD x1 = mgr.bddVar(0);
     BDD x2 = mgr.bddVar(1);
 
-    //        mgr.pushVariableName("x_1");
-    //        mgr.pushVariableName("x_2");
+    if (USE_VARIABLE_NAMES) {
+        mgr.pushVariableName("x_1");
+        mgr.pushVariableName("x_2");
+    }
 
     BDD cube1 = !x2 * !x1;
     BDD cube2 = !x2 * x1;

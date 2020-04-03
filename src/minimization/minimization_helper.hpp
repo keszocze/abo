@@ -41,7 +41,8 @@ struct MinimizationInputInfo
     //! the metrics to target during the minimzation
     std::vector<SimpleMetricDimension> metrics;
     //! the operators used for the approximation
-    std::vector<Operator> operators = {Operator::NEGATIVE_COFACTOR, Operator::POSITIVE_COFACTOR};
+    std::vector<Operator> operators = {Operator::NEGATIVE_COFACTOR,
+                                       Operator::POSITIVE_COFACTOR};
     //! the mode used for constructing the operator application functions
     OperatorConstructionMode operator_mode = OperatorConstructionMode::SINGLE_BDD;
     //! only used when operator_mode == RANDOM: the number of operator functions to construct

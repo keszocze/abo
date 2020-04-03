@@ -6,7 +6,8 @@
 
 namespace abo::error_metrics {
 
-double average_bit_flip_error(const std::vector<BDD>& f, const std::vector<BDD>& f_hat)
+double average_bit_flip_error(const std::vector<BDD>& f,
+                              const std::vector<BDD>& f_hat)
 {
     assert(f.size() == f_hat.size());
 
@@ -30,7 +31,8 @@ double average_bit_flip_error(const std::vector<BDD>& f, const std::vector<BDD>&
     return result / std::pow(2.0, max_support_size);
 }
 
-double average_bit_flip_error_add(const Cudd& mgr, const std::vector<BDD>& f,
+double average_bit_flip_error_add(const Cudd& mgr,
+                                  const std::vector<BDD>& f,
                                   const std::vector<BDD>& f_hat)
 {
     ADD diff = abo::util::xor_difference_add(mgr, f, f_hat);
@@ -41,10 +43,11 @@ double average_bit_flip_error_add(const Cudd& mgr, const std::vector<BDD>& f,
     for (auto [value, path_count] : terminal_values)
     {
         // counts the number of set bits in value
-        bit_count_sum += static_cast<unsigned long>(__builtin_popcountll(value)) * path_count;
+        int bitcount = __builtin_popcountll(value);
+        bit_count_sum += static_cast<unsigned long>(bitcount) * path_count;
         total_path_count += path_count;
     }
-    return bit_count_sum / double(total_path_count);
+    return bit_count_sum / static_cast<double>(total_path_count);
 }
 
 } // namespace abo::error_metrics

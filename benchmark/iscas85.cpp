@@ -53,7 +53,7 @@ static void benchmark_iscas85(benchmark::State& state)
                     abo::operators::subset_light_child(mgr, orig, state.range(3), 10000));
                 break;
             case ROUND_FULL:
-                rounded.push_back(abo::operators::round(mgr, orig, state.range(3)));
+                rounded.push_back(abo::operators::round_bdd(mgr, orig, state.range(3)));
                 break;
             }
         }
