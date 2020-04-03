@@ -41,7 +41,7 @@ void aig_parser::on_output(unsigned index, unsigned lit) const
     output_indices[index] = lit;
 }
 
-void aig_parser::on_and(unsigned index, unsigned left_lit, unsigned right_lit) const
+void aig_parser::on_and(unsigned index, unsigned left_lit, unsigned right_lit) const //NOSONAR
 {
     assert(index * 2 <= num_literals);
     assert(left_lit < num_literals && right_lit < num_literals);
@@ -87,7 +87,7 @@ const BDD& aig_parser::find_literal(unsigned literal) const
     }
 
     // inverted literal
-    if (literal & 1 && literals[literal - 1])
+    if ((literal & 1) && literals[literal - 1])
     {
         const BDD& original = literals[literal - 1].value();
         literals[literal] = !original;
@@ -95,7 +95,7 @@ const BDD& aig_parser::find_literal(unsigned literal) const
     }
 
     // literal is not known yet, they should be created in order
-    throw new std::invalid_argument("AIG parser: literal should have been declared before");
+    throw std::invalid_argument("AIG parser: literal should have been declared before");
 }
 
 // unsupported operations
