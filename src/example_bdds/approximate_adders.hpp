@@ -21,9 +21,10 @@ std::vector<BDD> gracefully_degrading_adder(Cudd& mgr, unsigned int num_bits,
                                             unsigned int num_partitions,
                                             unsigned int prediction_bits);
 
-std::vector<BDD> generic_accuracy_reconfigurable_adder(Cudd& mgr, unsigned int num_bits,
-                                                       unsigned int resultant_bits,
-                                                       unsigned int previous_bits);
+std::vector<BDD>
+generic_accuracy_reconfigurable_adder(Cudd& mgr, unsigned int num_bits,
+                                       unsigned int resultant_bits,
+                                       unsigned int previous_bits);
 
 std::vector<BDD> regular_adder(const Cudd& mgr, unsigned int num_bits);
 

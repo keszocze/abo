@@ -6,9 +6,12 @@
 
 #include <cudd_helpers.hpp>
 
+using abo::util::NumberRepresentation;
+using boost::multiprecision::uint256_t;
+
 namespace abo::error_metrics {
 
-boost::multiprecision::uint256_t get_max_value(const Cudd& mgr, const std::vector<BDD>& fun)
+uint256_t get_max_value(const Cudd& mgr, const std::vector<BDD>& fun)
 {
 
     /*
@@ -18,8 +21,8 @@ boost::multiprecision::uint256_t get_max_value(const Cudd& mgr, const std::vecto
 
     BDD sigma = mgr.bddOne();
 
-    boost::multiprecision::uint256_t error = 0U;
-    boost::multiprecision::uint256_t one = 1U;
+    uint256_t error = 0U;
+    uint256_t one = 1U;
 
     /*
      * We use iterators instead of explicit indexing using ints as that would (well, let's be
@@ -42,9 +45,10 @@ boost::multiprecision::uint256_t get_max_value(const Cudd& mgr, const std::vecto
     return error;
 }
 
-boost::multiprecision::uint256_t worst_case_error(const Cudd& mgr, const std::vector<BDD>& f,
-                                                  const std::vector<BDD>& f_hat,
-                                                  const NumberRepresentation num_rep)
+uint256_t worst_case_error(const Cudd& mgr,
+                            const std::vector<BDD>& f,
+                            const std::vector<BDD>& f_hat,
+                            const NumberRepresentation num_rep)
 {
 
     std::vector<BDD> absolute_difference =
@@ -52,33 +56,37 @@ boost::multiprecision::uint256_t worst_case_error(const Cudd& mgr, const std::ve
     return get_max_value(mgr, absolute_difference);
 }
 
-double worst_case_error_percent(const Cudd& mgr, const std::vector<BDD>& f,
-                                const std::vector<BDD>& f_hat, const NumberRepresentation num_rep)
+double worst_case_error_percent(const Cudd& mgr,
+                                const std::vector<BDD>& f,
+                                const std::vector<BDD>& f_hat,
+                                const NumberRepresentation num_rep)
 {
-    return double(worst_case_error(mgr, f, f_hat, num_rep)) / (std::pow(2, f.size()) - 1);
+    double wce = static_cast<double>(worst_case_error(mgr, f, f_hat, num_rep));
+    return wce / (std::pow(2, f.size()) - 1);
 }
 
-boost::multiprecision::uint256_t worst_case_error_add(const Cudd& mgr, const std::vector<BDD>& f,
-                                                      const std::vector<BDD>& f_hat,
-                                                      const NumberRepresentation num_rep)
+uint256_t worst_case_error_add(const Cudd& mgr,
+                                const std::vector<BDD>& f,
+                                const std::vector<BDD>& f_hat,
+                                const NumberRepresentation num_rep)
 {
 
     ADD diff = abo::util::absolute_difference_add(mgr, f, f_hat, num_rep);
     std::vector<std::pair<double, unsigned long>> terminal_values =
         abo::util::add_terminal_values(diff);
 
-    boost::multiprecision::uint256_t max_value = 0;
+    uint256_t max_value = 0;
     for (auto p : terminal_values)
     {
-        max_value = std::max(boost::multiprecision::uint256_t(p.first), max_value);
+        max_value = std::max(uint256_t(p.first), max_value);
     }
     return max_value;
 }
 
-boost::multiprecision::uint256_t approximate_worst_case_error(const Cudd& mgr,
-                                                              const std::vector<BDD>& f,
-                                                              const std::vector<BDD>& f_hat, int n,
-                                                              const NumberRepresentation num_rep)
+uint256_t approximate_worst_case_error(const Cudd& mgr,
+                                      const std::vector<BDD>& f,
+                                      const std::vector<BDD>& f_hat, int n,
+                                      const NumberRepresentation num_rep)
 {
     assert(f.size() == f_hat.size() && n >= 1);
 
@@ -119,7 +127,7 @@ boost::multiprecision::uint256_t approximate_worst_case_error(const Cudd& mgr,
         abo::util::bdd_absolute_difference(mgr, f_, f_hat_, num_rep);
 
     unsigned long shift = bit_end + 1;
-    boost::multiprecision::uint256_t one = 1;
+    uint256_t one = 1;
     // add one to give an upper bound on the error
     return (get_max_value(mgr, absolute_difference) + 1) * (one << shift) - 1;
 }

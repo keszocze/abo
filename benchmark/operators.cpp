@@ -72,7 +72,7 @@ static void benchmark_operators(benchmark::State& state)
                     abo::operators::round_best(mgr, orig, state.range(2), state.range(2)));
                 break;
             case ROUND_FULL:
-                rounded.push_back(abo::operators::round(mgr, orig, state.range(2)));
+                rounded.push_back(abo::operators::round_bdd(mgr, orig, state.range(2)));
                 break;
             case COFACTOR_POSITIVE:
                 rounded.push_back(orig.Cofactor(mgr.bddVar(state.range(2))));

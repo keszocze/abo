@@ -41,10 +41,12 @@ void collect_nodes_rec(DdNode* node, std::set<DdNode*>& visited,
     }
 }
 
-void dump_dot_readable(const Cudd& mgr, const std::vector<BDD>& bdds, std::ostream& output,
+void dump_dot_readable(const Cudd& mgr,
+                       const std::vector<BDD>& bdds, std::ostream& output,
                        const std::vector<std::string>& function_names,
                        const std::vector<std::string>& variable_names,
-                       const bool enforce_function_order, const std::optional<bool> left_terminal,
+                       const bool enforce_function_order,
+                       const std::optional<bool> left_terminal,
                        DotPresentationConfig conf)
 {
 
@@ -59,7 +61,8 @@ void dump_dot_readable(const Cudd& mgr, const std::vector<BDD>& bdds, std::ostre
         std::string s;
         for (char c : std::to_string(n))
         {
-            s += std::string("&#832") + std::to_string(c - '0') + std::string(";");
+            s += std::string("&#832") + std::to_string(c - '0')
+                    + std::string(";");
         }
         return s;
     });
@@ -92,7 +95,7 @@ void dump_dot_readable(const Cudd& mgr, const std::vector<BDD>& bdds, std::ostre
             function_names_.push_back("<" + function + ">");
         }
     }
-    //------------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     std::vector<std::vector<DdNode*>> level_nodes;
     std::set<DdNode*> visited;
@@ -140,7 +143,7 @@ void dump_dot_readable(const Cudd& mgr, const std::vector<BDD>& bdds, std::ostre
     output << "ranksep = \"" << conf.rank_seperation << "\";" << std::endl;
     indent();
     output << "margin=0;" << std::endl;
-    //-------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     /*
      * create nodes for function names
@@ -339,11 +342,14 @@ void dump_dot_readable(const Cudd& mgr, const std::vector<BDD>& bdds, std::ostre
     output << "}" << std::endl;
 }
 
-void dump_dot_readable_to_file(const Cudd& mgr, const std::vector<BDD>& bdds, std::string filename,
+void dump_dot_readable_to_file(const Cudd& mgr,
+                               const std::vector<BDD>& bdds,
+                               std::string filename,
                                const std::vector<std::string>& function_names,
                                const std::vector<std::string>& variable_names,
                                const bool enforce_function_order,
-                               const std::optional<bool> left_terminal, DotPresentationConfig conf)
+                               const std::optional<bool> left_terminal,
+                               DotPresentationConfig conf)
 {
     std::ofstream outfile;
     outfile.open(filename, std::ios::out | std::ios::trunc);
@@ -356,22 +362,39 @@ void dump_dot_readable_to_file(const Cudd& mgr, const std::vector<BDD>& bdds, st
     }
 }
 
-void dump_dot_readable(const Cudd& mgr, const BDD& bdd, std::ostream& output,
+void dump_dot_readable(const Cudd& mgr,
+                       const BDD& bdd,
+                       std::ostream& output,
                        const std::vector<std::string>& function_names,
                        const std::vector<std::string>& variable_names,
-                       const std::optional<bool> left_terminal, DotPresentationConfig conf)
+                       const std::optional<bool> left_terminal,
+                       DotPresentationConfig conf)
 {
-    dump_dot_readable(mgr, std::vector<BDD>{bdd}, output, function_names, variable_names, false,
-                      left_terminal, conf);
+    dump_dot_readable(mgr,
+                      std::vector<BDD>{bdd},
+                      output,
+                      function_names,
+                      variable_names,
+                      false,
+                      left_terminal,
+                      conf);
 }
 
-void dump_dot_readable_to_file(const Cudd& mgr, const BDD& bdd, std::string filename,
+void dump_dot_readable_to_file(const Cudd& mgr,
+                               const BDD& bdd,
+                               std::string filename,
                                const std::vector<std::string>& function_names,
                                const std::vector<std::string>& variable_names,
-                               const std::optional<bool> left_terminal, DotPresentationConfig conf)
+                               const std::optional<bool> left_terminal,
+                               DotPresentationConfig conf)
 {
-    dump_dot_readable_to_file(mgr, std::vector<BDD>{bdd}, filename, function_names, variable_names,
-                              false, left_terminal, conf);
+    dump_dot_readable_to_file(mgr, std::vector<BDD>{bdd},
+                              filename,
+                              function_names,
+                              variable_names,
+                              false,
+                              left_terminal,
+                              conf);
 }
 
 } // namespace abo::util

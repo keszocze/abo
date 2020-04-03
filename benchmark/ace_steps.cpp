@@ -43,7 +43,7 @@ static void benchmark_ace_steps(benchmark::State& state)
 
             std::vector<BDD> difference = abo::util::bdd_subtract(mgr, original, rounded);
             std::vector<BDD> absdiff =
-                abo::util::abs(mgr, difference, abo::util::NumberRepresentation::TwosComplement);
+                abo::util::bdd_abs(mgr, difference, abo::util::NumberRepresentation::TwosComplement);
 
             if (!difference_only)
             {

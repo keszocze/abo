@@ -34,7 +34,7 @@ TEST_CASE("Example 3 from ASP-DAC 2016 paper") {
     for (const BDD &b : fun) {
         self_rounded_down.push_back(abo::operators::round_down(mgr, b, 2, 4));
         self_rounded_up.push_back(abo::operators::round_up(mgr, b, 2, 4));
-        self_rounded.push_back(abo::operators::round(mgr, b, 2));
+        self_rounded.push_back(abo::operators::round_bdd(mgr, b, 2));
     }
 
     CHECK(expected_rounded_down == self_rounded_down);

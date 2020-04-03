@@ -8,8 +8,6 @@
 
 namespace abo::error_metrics {
 
-using abo::util::NumberRepresentation;
-
 /**
  * @brief Computes the average value of the function f over all possible inputs
  * @param f The function to compute the average of
@@ -37,7 +35,7 @@ boost::multiprecision::cpp_dec_float_100 mean_squared_value(const std::vector<BD
  */
 boost::multiprecision::cpp_dec_float_100
 average_case_error(const Cudd& mgr, const std::vector<BDD>& f, const std::vector<BDD>& f_hat,
-                   const NumberRepresentation num_rep = NumberRepresentation::BaseTwo);
+                   const abo::util::NumberRepresentation num_rep = abo::util::NumberRepresentation::BaseTwo);
 
 /**
  * @brief Computes the average squared absolute difference between the functions f and f_hat
@@ -49,8 +47,10 @@ average_case_error(const Cudd& mgr, const std::vector<BDD>& f, const std::vector
  * @return The average squared absolute difference between f and f_hat
  */
 boost::multiprecision::cpp_dec_float_100
-mean_squared_error(const Cudd& mgr, const std::vector<BDD>& f, const std::vector<BDD>& f_hat,
-                   const NumberRepresentation num_rep = NumberRepresentation::BaseTwo);
+mean_squared_error(const Cudd& mgr, const std::vector<BDD>& f,
+                   const std::vector<BDD>& f_hat,
+                   const abo::util::NumberRepresentation num_rep
+                        = abo::util::NumberRepresentation::BaseTwo);
 
 /**
  * @brief Computes the average absolute difference between the functions f and f_hat
@@ -64,8 +64,10 @@ mean_squared_error(const Cudd& mgr, const std::vector<BDD>& f, const std::vector
  * @return The average absolute difference between f and f_hat
  */
 boost::multiprecision::cpp_dec_float_100
-average_case_error_add(const Cudd& mgr, const std::vector<BDD>& f, const std::vector<BDD>& f_hat,
-                       const NumberRepresentation num_rep = NumberRepresentation::BaseTwo);
+average_case_error_add(const Cudd& mgr, const std::vector<BDD>& f,
+                       const std::vector<BDD>& f_hat,
+                       const abo::util::NumberRepresentation num_rep
+                            = abo::util::NumberRepresentation::BaseTwo);
 
 /**
  * @brief Computes the average squared absolute difference between the functions f and f_hat
@@ -79,7 +81,9 @@ average_case_error_add(const Cudd& mgr, const std::vector<BDD>& f, const std::ve
  * @return The average squared absolute difference between f and f_hat
  */
 boost::multiprecision::cpp_dec_float_100
-mean_squared_error_add(const Cudd& mgr, const std::vector<BDD>& f, const std::vector<BDD>& f_hat,
-                       const NumberRepresentation num_rep = NumberRepresentation::BaseTwo);
+mean_squared_error_add(const Cudd& mgr, const std::vector<BDD>& f,
+                       const std::vector<BDD>& f_hat,
+                       const abo::util::NumberRepresentation num_rep
+                            = abo::util::NumberRepresentation::BaseTwo);
 
 } // namespace abo::error_metrics
