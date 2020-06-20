@@ -522,6 +522,10 @@ std::vector<BDD> bdd_absolute_difference(const Cudd& mgr,
         g_.push_back(mgr.bddZero());
     }
 
+    // equalize sizes for the computation (with sign extension)
+    while (f_.size() < g_.size()) f_.push_back(f_.back());
+    while (g_.size() < f_.size()) g_.push_back(g_.back());
+
     bool smaller = true;
     for (std::size_t i = 0; i < f_.size(); i++)
     {
