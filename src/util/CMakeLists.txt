@@ -7,6 +7,8 @@ add_library(abo_util
         number_representation.hpp
         dump_dot.cpp
         dump_dot.hpp
+        function.cpp
+        function.hpp
 )
 target_link_libraries(abo_util PUBLIC cudd)
 target_include_directories(abo_util PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
