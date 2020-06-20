@@ -92,6 +92,26 @@ double wcre_search(
  * @brief Computes the maximum relative difference between f and f_hat for any input
  * It is defined as the maximum of |f(x) - f_hat(x)| / max(1, |f(x)|) over all inputs x
  * As it is not symmetric, it is not a metric in the mathematical sense
+ * The computation is performed with BDDs using a binary search to find the maximum value
+ * If the correct value is found, the search is aborted. Otherwise, it is run until the desired
+ * precision is reached
+ * @param mgr The BDD object manager
+ * @param f The original function
+ * @param f_hat The approximated function. Must have the same number of bits as f
+ * @param iterations The number of random input samples drawn in each iteration
+ * @param num_rep The number representation for f and f_hat
+ * @return the maximum relative difference of the inputs as a fraction [numerator, denominator]
+ */
+std::pair<long, long> wcre_randomized_search(
+        const Cudd& mgr, const std::vector<BDD>& f,
+        const std::vector<BDD>& f_hat,
+        unsigned int samples = 1,
+        const abo::util::NumberRepresentation num_rep
+        = abo::util::NumberRepresentation::BaseTwo);
+/**
+ * @brief Computes the maximum relative difference between f and f_hat for any input
+ * It is defined as the maximum of |f(x) - f_hat(x)| / max(1, |f(x)|) over all inputs x
+ * As it is not symmetric, it is not a metric in the mathematical sense
  * The computation is performed with BDDs using a symbolic division and might be quite slow
  * @param mgr The BDD object manager
  * @param f The original function
