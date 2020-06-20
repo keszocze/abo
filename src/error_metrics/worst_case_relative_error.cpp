@@ -2,6 +2,7 @@
 #include "cudd_helpers.hpp"
 #include "worst_case_error.hpp"
 #include <algorithm>
+#include <set>
 
 using abo::util::NumberRepresentation;
 using boost::multiprecision::cpp_dec_float_100;
