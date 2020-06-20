@@ -139,15 +139,15 @@ std::pair<long, long> wcre_randomized_search(const Cudd& mgr, const std::vector<
 }
 
 double wcre_search(const Cudd& mgr, const std::vector<BDD>& f,
-                    const std::vector<BDD>& f_hat, unsigned int num_extra_bits,
-                    double precision, const NumberRepresentation num_rep)
+                   const std::vector<BDD>& f_hat, unsigned int num_extra_bits,
+                   double precision, const NumberRepresentation num_rep)
 {
 
     std::vector<BDD> f_abs = abo::util::bdd_abs(mgr, f, num_rep);
     std::vector<BDD> f_ = abo::util::bdd_max_one(mgr, f_abs);
 
     std::vector<BDD> absolute_difference =
-        abo::util::bdd_absolute_difference(mgr, f, f_hat, num_rep);
+            abo::util::bdd_absolute_difference(mgr, f, f_hat, num_rep);
 
     std::vector<BDD> result(num_extra_bits, mgr.bddZero());
     absolute_difference.insert(absolute_difference.begin(), result.begin(),
@@ -156,6 +156,7 @@ double wcre_search(const Cudd& mgr, const std::vector<BDD>& f,
 
     double min;
     double max;
+    BDD last_greater = mgr.bddOne();
     for (float factor = 1.0f;;factor *= 2.0f)
     {
         std::vector<BDD> multiplied = abo::util::bdd_multiply_constant(mgr, f_, factor);
@@ -166,6 +167,10 @@ double wcre_search(const Cudd& mgr, const std::vector<BDD>& f,
         }
         if (!ge.first)
         {
+            if (factor != 1.0) {
+                std::vector<BDD> multiplied = abo::util::bdd_multiply_constant(mgr, f_, factor / 2.0);
+                last_greater = abo::util::greater_than(mgr, absolute_difference, multiplied);
+            }
             max = factor;
             min = factor == 1.0 ? 0 : (factor / 2.0);
             break;
@@ -174,18 +179,24 @@ double wcre_search(const Cudd& mgr, const std::vector<BDD>& f,
     while (max - min > precision)
     {
         double middle = (min + max) / 2.0;
-        std::vector<BDD> multiplied = abo::util::bdd_multiply_constant(mgr, f_, middle);
-        auto ge = abo::util::exists_greater_equals(mgr, absolute_difference, multiplied);
-        if (ge.second)
-        { // the correct value was already found
+        std::vector<BDD> reduced_f = f_;
+        for (BDD &b : reduced_f) {
+            b = b & last_greater;
+        }
+        std::vector<BDD> reduced_absdiff = absolute_difference;
+        for (BDD &b : reduced_absdiff) {
+            b = b & last_greater;
+        }
+        std::vector<BDD> multiplied = abo::util::bdd_multiply_constant(mgr, reduced_f, middle);
+        auto ge = abo::util::exists_greater_equals(mgr, reduced_absdiff, multiplied);
+        if (ge.second) { // the correct value was already found
             return middle;
         }
-        if (ge.first)
-        {
+        if (ge.first) {
             min = middle;
-        }
-        else
-        {
+            // if the current value is an exact power of two, compute last_greater
+            last_greater = abo::util::greater_than(mgr, reduced_absdiff, multiplied);
+        } else {
             max = middle;
         }
     }
