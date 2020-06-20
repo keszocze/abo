@@ -98,7 +98,7 @@ double wcre_search(
  * @param mgr The BDD object manager
  * @param f The original function
  * @param f_hat The approximated function. Must have the same number of bits as f
- * @param iterations The number of random input samples drawn in each iteration
+ * @param samples The number of random input samples drawn in each iteration
  * @param num_rep The number representation for f and f_hat
  * @return the maximum relative difference of the inputs as a fraction [numerator, denominator]
  */
