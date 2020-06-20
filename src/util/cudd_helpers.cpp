@@ -764,6 +764,29 @@ BDD greater_equals(const Cudd& mgr,
     return result;
 }
 
+BDD greater_than(const Cudd& mgr,
+                 const std::vector<BDD>& f,
+                 const std::vector<BDD>& g)
+{
+    std::vector<BDD> f_ = f;
+    std::vector<BDD> g_ = g;
+
+    equalize_vector_size(mgr, f_, g_);
+
+    BDD zero_condition = mgr.bddOne();
+    BDD equal_condition = mgr.bddOne();
+
+    BDD result = mgr.bddZero();
+    for (int i = int(f_.size()) - 1; i >= 0; i--)
+    {
+        zero_condition &= !g_[i];
+        result |= f_[i] & zero_condition;
+        result |= f_[i] & !g_[i] & equal_condition;
+        equal_condition &= (f_[i] & g_[i]) | ((!f_[i]) & (!g_[i]));
+    }
+    return result;
+}
+
 std::vector<BDD> bdd_divide(const Cudd& mgr,
                             const std::vector<BDD>& f,
                             const std::vector<BDD>& g,

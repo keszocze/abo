@@ -289,6 +289,17 @@ BDD greater_equals(const Cudd& mgr,
                    const std::vector<BDD>& g);
 
 /**
+ * @brief Creates a BDD representing f > g
+ * @param mgr The Cudd object manager
+ * @param f Function to compare in base two (interpreted as returning an unsigned integer)
+ * @param g Function to compare in base two (interpreted as returning an unsigned integer)
+ * @return BDD representing f > g
+ */
+BDD greater_than(const Cudd& mgr,
+                const std::vector<BDD>& f,
+                const std::vector<BDD>& g);
+
+/**
  * @brief Computes a function g such that int(g(x)) = max(1, int(f(x)) for an unsigned function f
  * @param mgr The Cudd object manager
  * @param f The function to use. Is interpreted as unsigned integers
