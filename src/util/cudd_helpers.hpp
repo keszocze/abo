@@ -320,4 +320,13 @@ std::vector<BDD> bdd_divide(const Cudd& mgr,
                             const std::vector<BDD>& g,
                             unsigned int extra_bits);
 
+/**
+ * @brief Converts an unsigned number to a BDD function representing that value
+ * @param mgr The Cudd object manager
+ * @param number The value the resulting function should return
+ * @return A function that returns the given number for all inputs
+ */
+std::vector<BDD> number_to_bdds(const Cudd& mgr,
+                                const boost::multiprecision::uint256_t &number);
+
 } // namespace abo::util

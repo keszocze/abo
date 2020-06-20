@@ -824,4 +824,23 @@ std::vector<BDD> bdd_divide(const Cudd& mgr,
     return result;
 }
 
+std::vector<BDD> number_to_bdds(const Cudd& mgr,
+                                const boost::multiprecision::uint256_t& number)
+{
+    std::vector<BDD> result;
+    result.reserve(256);
+    const boost::multiprecision::uint256_t one = 1;
+    for (int i = 0;i<256;i++) {
+        if (number & (one << i)) {
+            result.push_back(mgr.bddOne());
+        } else {
+            result.push_back(mgr.bddZero());
+        }
+    }
+    while (result.size() > 1 && result.back().IsZero()) {
+        result.pop_back();
+    }
+    return result;
+}
+
 } // namespace abo::util
