@@ -652,6 +652,35 @@ std::vector<BDD> bdd_multiply_constant(const Cudd& mgr,
     return result;
 }
 
+std::vector<BDD> bdd_multiply_constant(const Cudd& mgr,
+                                       const std::vector<BDD>& f,
+                                       boost::multiprecision::uint256_t factor)
+{
+
+    std::size_t extra_bits = size_t(std::max(0.0, std::ceil(std::log2(double(factor))))) + 2;
+    std::vector<BDD> result(f.size() + extra_bits, mgr.bddZero());
+
+    std::vector<BDD> fc = f;
+    while (result.size() > fc.size())
+    {
+        fc.push_back(mgr.bddZero());
+    }
+
+    using boost::multiprecision::uint256_t;
+
+    assert(factor <= static_cast<double>(std::numeric_limits<uint256_t>::max()));
+
+    uint256_t great_factor = factor;
+    uint256_t one = 1;
+    for (int i = 0; i < 256; i++)
+    {
+        if (great_factor & (one << i))
+        {
+            result = bdd_add(mgr, result, bdd_shift(mgr, fc, i));
+        }
+    }
+    return result;
+}
 void equalize_vector_size(const Cudd& mgr,
                           std::vector<BDD>& f1,
                           std::vector<BDD>& f2)

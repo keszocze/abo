@@ -9,6 +9,7 @@
 #include <vector>
 
 #include <cudd/cplusplus/cuddObj.hh>
+#include <boost/multiprecision/cpp_int.hpp>
 
 #include "number_representation.hpp"
 
@@ -251,6 +252,17 @@ std::vector<BDD> bdd_multiply_constant(const Cudd& mgr,
                                        double factor,
                                        const unsigned int num_extra_bits = 16);
 
+/**
+ * @brief Multiplies a bdd function with a constant large value
+ * @param mgr The Cudd object manager
+ * @param f Function that is to be multiplied. The function is interpreted as returning an unsigned
+ * integer
+ * @param factor Constant multiplication factor
+ * @return BDD representing the function "factor*f"
+ */
+std::vector<BDD> bdd_multiply_constant(const Cudd& mgr,
+                                       const std::vector<BDD>& f,
+                                       boost::multiprecision::uint256_t factor);
 /**
  * @brief Checks if an input x exists such that int(f1(x)) >= int(f2(x))
  * @param mgr The Cudd object manager
