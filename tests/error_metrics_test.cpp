@@ -12,6 +12,7 @@
 #include <from_papers.hpp>
 #include <worst_case_error.hpp>
 #include <average_case_error.hpp>
+#include <worst_case_relative_error.hpp>
 
 #include <iostream>
 
@@ -168,4 +169,44 @@ TEST_CASE("Trivial average case error") {
     std::vector<BDD> one({mgr.bddOne(), mgr.bddOne()});
 
     REQUIRE(abo::error_metrics::average_case_error(mgr, one, zero) == 3);
+}
+
+static void check_wcr_values(Cudd &mgr, const std::vector<BDD> &f,
+                             const std::vector<BDD> &g, long desired_wcr) {
+    auto f_ = f;
+    auto g_ = g;
+
+    // equalize function sizes (is necessary for the error metrics)
+    while (f_.size() < g_.size()) f_.push_back(mgr.bddZero());
+    while (g_.size() < f_.size()) g_.push_back(mgr.bddZero());
+
+    double bin_search = abo::error_metrics::wcre_search(mgr, f, g);
+    REQUIRE(desired_wcr == bin_search);
+
+    auto ran_search = abo::error_metrics::wcre_randomized_search(mgr, f, g);
+    REQUIRE(desired_wcr * ran_search.second == ran_search.first);
+
+    auto symbolic = abo::error_metrics::wcre_symbolic_division(mgr, f, g);
+    REQUIRE(desired_wcr == symbolic);
+
+    auto add = abo::error_metrics::wcre_symbolic_division(mgr, f, g);
+    REQUIRE(desired_wcr == add);
+}
+
+TEST_CASE("Simple worst case relative error metrics") {
+    Cudd mgr(256);
+    auto f1 = abo::util::number_to_bdds(mgr, 1);
+
+    // check some static values
+    for (long f2val : {0, 1, 5, 21, 1232345}) {
+        auto f2 = abo::util::number_to_bdds(mgr, f2val + 1);
+        check_wcr_values(mgr, f1, f2, f2val);
+    }
+
+    // check division by zero not occuring
+    check_wcr_values(mgr, abo::util::number_to_bdds(mgr, 0), f1, 1);
+
+    // division is performed
+    check_wcr_values(mgr, abo::util::number_to_bdds(mgr, 3),
+                     abo::util::number_to_bdds(mgr, 18), 5);
 }
