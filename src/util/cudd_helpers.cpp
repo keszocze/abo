@@ -57,6 +57,20 @@ long eval_adder(const std::vector<BDD>& adder,
     return result;
 }
 
+long eval(const std::vector<BDD>& function, std::vector<int> input)
+{
+    long result = 0;
+    for (unsigned int i = 0; i < function.size(); i++)
+    {
+        if (function[i].Eval(input.data()).IsOne())
+        {
+            result |= 1L << i;
+        }
+    }
+
+    return result;
+}
+
 static double count_minterms_rec(DdNode* node,
                                  std::map<DdNode*, double>& minterms_map)
 {

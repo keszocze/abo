@@ -32,6 +32,14 @@ unsigned int terminal_level(const std::vector<std::vector<BDD>>& bdds);
 long eval_adder(const std::vector<BDD>& adder, long a, long b, int bits);
 
 /**
+ * @brief Evaluates the function with the given input
+ * @param function Representing an unsigned integer
+ * @param input The inputs to the function (see cudd BDD.eval)
+ * @return The value of function with the given input
+ */
+long eval(const std::vector<BDD>& function, std::vector<int> input);
+
+/**
  * @brief count_minterms Counts the number of minterms for each node in the given BDD in percent
  * (between 0 and 1). This counts how many percent of inputs that lead to a given node as an
  * intermediate result also lead to 1.
