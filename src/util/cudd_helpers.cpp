@@ -668,8 +668,6 @@ std::vector<BDD> bdd_multiply_constant(const Cudd& mgr,
 
     using boost::multiprecision::uint256_t;
 
-    assert(factor <= static_cast<double>(std::numeric_limits<uint256_t>::max()));
-
     uint256_t great_factor = factor;
     uint256_t one = 1;
     for (int i = 0; i < 256; i++)
