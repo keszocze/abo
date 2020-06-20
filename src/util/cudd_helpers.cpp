@@ -50,7 +50,7 @@ long eval_adder(const std::vector<BDD>& adder,
     {
         if (adder[i].Eval(bdd_inputs.data()).IsOne())
         {
-            result |= 1 << i;
+            result |= 1L << i;
         }
     }
 
