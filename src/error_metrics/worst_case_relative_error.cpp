@@ -1,6 +1,7 @@
 #include "worst_case_relative_error.hpp"
 #include "cudd_helpers.hpp"
 #include "worst_case_error.hpp"
+#include <algorithm>
 
 using abo::util::NumberRepresentation;
 using boost::multiprecision::cpp_dec_float_100;
@@ -48,6 +49,11 @@ std::pair<long, long> wcre_randomized_search(const Cudd& mgr, const std::vector<
 
     std::vector<BDD> absolute_difference =
             abo::util::bdd_absolute_difference(mgr, f, f_hat, num_rep);
+
+    // shortcut for 0 since the computation will not terminate otherwise
+    if (std::all_of(absolute_difference.begin(), absolute_difference.end(), [](const BDD &b) { return b.IsZero(); })) {
+        return {0, 1};
+    }
 
     std::vector<unsigned int> support_indices1 = mgr.SupportIndices(f);
     std::vector<unsigned int> support_indices2 = mgr.SupportIndices(f_hat);
@@ -148,6 +154,11 @@ double wcre_search(const Cudd& mgr, const std::vector<BDD>& f,
 
     std::vector<BDD> absolute_difference =
             abo::util::bdd_absolute_difference(mgr, f, f_hat, num_rep);
+
+    // shortcut for 0 since the binary search will never reach zero exactly
+    if (std::all_of(absolute_difference.begin(), absolute_difference.end(), [](const BDD &b) { return b.IsZero(); })) {
+        return 0;
+    }
 
     std::vector<BDD> result(num_extra_bits, mgr.bddZero());
     absolute_difference.insert(absolute_difference.begin(), result.begin(),
