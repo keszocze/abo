@@ -67,3 +67,22 @@ TEST_CASE("operator |=") {
     REQUIRE(function[0] == (f1 | f3));
     REQUIRE(function[1] == (f2 | f3));
 }
+
+TEST_CASE("num bits") {
+    Cudd mgr;
+    BDD f = mgr.bddVar(1);
+
+    Function function(mgr, {f, f, f, f}, abo::util::NumberRepresentation::BaseTwo);
+    REQUIRE(function.num_bits() == 4UL);
+}
+
+TEST_CASE("is signed") {
+    Cudd mgr;
+    BDD f = mgr.bddVar(1);
+
+    Function function(mgr, {f, f}, abo::util::NumberRepresentation::BaseTwo);
+    REQUIRE(!function.is_signed());
+
+    function = Function(mgr, {f, f}, abo::util::NumberRepresentation::TwosComplement);
+    REQUIRE(function.is_signed());
+}
