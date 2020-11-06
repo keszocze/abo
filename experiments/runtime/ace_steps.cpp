@@ -36,10 +36,12 @@ static void benchmark_ace_steps(benchmark::State& state)
                 rounded.push_back(abo::operators::superset_heavy_child(mgr, orig, state.range(1),
                                                                        10000)); // round all the way
             }
-            state.ResumeTiming();
+
 
             original.push_back(mgr.bddZero());
             rounded.push_back(mgr.bddZero());
+
+            state.ResumeTiming();
 
             std::vector<BDD> difference = abo::util::bdd_subtract(mgr, original, rounded);
             std::vector<BDD> absdiff =

@@ -2,6 +2,7 @@
 #include "cudd_helpers.hpp"
 
 #include <map>
+#include <stdexcept>
 
 #include <cudd/cudd/cudd.h>
 #include <cudd_helpers.hpp>

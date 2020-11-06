@@ -8,7 +8,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 option(BUILD_TESTS "Build tests" ON)
 
-option(BUILD_DOCUMENTATION "Build documentation" ON)
+option(BUILD_DOCUMENTATION "Build documentation" OFF)
 
 if(UNIX)
     # show quite some warnings (but remove some intentionally)
@@ -29,7 +29,6 @@ include(BuildCudd)
 include(BuildPagmo2)
 
 add_subdirectory(src)
-add_subdirectory(benchmark)
 add_subdirectory(experiments)
 
 if (BUILD_DOCUMENTATION)
@@ -40,8 +39,8 @@ endif()
     add_subdirectory(tests)
 #endif(BUILD_TESTS)
 
-file(GLOB_RECURSE ALL_SOURCE_FILES src/*.hpp src/*.cpp benchmark/*.hpp
-	benchmark/*.cpp experiments/*.hpp experiments/*.cpp)
+file(GLOB_RECURSE ALL_SOURCE_FILES src/*.hpp src/*.cpp benchmarks/*.hpp
+        benchmarks/*.cpp experiments/*.hpp experiments/*.cpp)
 
 add_custom_target(clangformat
 #        COMMAND echo ${ALL_SOURCE_FILES}
