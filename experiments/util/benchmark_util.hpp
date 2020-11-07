@@ -40,8 +40,12 @@ std::string error_metric_name(ErrorMetric metric);
 double compute_error_metric(const Cudd& mgr, const std::vector<BDD>& original,
                             const std::vector<BDD>& approx, ErrorMetric metric);
 
+/**
+ * @brief Collection of all supported ISCAS'85 benchmark files for easy access
+ */
 enum class ISCAS85File
 {
+    // the numbering is done by hand to ensure that we can use this as array index
     C17 = 0,
     C432 = 1,
     C499 = 2,
@@ -56,9 +60,14 @@ enum class ISCAS85File
 };
 
 /**
- * Returns the filename of the iscas 85 file identified the the enum input
+ * Returns the filename of the iscas'85 file identified the the enum input
  */
 std::string iscas_85_filename_by_id(ISCAS85File file);
+
+/*
+ * Returns the full path of the iscas'85 benchmark
+ */
+std::string iscas_85_filepath_by_id(ISCAS85File file);
 
 /**
  * @brief Loads an iscas 85 benchmark and returns it as a BDD vector
@@ -67,6 +76,36 @@ std::string iscas_85_filename_by_id(ISCAS85File file);
  * @return The iscas 85 benchmark
  */
 std::vector<BDD> load_iscas_85_file(Cudd& mgr, ISCAS85File file);
+
+/**
+ * @brief Collection of all supported EPFL benchmark files for easy access
+ */
+enum class EPFLFile
+{
+    // the numbering is done by hand to ensure that we can use this as array index
+    Adder = 0,
+    Bar = 1,
+    Div = 2,
+    Hyp = 3,
+    Log2 = 4,
+    Max = 5,
+    Mul = 6,
+    Sin = 7,
+    Sqrt = 8,
+    Square = 9
+};
+
+/**
+ * Returns the filename of the EPFL file identified the the enum input
+ */
+std::string epfl_filename_by_id(EPFLFile file);
+
+/*
+ * Returns the full path of the EPFL benchmark
+ */
+std::string epfl_filepath_by_id(EPFLFile file);
+
+std::vector<BDD> load_epfl_benchmark_file(Cudd& mgr, EPFLFile file);
 
 enum class ApproximateAdder
 {

@@ -1,6 +1,7 @@
 #include "minimization_helper.hpp"
 
 #include <chrono>
+#include <stdexcept>
 
 #include "aig_parser.hpp"
 #include "approximate_adders.hpp"
@@ -21,11 +22,18 @@ std::pair<Cudd, std::vector<BDD>> load_file(std::string file, bool reorder)
         mgr.AutodynEnable();
     }
     abo::parser::aig_parser parser(mgr);
-    // TODO: although this path works, maybe make it more sensible?
-    lorina::read_aiger("../benchmark/iscas85/" + file + ".aig", parser);
+
+    auto code = lorina::read_aiger(file, parser);
     mgr.AutodynDisable();
 
-    return {mgr, parser.get_outputs()};
+    if (code == lorina::return_code::success)
+    {
+        return {mgr, parser.get_outputs()};
+    }
+    else
+    {
+        throw std::invalid_argument("Could not parse aiger file " + file);
+    }
 }
 
 std::pair<Cudd, std::vector<BDD>> load_input(std::string input, bool sift)

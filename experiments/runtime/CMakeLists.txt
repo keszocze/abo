@@ -64,7 +64,16 @@ target_link_libraries(benchmark_sampling_methods
 add_custom_command(
         TARGET benchmark_iscas_85 POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_CURRENT_SOURCE_DIR}/iscas85
+        ${PROJECT_SOURCE_DIR}/benchmarks/iscas85
         ${CMAKE_CURRENT_BINARY_DIR}/iscas85
-        COMMENT "Copying iscas dataset for benchmarking"
+        COMMENT "Copying iscas dataset for the timing benchmarks"
         VERBATIM)
+
+# copies the iscas dataset used for benchmarking into the build folder so that they are actually found
+add_custom_command(
+		TARGET benchmark_iscas_85 POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_directory
+		${PROJECT_SOURCE_DIR}/benchmarks/epfl_combinational/arithmetic/
+		${CMAKE_CURRENT_BINARY_DIR}/epfl
+		COMMENT "Copying EPFL dataset for the timing benchmarks"
+		VERBATIM)

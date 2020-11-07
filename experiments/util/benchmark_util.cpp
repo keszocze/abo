@@ -59,8 +59,7 @@ double compute_error_metric(const Cudd& mgr, const std::vector<BDD>& original,
         return static_cast<double>(
             abo::error_metrics::approximate_worst_case_error(mgr, original, approx, 5));
     case ErrorMetric::AVERAGE_RELATIVE_ADD:
-        return static_cast<double>(
-            abo::error_metrics::acre_add(mgr, approx, original));
+        return static_cast<double>(abo::error_metrics::acre_add(mgr, approx, original));
     case ErrorMetric::AVERAGE_RELATIVE_APPROX:
         auto bounds = abo::error_metrics::acre_bounds(mgr, approx, original);
         return static_cast<double>((bounds.first + bounds.second) / 2.0);
@@ -84,13 +83,49 @@ std::string iscas_85_filename_by_id(ISCAS85File file)
     return files[file_id];
 }
 
+std::string iscas_85_filepath_by_id(ISCAS85File file)
+{
+    return "./iscas85/" + iscas_85_filename_by_id(file);
+}
+
 std::vector<BDD> load_iscas_85_file(Cudd& mgr, ISCAS85File file)
 {
 
-    std::string filename = iscas_85_filename_by_id(file);
+    std::string file_path = iscas_85_filepath_by_id(file);
 
     abo::parser::aig_parser parser(mgr);
-    lorina::read_aiger("iscas85/" + filename, parser);
+    lorina::read_aiger(file_path, parser);
+
+    return parser.get_outputs();
+}
+
+std::string epfl_filename_by_id(EPFLFile file)
+{
+    const std::vector<std::string> files = {"adder.aig", "bar.aig",   "div.aig",        "hyp.aig",
+                                            "log2.aig",  "max.aig",   "multiplier.aig", "sin.aig",
+                                            "sqrt.aig",  "square.aig"};
+
+    std::size_t file_id = static_cast<std::size_t>(file);
+    if (file_id >= files.size())
+    {
+        throw new std::logic_error("Unknown EPFL file number!");
+    }
+
+    return files[file_id];
+}
+
+std::string epfl_filepath_by_id(EPFLFile file)
+{
+    return "./epfl/" + epfl_filename_by_id(file);
+}
+
+std::vector<BDD> load_epfl_benchmark_file(Cudd& mgr, EPFLFile file)
+{
+
+    std::string filename = epfl_filepath_by_id(file);
+
+    abo::parser::aig_parser parser(mgr);
+    lorina::read_aiger(filename, parser);
 
     return parser.get_outputs();
 }

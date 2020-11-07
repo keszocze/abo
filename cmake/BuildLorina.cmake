@@ -4,7 +4,7 @@ ExternalProject_Add(project_lorina
     GIT_REPOSITORY https://github.com/hriener/lorina.git
     GIT_TAG v0.2
     # the project sadly has no install step, which makes some of the following necessary
-    INSTALL_COMMAND cmake -E echo "Skipping install step."
+    INSTALL_COMMAND cmake -E echo "Skipping Lorina install step."
 )
 
 externalproject_get_property(project_lorina source_dir)
