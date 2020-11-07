@@ -20,7 +20,7 @@ int main()
         // allow dynamic variable reordering during reading to start with reasonable bdd sizes
         mgr.AutodynEnable();
         abo::parser::aig_parser parser(mgr);
-        lorina::read_aiger("../benchmark/iscas85/" + file + ".aig", parser);
+        lorina::read_aiger("./iscas85/" + file + ".aig", parser);
         // disable reordering as it can cause problems during the optimization process
         mgr.AutodynDisable();
 
