@@ -1,7 +1,3 @@
-//
-// Created by keszocze on 07.10.18.
-//
-
 #include <catch2/catch.hpp>
 #include <cudd/cplusplus/cuddObj.hh>
 #include <cudd_helpers.hpp>

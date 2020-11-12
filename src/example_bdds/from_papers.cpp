@@ -145,4 +145,33 @@ std::vector<BDD> example3(Cudd& mgr)
     return {d0, d1, d2, d3, d4};
 }
 
+
+std::vector<BDD> running_example(Cudd& mgr)
+{
+
+    BDD x1 = mgr.bddVar(2);
+    BDD x2 = mgr.bddVar(1);
+    BDD x3 = mgr.bddVar(0);
+
+    if (USE_VARIABLE_NAMES) {
+        mgr.pushVariableName("x_1");
+        mgr.pushVariableName("x_2");
+        mgr.pushVariableName("x_3");
+    }
+
+    BDD cube1 = !x3 * !x2 * !x1;
+    BDD cube2 = !x3 * !x2 * x1;
+    BDD cube3 = !x3 * x2 * !x1;
+    BDD cube4 = !x3 * x2 * x1;
+    BDD cube5 = x3 * !x2 * !x1;
+    BDD cube6 = x3 * !x2 * x1;
+    BDD cube7 = x3 * x2 * !x1;
+    BDD cube8 = x3 * x2 * x1;
+
+    BDD d0 = cube1 | cube2 | cube3 | cube5 | cube8;
+    BDD d1 = cube4 | cube5 | cube6 | cube7;
+
+    return {d0, d1};
+}
+
 } // namespace abo::example_bdds

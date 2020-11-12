@@ -39,7 +39,7 @@ std::vector<BDD> example1a(Cudd& mgr);
  * @param mgr The manager used for creating the BDD
  * @return Vectr of BDDs representing the function in Figure 1(b) of the aforementioned paper
  * @warning The method uses the first four bdd variables within the manager to create the function.
- * The caller has to make sure that this makes sense in hist context.
+ * The caller has to make sure that this makes sense in his context.
  */
 std::vector<BDD> example1b(Cudd& mgr);
 
@@ -56,7 +56,7 @@ std::vector<BDD> example1b(Cudd& mgr);
  * @param mgr The manager used for creating the BDD
  * @return Vectr of BDDs representing the function in Figure 1(c) of the aforementioned paper
  * @warning The method uses the first four bdd variables within the manager to create the function.
- * The caller has to make sure that this makes sense in hist context.
+ * The caller has to make sure that this makes sense in his context.
  */
 std::vector<BDD> example1c(Cudd& mgr);
 
@@ -73,12 +73,12 @@ std::vector<BDD> example1c(Cudd& mgr);
  * @param mgr The manager used for creating the BDD
  * @return Vectr of BDDs representing the function in Figure 1(d) of the aforementioned paper
  * @warning The method uses the first four bdd variables within the manager to create the function.
- * The caller has to make sure that this makes sense in hist context.
+ * The caller has to make sure that this makes sense in his context.
  */
 std::vector<BDD> example1d(Cudd& mgr);
 
 /**
- * @brief BDD for Example 1 of Soeken et al. BDD Minimization for Approximate Computing
+ * @brief BDD for Example 3 of Soeken et al. BDD Minimization for Approximate Computing
  *
  *
  * The paper is:
@@ -91,7 +91,23 @@ std::vector<BDD> example1d(Cudd& mgr);
  * @param mgr The manager used for creating the BDD
  * @return Vector of BDDs representing the function in Example 1 of the aforementioned paper
  * @warning The method uses the first four bdd variables within the manager to create the function.
- * The caller has to make sure that this makes sense in hist context.
+ * The caller has to make sure that this makes sense in his context.
  */
 std::vector<BDD> example3(Cudd& mgr);
+
+/**
+ * @brief BDD used as a running example in Figure 1 of Wendler, Keszocze. A fast BDD Minimization
+ * Framework for Approximate Computing
+ *
+ * The paper is:
+ * Wendler, A., Keszocze, O., 2020, A fast BDD Minimization Framework for Approximate Computing, in:
+ * Design Automation and Test in Europe. Grenoble, France.
+ * https://doi.org/10.23919/DATE48585.2020.9116296
+ *
+ * @param mgr The manager used for creating the BDD
+ * @return Vector of BDDs representing the function in Example 1 of the aforementioned paper
+ * @warning The method uses the first three bdd variables within the manager to create the function.
+ * The caller has to make sure that this makes sense in his context.
+ */
+std::vector<BDD> running_example(Cudd& mgr);
 } // namespace abo::example_bdds
