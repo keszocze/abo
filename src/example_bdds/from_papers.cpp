@@ -153,11 +153,11 @@ std::vector<BDD> running_example(Cudd& mgr)
     BDD x2 = mgr.bddVar(1);
     BDD x3 = mgr.bddVar(0);
 
-    if (USE_VARIABLE_NAMES) {
-        mgr.pushVariableName("x_1");
+//    if (USE_VARIABLE_NAMES) {
+        mgr.pushVariableName("x_a1");
         mgr.pushVariableName("x_2");
         mgr.pushVariableName("x_3");
-    }
+//    }
 
     BDD cube1 = !x3 * !x2 * !x1;
     BDD cube2 = !x3 * !x2 * x1;

@@ -30,12 +30,12 @@ int main()
              << result.smallest_function.metric_values[1] << ";"
              << abo::minimization::format_time(result.minimization_time) << "\n";
 
-//        cout << endl << "Buckets:" << endl;
-//        for (auto bucket : result.all_buckets)
-//        {
-//            cout << bucket.bdd_size << ", " << bucket.metric_values[0] << ", "
-//                 << bucket.metric_values[1] << endl;
-//        }
-//        cout << endl;
+        cout << endl << "Buckets:" << endl;
+        for (auto bucket : result.all_buckets)
+        {
+            cout << bucket.bdd_size << ", " << bucket.metric_values[0] << ", "
+                 << bucket.metric_values[1] << endl;
+        }
+        cout << endl;
     }
 }

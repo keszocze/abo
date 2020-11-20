@@ -134,7 +134,7 @@ struct Bucket
     std::size_t bdd_size;
     //! The value of every metric computed for the function
     std::vector<double> metric_values;
-    //! For each operator given to the optimization procedure, this stores wether it can still be
+    //! For each operator given to the optimization procedure, this stores whether it can still be
     //! applied to the function
     std::vector<bool> possible_operators;
 };
