@@ -20,6 +20,10 @@ std::string error_metric_name(ErrorMetric metric)
     {
     case ErrorMetric::WORST_CASE: name = "worst case"; break;
     case ErrorMetric::WORST_CASE_RELATIVE_APPROX: name = "worst case relative"; break;
+    case ErrorMetric::WORST_CASE_RELATIVE_BINARY_SEARCH: name = "wcr binary search"; break;
+    case ErrorMetric::WORST_CASE_RELATIVE_RANDOMIZED: name = "wcr randomized"; break;
+    case ErrorMetric::WORST_CASE_RELATIVE_ADD: name = "wcr ADD"; break;
+    case ErrorMetric::WORST_CASE_RELATIVE_SYMBOLIC: name = "wcr symbolic"; break;
     case ErrorMetric::AVERAGE_CASE: name = "average case"; break;
     case ErrorMetric::MEAN_SQUARED: name = "mean squared"; break;
     case ErrorMetric::ERROR_RATE: name = "error rate"; break;
@@ -44,6 +48,17 @@ double compute_error_metric(const Cudd& mgr, const std::vector<BDD>& original,
         auto bounds = abo::error_metrics::wcre_bounds(mgr, original, approx);
         return static_cast<double>((bounds.first + bounds.second) / 2.0);
     }
+    case ErrorMetric::WORST_CASE_RELATIVE_BINARY_SEARCH:
+        return static_cast<double>(abo::error_metrics::wcre_search(mgr, original, approx));
+    case ErrorMetric::WORST_CASE_RELATIVE_RANDOMIZED:
+    {
+        auto fraction = abo::error_metrics::wcre_randomized_search(mgr, original, approx);
+        return static_cast<double>(fraction.first) / fraction.second;
+    }
+    case ErrorMetric::WORST_CASE_RELATIVE_ADD:
+        return static_cast<double>(abo::error_metrics::wcre_add(mgr, original, approx));
+    case ErrorMetric::WORST_CASE_RELATIVE_SYMBOLIC:
+        return static_cast<double>(abo::error_metrics::wcre_symbolic_division(mgr, original, approx));
     case ErrorMetric::AVERAGE_CASE:
         return static_cast<double>(abo::error_metrics::average_case_error(mgr, original, approx));
     case ErrorMetric::MEAN_SQUARED:

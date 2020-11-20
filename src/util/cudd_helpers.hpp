@@ -9,6 +9,7 @@
 #include <vector>
 
 #include <cudd/cplusplus/cuddObj.hh>
+#include <boost/multiprecision/cpp_int.hpp>
 
 #include "number_representation.hpp"
 
@@ -30,6 +31,14 @@ unsigned int terminal_level(const std::vector<std::vector<BDD>>& bdds);
  * @return The value of a + b
  */
 long eval_adder(const std::vector<BDD>& adder, long a, long b, int bits);
+
+/**
+ * @brief Evaluates the function with the given input
+ * @param function Representing an unsigned integer
+ * @param input The inputs to the function (see cudd BDD.eval)
+ * @return The value of function with the given input
+ */
+long eval(const std::vector<BDD>& function, std::vector<int> input);
 
 /**
  * @brief count_minterms Counts the number of minterms for each node in the given BDD in percent
@@ -244,6 +253,17 @@ std::vector<BDD> bdd_multiply_constant(const Cudd& mgr,
                                        const unsigned int num_extra_bits = 16);
 
 /**
+ * @brief Multiplies a bdd function with a constant large value
+ * @param mgr The Cudd object manager
+ * @param f Function that is to be multiplied. The function is interpreted as returning an unsigned
+ * integer
+ * @param factor Constant multiplication factor
+ * @return BDD representing the function "factor*f"
+ */
+std::vector<BDD> bdd_multiply_constant(const Cudd& mgr,
+                                       const std::vector<BDD>& f,
+                                       boost::multiprecision::uint256_t factor);
+/**
  * @brief Checks if an input x exists such that int(f1(x)) >= int(f2(x))
  * @param mgr The Cudd object manager
  * @param f1 Function to compare in base two (interpreted as returning an unsigned integer)
@@ -269,6 +289,17 @@ BDD greater_equals(const Cudd& mgr,
                    const std::vector<BDD>& g);
 
 /**
+ * @brief Creates a BDD representing f > g
+ * @param mgr The Cudd object manager
+ * @param f Function to compare in base two (interpreted as returning an unsigned integer)
+ * @param g Function to compare in base two (interpreted as returning an unsigned integer)
+ * @return BDD representing f > g
+ */
+BDD greater_than(const Cudd& mgr,
+                const std::vector<BDD>& f,
+                const std::vector<BDD>& g);
+
+/**
  * @brief Computes a function g such that int(g(x)) = max(1, int(f(x)) for an unsigned function f
  * @param mgr The Cudd object manager
  * @param f The function to use. Is interpreted as unsigned integers
@@ -288,5 +319,14 @@ std::vector<BDD> bdd_divide(const Cudd& mgr,
                             const std::vector<BDD>& f,
                             const std::vector<BDD>& g,
                             unsigned int extra_bits);
+
+/**
+ * @brief Converts an unsigned number to a BDD function representing that value
+ * @param mgr The Cudd object manager
+ * @param number The value the resulting function should return
+ * @return A function that returns the given number for all inputs
+ */
+std::vector<BDD> number_to_bdds(const Cudd& mgr,
+                                const boost::multiprecision::uint256_t &number);
 
 } // namespace abo::util

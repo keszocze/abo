@@ -50,7 +50,21 @@ long eval_adder(const std::vector<BDD>& adder,
     {
         if (adder[i].Eval(bdd_inputs.data()).IsOne())
         {
-            result |= 1 << i;
+            result |= 1L << i;
+        }
+    }
+
+    return result;
+}
+
+long eval(const std::vector<BDD>& function, std::vector<int> input)
+{
+    long result = 0;
+    for (unsigned int i = 0; i < function.size(); i++)
+    {
+        if (function[i].Eval(input.data()).IsOne())
+        {
+            result |= 1L << i;
         }
     }
 
@@ -508,6 +522,10 @@ std::vector<BDD> bdd_absolute_difference(const Cudd& mgr,
         g_.push_back(mgr.bddZero());
     }
 
+    // equalize sizes for the computation (with sign extension)
+    while (f_.size() < g_.size()) f_.push_back(f_.back());
+    while (g_.size() < f_.size()) g_.push_back(g_.back());
+
     bool smaller = true;
     for (std::size_t i = 0; i < f_.size(); i++)
     {
@@ -638,6 +656,33 @@ std::vector<BDD> bdd_multiply_constant(const Cudd& mgr,
     return result;
 }
 
+std::vector<BDD> bdd_multiply_constant(const Cudd& mgr,
+                                       const std::vector<BDD>& f,
+                                       boost::multiprecision::uint256_t factor)
+{
+
+    std::size_t extra_bits = size_t(std::max(0.0, std::ceil(std::log2(double(factor))))) + 2;
+    std::vector<BDD> result(f.size() + extra_bits, mgr.bddZero());
+
+    std::vector<BDD> fc = f;
+    while (result.size() > fc.size())
+    {
+        fc.push_back(mgr.bddZero());
+    }
+
+    using boost::multiprecision::uint256_t;
+
+    uint256_t great_factor = factor;
+    uint256_t one = 1;
+    for (int i = 0; i < 256; i++)
+    {
+        if (great_factor & (one << i))
+        {
+            result = bdd_add(mgr, result, bdd_shift(mgr, fc, i));
+        }
+    }
+    return result;
+}
 void equalize_vector_size(const Cudd& mgr,
                           std::vector<BDD>& f1,
                           std::vector<BDD>& f2)
@@ -721,6 +766,29 @@ BDD greater_equals(const Cudd& mgr,
     return result;
 }
 
+BDD greater_than(const Cudd& mgr,
+                 const std::vector<BDD>& f,
+                 const std::vector<BDD>& g)
+{
+    std::vector<BDD> f_ = f;
+    std::vector<BDD> g_ = g;
+
+    equalize_vector_size(mgr, f_, g_);
+
+    BDD zero_condition = mgr.bddOne();
+    BDD equal_condition = mgr.bddOne();
+
+    BDD result = mgr.bddZero();
+    for (int i = int(f_.size()) - 1; i >= 0; i--)
+    {
+        zero_condition &= !g_[i];
+        result |= f_[i] & zero_condition;
+        result |= f_[i] & !g_[i] & equal_condition;
+        equal_condition &= (f_[i] & g_[i]) | ((!f_[i]) & (!g_[i]));
+    }
+    return result;
+}
+
 std::vector<BDD> bdd_divide(const Cudd& mgr,
                             const std::vector<BDD>& f,
                             const std::vector<BDD>& g,
@@ -753,6 +821,25 @@ std::vector<BDD> bdd_divide(const Cudd& mgr,
         result.push_back(subtract_condition);
     }
     std::reverse(result.begin(), result.end());
+    return result;
+}
+
+std::vector<BDD> number_to_bdds(const Cudd& mgr,
+                                const boost::multiprecision::uint256_t& number)
+{
+    std::vector<BDD> result;
+    result.reserve(256);
+    const boost::multiprecision::uint256_t one = 1;
+    for (int i = 0;i<256;i++) {
+        if (number & (one << i)) {
+            result.push_back(mgr.bddOne());
+        } else {
+            result.push_back(mgr.bddZero());
+        }
+    }
+    while (result.size() > 1 && result.back().IsZero()) {
+        result.pop_back();
+    }
     return result;
 }
 
