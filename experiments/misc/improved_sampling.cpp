@@ -20,7 +20,7 @@ int main()
     rounded.reserve(original.size());
     for (const BDD& orig : original)
     {
-        rounded.push_back(subset_light_child(mgr, orig, 53, 10000000));
+        rounded.push_back(subset_light_child(mgr, orig, 52, 10000000));
     }
 
     std::cout << "Approximated the function\n";
