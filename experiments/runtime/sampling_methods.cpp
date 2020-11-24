@@ -1,7 +1,7 @@
 #include <benchmark/benchmark.h>
 #include <cudd/cplusplus/cuddObj.hh>
 
-#include "benchmark_util.hpp"
+#include "../util/benchmark_util.hpp"
 #include "error_rate.hpp"
 
 using namespace abo::benchmark;

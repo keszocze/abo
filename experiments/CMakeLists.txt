@@ -1,6 +1,7 @@
 add_subdirectory(util)
 add_subdirectory(minimization)
 add_subdirectory(runtime)
+add_subdirectory(misc)
 
 add_executable(testing testing.cpp)
 

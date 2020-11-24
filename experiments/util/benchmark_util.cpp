@@ -109,9 +109,16 @@ std::vector<BDD> load_iscas_85_file(Cudd& mgr, ISCAS85File file)
     std::string file_path = iscas_85_filepath_by_id(file);
 
     abo::parser::aig_parser parser(mgr);
-    lorina::read_aiger(file_path, parser);
+    auto code = lorina::read_aiger(file_path, parser);
 
-    return parser.get_outputs();
+    if (code == lorina::return_code::success)
+    {
+        return parser.get_outputs();
+    }
+    else
+    {
+        throw std::invalid_argument("Could not parse aiger file " + file_path);
+    }
 }
 
 std::string epfl_filename_by_id(EPFLFile file)
