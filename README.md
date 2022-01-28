@@ -35,17 +35,17 @@ For each experiment, one text file in the folder 'result' will be created.
 
 If you are using *abo*, please cite the following paper:
 
-Andreas Wendler and Oliver Keszocze *A fast BDD Minimization Framework for Approximate Computing*. 
-In: Design, Automation and Test in Europe (DATE'20) 
+Oliver Keszocze *BDD-based Error Metric Analysis, Computation and Optimization*. 
+In: IEEE Access
 
 You can use the following bibtex code:
 ```
-@inproceedings{Wendler2020,
-  title = {{A Fast BDD Minimization Framework for Approximate Computing}},
-  booktitle = {Design, Automation and Test in Europe},
-  author = {Wendler, Andreas and Keszocze, Oliver},
-  location = {Grenoble, FR}
-}
+@ARTICLE{Keszocze2022,
+  author={Keszocze, Oliver},
+  journal={IEEE Access}, 
+  title={BDD-based Error Metric Analysis, Computation and Optimization}, 
+  year={2022},
+  doi={10.1109/ACCESS.2022.3140557}}
 ```
 
 ## References
