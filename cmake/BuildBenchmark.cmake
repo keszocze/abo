@@ -2,7 +2,7 @@ include(ExternalProject)
 
 ExternalProject_Add(project_benchmark
     GIT_REPOSITORY https://github.com/google/benchmark.git
-    GIT_TAG v1.5.0
+    GIT_TAG v1.6.1
     BUILD_BYPRODUCTS "<INSTALL_DIR>/lib"
     CMAKE_ARGS
         -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>

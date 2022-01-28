@@ -2,7 +2,7 @@ include(ExternalProject)
 
 ExternalProject_Add(project_catch2
     GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-    GIT_TAG v2.4.0
+    GIT_TAG v2.13.8
     CMAKE_ARGS
         -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
         -DCATCH_BUILD_TESTING:BOOL=OFF
