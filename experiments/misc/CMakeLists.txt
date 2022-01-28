@@ -1,4 +1,14 @@
 add_executable(test_improved_sampling improved_sampling.cpp)
+add_executable(er_ace_adder_comparison er_ace_adder_comparison.cpp)
+
+target_link_libraries(er_ace_adder_comparison
+        PRIVATE error_metrics
+        PRIVATE benchmark
+        PRIVATE approximation_operators
+        PRIVATE benchmark_util
+        )
+
+
 
 target_link_libraries(test_improved_sampling
         PRIVATE error_metrics
