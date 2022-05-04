@@ -2,7 +2,7 @@ include(ExternalProject)
 
 ExternalProject_Add(project_pagmo2
     GIT_REPOSITORY https://github.com/esa/pagmo2.git
-    GIT_TAG v2.12.0
+    GIT_TAG v2.18.0
     CMAKE_ARGS
         -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
         -DCMAKE_CXX_COMPILER:PATH=${CMAKE_CXX_COMPILER}
