@@ -28,7 +28,7 @@ include(BuildCatch2)
 include(BuildBenchmark)
 include(BuildCudd)
 include(BuildPagmo2)
-
+include(EPFLBenchmarks)
 
 add_subdirectory(src)
 add_subdirectory(experiments)
